@@ -712,40 +712,7 @@
     
     //从服务器返回的数据为空,
     if (simpleList.count == 0) {
-        ABAddressBookRef addressBook = ABAddressBookCreate();
-        CFArrayRef peoples = ABAddressBookCopyArrayOfAllPeople(addressBook);
-        CFIndex count = CFArrayGetCount(peoples);	
-        CFRelease(peoples);
-        CFRelease(addressBook);
-        
-        //本地通讯录存在数据, 继续同步会导致用户通讯录被清空, 进行提示
-        if (count > 0) {
-            NSCondition* condition = [[NSCondition alloc] init];
-            __block BOOL shouldContinue = YES;
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [UIAlertView alertViewWithTitle:@"警告" 
-                                        message:@"检测到服务器联系人数据可能被清空, 继续同步会导致本地通讯录被清空, 是否继续?" 
-                              cancelButtonTitle:@"确定继续同步" 
-                              otherButtonTitles:[NSArray arrayWithObject:@"取消"]
-                                      onDismiss:^(int buttonIndex) {
-                                          shouldContinue = NO;
-                                          [condition signal];
-                                      }onCancel:^{
-                                          shouldContinue = YES;
-                                          [condition signal];
-                                      }];
-            });
-            
-            [condition lock];
-            [condition wait]; //等待用户确认是否继续同步
-            
-            if (!shouldContinue) {
-                [condition release];
-                return NO;
-            }
-            [condition release];
-        }
+        NSLog(@"server db is empty");
     }
     
 	return [self downloadContactToMomo:simpleList contacts:syncInfos];

@@ -16,7 +16,6 @@
 
 @interface MMSyncThread()
 -(BOOL)sync;
--(void)handleAddressBookChanged;
 -(void)wakeUpRunLoop:(CFRunLoopRef)runLoop;
 
 -(BOOL)remoteSync;
@@ -24,8 +23,6 @@
 
 @implementation MMSyncThread
 @synthesize isSyncing = isSyncing_;
-@synthesize responseToAddressBookChange = responseToAddressBookChange_;
-
 
 -(BOOL)beginSync {
     if (isSyncing_) {
@@ -114,8 +111,6 @@ void timerCallback(CFRunLoopTimerRef timer, void *info) {
 -(id)init {
 	self = [super initWithTarget:nil selector:nil object:nil];
 	if (self) {
-        responseToAddressBookChange_ = YES;
-		syncMode_ = kSyncModeRemote;
         int result = pthread_mutex_init(&mutex_, 0);
         assert(0 == result);
         result = pthread_cond_init(&condition_, 0);
@@ -130,21 +125,7 @@ void timerCallback(CFRunLoopTimerRef timer, void *info) {
 	[super dealloc];
 }
 
-
--(void)handleAddressBookChanged {
-    if (!responseToAddressBookChange_ || isSyncing_) {
-        return;
-    }
-    
-	assert(addressBook_);
-	ABAddressBookRevert(addressBook_);
-}
-
 -(void)onContactChangedInSyncThread:(NSNotification*)notification {
-    if (syncMode_ != kSyncModeRemote) {
-        return;
-    }
-    
     dispatch_async(dispatch_get_main_queue(), ^{
         [[NSNotificationCenter defaultCenter] postNotificationName:kMMBeginSync object:[NSNumber numberWithBool:NO]]; //MQ下发变更不显示同步进度
     });
@@ -277,11 +258,8 @@ void timerCallback(CFRunLoopTimerRef timer, void *info) {
 }
 
 -(BOOL)sync {
-    if (kSyncModeRemote == syncMode_) {
-        [[MMContactManager instance] clearAddressBookContact];
-        return [self remoteSync];
-    }
-    return YES;
+    [[MMContactManager instance] clearAddressBookContact];
+    return [self remoteSync];
 }
 
 
@@ -291,26 +269,26 @@ void timerCallback(CFRunLoopTimerRef timer, void *info) {
     pthread_cond_signal(&condition_);
     pthread_mutex_unlock(&mutex_);
     {
-        if (syncMode_ != kSyncModeNone) {
-            NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [[NSNotificationCenter defaultCenter] postNotificationName:kMMBeginSync object:nil];
-            });
-            self.isSyncing = YES;
-            
-            lastSyncResult_ = [self sync];
-            if (!lastSyncResult_) 
-                MLOG(@"同步失败");
-            
-            self.isSyncing = NO;
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                NSDictionary* userInfo = [NSDictionary dictionaryWithObject:BOOL_NUMBER(lastSyncResult_) forKey:@"result"];
-                [[NSNotificationCenter defaultCenter] postNotificationName:kMMEndSync object:userInfo];
-            });
 
-            [pool release];
-        }
+        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:kMMBeginSync object:nil];
+        });
+        self.isSyncing = YES;
+        
+        lastSyncResult_ = [self sync];
+        if (!lastSyncResult_)
+            MLOG(@"同步失败");
+        
+        self.isSyncing = NO;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSDictionary* userInfo = [NSDictionary dictionaryWithObject:BOOL_NUMBER(lastSyncResult_) forKey:@"result"];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kMMEndSync object:userInfo];
+        });
+        
+        [pool release];
+
 	}
 
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
