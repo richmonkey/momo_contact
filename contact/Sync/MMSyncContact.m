@@ -18,7 +18,6 @@
 #import "MMLogger.h"
 #import "MMCommonAPI.h"
 #import "UIAlertView+MKBlockAdditions.h"
-#import "MMPreference.h"
 #import "MMSyncThread.h"
 #import "MMCardManager.h"
 
@@ -261,7 +260,6 @@
 		return YES;
 	}
 
-    //	NSMutableArray *avatarArray = [NSMutableArray array];
 	NSMutableArray *array = [NSMutableArray array];
 	unsigned int index= 0;
 	while (index < [phoneContactIds count]) {
@@ -271,24 +269,7 @@
             NSNumber *phoneid = [phoneContactIds objectAtIndex:index + i];
             MMMomoContact* dbContact = [[[MMMomoContact alloc] init] autorelease];	
             ABRecordRef person = ABAddressBookGetPersonWithRecordID(addressBook, [phoneid intValue]);
-            //            CFDataRef imgRef = ABPersonCopyImageData(person);
             dbContact.avatarUrl = @"";
-            
-            //            if (imgRef) {
-            //                NSString *url = @"";
-            //                if (![MMServerContactManager uploadAvatar:(NSData*)imgRef url:&url]) {
-            //                    MLOG(@"上传头像失败, phone contact id:%d", [phoneid intValue]);
-            //                    return NO;
-            //                }
-            //                dbContact.avatarUrl = url;
-            //                
-            //                [avatarArray addObject:(NSData*)imgRef];
-            //                CFRelease(imgRef);
-            //            } else {
-            //                [avatarArray addObject:[[[NSData alloc] init] autorelease]];
-            //            }
-            
-            
             NSMutableArray* dbDataList = [[[NSMutableArray alloc] init] autorelease];
             dbContact.phoneCid = [phoneid intValue];
             [MMAddressBook ABRecord2DbStruct:dbContact withDataList:dbDataList  withPerson:person];
@@ -312,7 +293,6 @@
         [[[MMContactManager instance] db] beginTransaction];
 		for (NSDictionary *dic in response) {
 			MMMomoContact *contact = [array objectAtIndex:index];
-            //			NSData *avatarData = [avatarArray objectAtIndex:index];
 			int status = [[dic objectForKey:@"status"] intValue];
 			if ( 201 == status) {
 				MMContactSyncInfo *info = [[[MMContactSyncInfo alloc] init] autorelease];	
@@ -323,7 +303,6 @@
 				NSDate *phoneModifyDate = [MMAddressBook getContactModifyDate:[[phoneContactIds objectAtIndex:index] intValue]];
 				info.phoneModifyDate = [phoneModifyDate timeIntervalSince1970];
 				info.avatarUrl = contact.avatarBigUrl;
-                //				info.avatarPart = [self getAvatarPart:avatarData];
 				[self addContactSyncInfo:info];
 #ifdef UPDATE_MOMO_DATEBASE
 				contact.contactId = [[dic objectForKey:@"id"] intValue];
@@ -331,10 +310,6 @@
 				if ([[MMContactManager instance] insertContact:contact withDataList:contact.properties] == MM_DB_OK) {
 					syncResult_.momoDownloadAddCount = syncResult_.momoDownloadAddCount + 1;
 				}
-                //                if ([contact.avatarUrl length] > 0 && [avatarData length] > 0) {
-                //                    [[MMAvatarMgr shareInstance] setImage:avatarData forURL:contact.avatarUrl];
-                //                }
-                
 #endif
 			} else if (303 == status) {
 				NSArray *array = [NSArray arrayWithObject:[dic objectForKey:@"id"]];
@@ -478,32 +453,7 @@
         dbContact.avatarUrl = [info.avatarUrl substringWithRange:range];
     }
     
-//	CFDataRef imgRef = ABPersonCopyImageData(person);
-//	BOOL avatarChanged = [self isAvatarChanged:(NSData*)imgRef syncInfo:info];
-//	if (avatarChanged) {
-//		NSString *url = @"";
-//		if (imgRef) {
-//			if (![MMServerContactManager uploadAvatar:(NSData*)imgRef url:&url]) {
-//				MLOG(@"上传头像失败, contact id:", info.contactId);
-//				CFRelease(imgRef);
-//				return NO;
-//			}
-//		}
-//		dbContact.avatarUrl = url;
-//		info.avatarPart = [self getAvatarPart:(NSData*)imgRef];
-//	} else {
-//		dbContact.avatarUrl = info.avatarUrl;
-//		
-//		if ([self isAvatarDownFail:info]) {
-//			NSRange range = NSMakeRange(1, [info.avatarUrl length] - 2);
-//			dbContact.avatarUrl = [info.avatarUrl substringWithRange:range];
-//		}
-//	}
-//	
-//	if (imgRef) {
-//		CFRelease(imgRef);
-//	}
-	
+
 	NSDictionary *response = nil;
 	NSInteger statusCode = [MMServerContactManager updateContact:dbContact response:&response];
 	if (statusCode == 200 || statusCode == 303) {
@@ -702,9 +652,7 @@
 	NSAssert(info, @"info nil");
 	if([MMAddressBook updateContactAvatar:avatar byPhoneId:info.phoneContactId] != MM_DB_OK)
 		return NO;
-    
-    
-//	[[MMAvatarMgr shareInstance] setImage:avatar forURL:contact.avatarPlatformUrl];
+
 	NSDate *modifyDate = [MMAddressBook getContactModifyDate:info.phoneContactId];
 	NSAssert(modifyDate, @"modifydate nil");
 	info.phoneModifyDate = [modifyDate timeIntervalSince1970];
@@ -967,16 +915,6 @@
             [idsToDown addObject:[NSNumber numberWithInteger:c.contactId]];
             [contactsToUpdate addObject:info];
         } 
-//        else {
-//            if (info.avatarUrl.length > 0 && (![self isBigAvatarUrl:info.avatarUrl] || [self isAvatarDownFail:info])) {
-//                NSInteger contactId = info.contactId;
-//                DbContact *tmp = [[MMContactManager instance] getContact:contactId withError:nil];
-//                MMMomoContact *contact = [[[MMMomoContact alloc] initWithContact:tmp] autorelease];
-//                NSArray *datas = [[MMContactManager instance] getDataList:contactId withError:nil];
-//                contact.properties = datas;
-//                [downAvatarContacts addObject:contact];
-//            }
-//        }
     }
 
     NSArray *array2 = [self getContactListFromMomoDb:idsToDown];
@@ -987,68 +925,12 @@
         assert(info);
         contact.phoneCid = info.phoneContactId;
         NSString *oldUrl = [[contact.avatarUrl copy] autorelease];
-//        if (![contact.avatarBigUrl isEqualToString:info.avatarUrl] && [contact.avatarUrl length] > 0) {
-//            //预防头像下载失败
-//            contact.avatarUrl = [NSString stringWithFormat:@"#%@#", contact.avatarUrl];
-//            [downAvatarContacts addObject:contact];
-//        }
         [self updateContactDown:contact];
         contact.avatarUrl = oldUrl;
         syncResult_.downloadUpdateCount = syncResult_.downloadUpdateCount + 1;
     }
 
     [pool release];
-    
-//    if ([MMPreference shareInstance].downContactAvatar) {
-//        //下载联系人头像, 不在同步进度中显示
-//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-//            [MMSyncThread shareInstance].responseToAddressBookChange = NO;
-//            
-//            for (MMMomoContact *contact in downAvatarContacts) {
-//                if (![MMPreference shareInstance].downContactAvatar || [self isCancelled]) {
-//                    break;
-//                }
-//                
-//                //GPRS下不下载, 退出
-//                if (![MMPreference shareInstance].downContactAvatarOnGPRS && 
-//                    [MMCommonAPI getNetworkStatus] == kReachableViaWWAN) {
-//                    break;
-//                }
-//                
-//                //已经下载成功了
-//                MMContactSyncInfo* syncInfo = [self getContactSyncInfo:contact.contactId];
-//                if (contact.avatarUrl.length > 0 
-//                    && [self isBigAvatarUrl:syncInfo.avatarUrl] 
-//                    && ![self isAvatarDownFail:syncInfo]) {
-//                    break;
-//                }
-//                
-//                NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-//                
-//                do {
-//                    
-//                    NSString *url = contact.avatarBigUrl;
-//                    if (url.length == 0) {
-//                        break;
-//                    }
-//                    
-//                    NSAssert([url length] > 0, @"url length greater than 0");
-//                    ASIHTTPRequest* request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:url]];
-//                    request.timeOutSeconds = HTTP_REQUEST_TIME_OUT_SECONDS;
-//                    [ASIHTTPRequest startSynchronous:request];
-//                    if ([request responseStatusCode] != 200 || ![request responseData]) {
-//                        break;
-//                    }
-//                    
-//                    [self updateContactAvatar:contact avatar:[request responseData]];
-//                } while (0);
-//                
-//                [pool release];
-//            }
-//            
-//            [MMSyncThread shareInstance].responseToAddressBookChange = YES;
-//        });
-//    }
     
 	return YES;
 }
@@ -1183,16 +1065,6 @@
         if (info.modifyDate > minfo.modifyDate) {
             MMFullContact *contact = [MMAddressBook getContact:info.contactId];
             assert(contact);
-//            NSData *data = [MMAddressBook getAvatarData:info.contactId];
-//            if (data) {
-//                if ([contact.avatarUrl length] > 0) {
-//                    [[MMAvatarMgr shareInstance] setImage:data forURL:contact.avatarUrl];
-//                } else {
-//                    NSString *path = [NSString stringWithFormat:@"%@%@", [MMCommonAPI temporaryURLHost], [MMCommonAPI createGUIDStr]];
-//                    [[MMAvatarMgr shareInstance] setImage:data forURL:path];
-//                    contact.avatarUrl = path;
-//                }
-//            }
             contact.contactId = -contact.contactId;
 
             if ([[MMContactManager instance] updateContact:contact withDataList:contact.properties] != MM_DB_OK) {
@@ -1230,13 +1102,6 @@
         MMContactSyncInfo *info = [addedArray objectAtIndex:index];
         MMFullContact *contact = [MMAddressBook getContact:info.contactId];
         assert(contact);
-        
-//        NSData *data = [MMAddressBook getAvatarData:info.contactId];
-//        if (data) {
-//            NSString *path = [NSString stringWithFormat:@"%@%@", NSTemporaryDirectory(), [MMCommonAPI createGUIDStr]];
-//            [[MMAvatarMgr shareInstance] setImage:data forURL:path];
-//            contact.avatarUrl = path;
-//        }
         
         contact.contactId = -contact.contactId;
         [tmpContactsArray addObject:contact];

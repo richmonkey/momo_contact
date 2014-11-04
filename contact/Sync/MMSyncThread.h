@@ -13,6 +13,11 @@
 #define kMMBeginSync @"BeginSync"
 #define kMMEndSync   @"EndSync"
 
+enum {
+	kSyncModeNone,
+	kSyncModeRemote,
+    kSyncModeLocal
+};
 
 @interface MMSyncThread : MMHttpRequestThread {
 	ABAddressBookRef addressBook_;

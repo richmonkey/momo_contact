@@ -110,6 +110,9 @@
 		6D16D7A71A08AEB9001D0939 /* pinyin.cc in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D7A41A08AEB9001D0939 /* pinyin.cc */; };
 		6D16D7AB1A08AFFB001D0939 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D16D7AA1A08AFFB001D0939 /* libz.dylib */; };
 		6D16D7AD1A08B003001D0939 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D16D7AC1A08B003001D0939 /* libsqlite3.dylib */; };
+		6D16D7B31A08B287001D0939 /* MMContactSync.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D7AF1A08B287001D0939 /* MMContactSync.m */; };
+		6D16D7B41A08B287001D0939 /* MMSyncContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D7B01A08B287001D0939 /* MMSyncContact.m */; };
+		6D16D7B51A08B287001D0939 /* MMSyncThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D7B21A08B287001D0939 /* MMSyncThread.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -342,6 +345,11 @@
 		6D16D7A81A08AFF0001D0939 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		6D16D7AA1A08AFFB001D0939 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		6D16D7AC1A08B003001D0939 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		6D16D7AE1A08B287001D0939 /* MMContactSync.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMContactSync.h; sourceTree = "<group>"; };
+		6D16D7AF1A08B287001D0939 /* MMContactSync.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMContactSync.m; sourceTree = "<group>"; };
+		6D16D7B01A08B287001D0939 /* MMSyncContact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMSyncContact.m; sourceTree = "<group>"; };
+		6D16D7B11A08B287001D0939 /* MMSyncThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMSyncThread.h; sourceTree = "<group>"; };
+		6D16D7B21A08B287001D0939 /* MMSyncThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMSyncThread.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -453,6 +461,11 @@
 		6D16D6251A08A57B001D0939 /* Sync */ = {
 			isa = PBXGroup;
 			children = (
+				6D16D7AE1A08B287001D0939 /* MMContactSync.h */,
+				6D16D7AF1A08B287001D0939 /* MMContactSync.m */,
+				6D16D7B01A08B287001D0939 /* MMSyncContact.m */,
+				6D16D7B11A08B287001D0939 /* MMSyncThread.h */,
+				6D16D7B21A08B287001D0939 /* MMSyncThread.m */,
 			);
 			path = Sync;
 			sourceTree = "<group>";
@@ -885,9 +898,11 @@
 				6D16D6371A08A6BB001D0939 /* DbStruct.m in Sources */,
 				6D16D7881A08AE3B001D0939 /* NSMutableIndexSet+BlocksKit.m in Sources */,
 				6D16D7231A08AC01001D0939 /* ASIHTTPRequest.m in Sources */,
+				6D16D7B31A08B287001D0939 /* MMContactSync.m in Sources */,
 				6D16D6C01A08A921001D0939 /* SBJsonStreamWriter.m in Sources */,
 				6D16D6C21A08A921001D0939 /* SBJsonStreamWriterState.m in Sources */,
 				6D16D7901A08AE3B001D0939 /* UIActionSheet+BlocksKit.m in Sources */,
+				6D16D7B41A08B287001D0939 /* MMSyncContact.m in Sources */,
 				6D16D7851A08AE3B001D0939 /* NSInvocation+BlocksKit.m in Sources */,
 				6D16D6FC1A08AB31001D0939 /* MMUapRequest.m in Sources */,
 				6D16D7A01A08AE70001D0939 /* NSObject+MKBlockAdditions.m in Sources */,
@@ -935,6 +950,7 @@
 				6D16D78C1A08AE3B001D0939 /* NSObject+BlocksKit.m in Sources */,
 				6D16D71F1A08AC01001D0939 /* ASIDataCompressor.m in Sources */,
 				6D16D6CC1A08A921001D0939 /* PLSqliteResultSet.m in Sources */,
+				6D16D7B51A08B287001D0939 /* MMSyncThread.m in Sources */,
 				6D16D63A1A08A6BB001D0939 /* MMModel.mm in Sources */,
 				6D16D6BD1A08A921001D0939 /* SBJsonStreamParserAccumulator.m in Sources */,
 				6D16D6B91A08A921001D0939 /* NSObject+SBJson.m in Sources */,

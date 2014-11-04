@@ -12,10 +12,7 @@
 #import "MMServerContactManager.h"
 #import "DbStruct.h"
 #import "MMContact.h"
-#import "MMLoginService.h"
 #import "MMLogger.h"
-#import "MMPreference.h"
-#import "MMGlobalStyle.h"
 #import "MMCardManager.h"
 
 @interface MMSyncThread()
@@ -117,18 +114,7 @@ static void MMABExternalChangeCallback(ABAddressBookRef addressBook, CFDictionar
 	return YES;
 }
 
--(void) onUserLogin:(NSNotification*)notification {
-	NSString *prev = [[notification userInfo] objectForKey:@"prev_user_mobile"];
-	NSString *cur = [[notification userInfo] objectForKey:@"user_mobile"];
-	if (![cur isEqualToString:prev]) {
-		MMContactSync *syncer = [[[MMContactSync alloc] init] autorelease];
-		[syncer clearSyncDb];
-        [[MMContactManager instance] clearContactDB];
-	}
-    
-    syncMode_ = [[MMPreference shareInstance] syncMode];
-    [self start];
-}
+
 
 void timerCallback(CFRunLoopTimerRef timer, void *info) {
 }
@@ -192,17 +178,11 @@ void timerCallback(CFRunLoopTimerRef timer, void *info) {
 	self = [super initWithTarget:nil selector:nil object:nil];
 	if (self) {
         responseToAddressBookChange_ = YES;
-		syncMode_ = [[MMPreference shareInstance] syncMode];
+		syncMode_ = kSyncModeRemote;
         int result = pthread_mutex_init(&mutex_, 0);
         assert(0 == result);
         result = pthread_cond_init(&condition_, 0);
         assert(0 == result);
-        
-		NSNotificationCenter * center = [NSNotificationCenter defaultCenter];
-		[center addObserver:self selector:@selector(onUserLogin:) name:kMMUserLogin object:nil];
-		[center addObserver:self selector:@selector(onUserLogout:) name:kMMUserLogout object:nil];
-        [[MMPreference shareInstance] addObserver:self forKeyPath:@"syncMode" 
-                                          options:NSKeyValueObservingOptionNew context:nil];
 	}
 	return self;
 }
@@ -210,9 +190,6 @@ void timerCallback(CFRunLoopTimerRef timer, void *info) {
 -(void)dealloc {
     pthread_mutex_destroy(&mutex_);
     pthread_cond_destroy(&condition_);
-	NSNotificationCenter * center = [NSNotificationCenter defaultCenter];
-	[center removeObserver:self name:kMMUserLogin object:nil];
-	[center removeObserver:self name:kMMUserLogout object:nil];
 	[super dealloc];
 }
 
