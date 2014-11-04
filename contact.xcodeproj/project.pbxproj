@@ -87,6 +87,7 @@
 		6D16D7B31A08B287001D0939 /* MMContactSync.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D7AF1A08B287001D0939 /* MMContactSync.m */; };
 		6D16D7B41A08B287001D0939 /* MMSyncContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D7B01A08B287001D0939 /* MMSyncContact.m */; };
 		6D16D7B51A08B287001D0939 /* MMSyncThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D7B21A08B287001D0939 /* MMSyncThread.m */; };
+		6D16D7B71A08C3FF001D0939 /* momo.db in Resources */ = {isa = PBXBuildFile; fileRef = 6D16D7B61A08C228001D0939 /* momo.db */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -689,6 +690,7 @@
 				6D16D6091A08A36A001D0939 /* Images.xcassets in Resources */,
 				6D16D5FB1A08A36A001D0939 /* InfoPlist.strings in Resources */,
 				6D16D6041A08A36A001D0939 /* Main.storyboard in Resources */,
+				6D16D7B71A08C3FF001D0939 /* momo.db in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -899,6 +901,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = NO;
+				CODE_SIGN_IDENTITY = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "contact/contact-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -909,6 +912,7 @@
 				INFOPLIST_FILE = "contact/contact-Info.plist";
 				OTHER_LDFLAGS = "-licucore";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -919,12 +923,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = NO;
+				CODE_SIGN_IDENTITY = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "contact/contact-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = PL_DB_PRIVATE;
 				INFOPLIST_FILE = "contact/contact-Info.plist";
 				OTHER_LDFLAGS = "-licucore";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
