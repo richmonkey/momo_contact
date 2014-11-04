@@ -18,74 +18,8 @@
 #import "oauth.h"
 #import "ASIFormDataRequest.h"
 
-//#ifndef NDEBUG
-#if 0
-@implementation SBJsonParser (jsonErrorAlert)
-
-- (BOOL)scanRestOfNull:(NSNull **)o {
-    if (!strncmp(c, "ull", 3)) {
-        c += 3;
-        *o = [NSNull null];
-		
-		dispatch_async(dispatch_get_main_queue(), ^{
-			UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"错误" message:@"JSON包含NULL" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-			[alertView show];
-			[alertView release];
-		});
-		
-		MLOG(@"JSON包含NULL");
-		
-        return YES;
-    }
-    [self addErrorWithCode:EPARSE description: @"Expected 'null'"];
-    return NO;
-}
-
-- (id)objectWithString:(NSString *)repr {
-	
-    id o = [self fragmentWithString:repr];
-    if (!o) {
-		if (repr && repr.length > 0) {
-			dispatch_async(dispatch_get_main_queue(), ^{
-				UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"错误" message:@"JSON解析错误" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-				[alertView show];
-				[alertView release];
-			});
-			
-			MLOG(@"JSON解析错误, %@, %@", [errorTrace description], repr);
-		}
-        
-		return nil;
-	}
-    
-    // Check that the object we've found is a valid JSON container.
-    if (![o isKindOfClass:[NSDictionary class]] && ![o isKindOfClass:[NSArray class]]) {
-        [self addErrorWithCode:EFRAGMENT description:@"Valid fragment, but not JSON"];
-		
-		if (repr && repr.length > 0) {
-			dispatch_async(dispatch_get_main_queue(), ^{
-				UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:@"错误" message:@"JSON解析错误" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil];
-				[alertView show];
-				[alertView release];
-			});
-			
-			MLOG(@"JSON解析错误, %@, %@", [errorTrace description], repr);
-		}
-		
-        return nil;
-    }
-	
-    return o;
-}
-
-@end
-#endif
-
 
 @implementation MMUapRequest
-
-
-
 + (MMUapRequest*)shareInstance {
 	static MMUapRequest* instance = nil;
 	if(!instance) {
