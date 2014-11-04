@@ -78,7 +78,6 @@
 
 
 @interface MMContactSync(Contact)
--(BOOL) addressBookToMomo;
 -(BOOL) downloadContactToMomo;
 -(BOOL) downloadContactToMomo:(NSArray*)simpleList;
 -(BOOL) uploadContact;

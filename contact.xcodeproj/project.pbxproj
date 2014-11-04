@@ -68,12 +68,6 @@
 		6D16D7241A08AC01001D0939 /* ASIInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D71A1A08AC01001D0939 /* ASIInputStream.m */; };
 		6D16D7251A08AC01001D0939 /* ASINetworkQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D71C1A08AC01001D0939 /* ASINetworkQueue.m */; };
 		6D16D7281A08AC1B001D0939 /* MMThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D7271A08AC1B001D0939 /* MMThread.m */; };
-		6D16D73C1A08AD7E001D0939 /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D7391A08AD7E001D0939 /* UIImage+Alpha.m */; };
-		6D16D73D1A08AD7E001D0939 /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D73B1A08AD7E001D0939 /* UIImage+Resize.m */; };
-		6D16D7401A08AD8E001D0939 /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D73F1A08AD8E001D0939 /* UIImage+RoundedCorner.m */; };
-		6D16D7A01A08AE70001D0939 /* NSObject+MKBlockAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D79B1A08AE70001D0939 /* NSObject+MKBlockAdditions.m */; };
-		6D16D7A11A08AE70001D0939 /* UIActionSheet+MKBlockAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D79D1A08AE70001D0939 /* UIActionSheet+MKBlockAdditions.m */; };
-		6D16D7A21A08AE70001D0939 /* UIAlertView+MKBlockAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D79F1A08AE70001D0939 /* UIAlertView+MKBlockAdditions.m */; };
 		6D16D7A71A08AEB9001D0939 /* pinyin.cc in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D7A41A08AEB9001D0939 /* pinyin.cc */; };
 		6D16D7AB1A08AFFB001D0939 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D16D7AA1A08AFFB001D0939 /* libz.dylib */; };
 		6D16D7AD1A08B003001D0939 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D16D7AC1A08B003001D0939 /* libsqlite3.dylib */; };
@@ -224,19 +218,6 @@
 		6D16D71D1A08AC01001D0939 /* ASIProgressDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIProgressDelegate.h; sourceTree = "<group>"; };
 		6D16D7261A08AC1B001D0939 /* MMThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMThread.h; sourceTree = "<group>"; };
 		6D16D7271A08AC1B001D0939 /* MMThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMThread.m; sourceTree = "<group>"; };
-		6D16D7381A08AD7E001D0939 /* UIImage+Alpha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Alpha.h"; sourceTree = "<group>"; };
-		6D16D7391A08AD7E001D0939 /* UIImage+Alpha.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Alpha.m"; sourceTree = "<group>"; };
-		6D16D73A1A08AD7E001D0939 /* UIImage+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Resize.h"; sourceTree = "<group>"; };
-		6D16D73B1A08AD7E001D0939 /* UIImage+Resize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Resize.m"; sourceTree = "<group>"; };
-		6D16D73E1A08AD8E001D0939 /* UIImage+RoundedCorner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+RoundedCorner.h"; sourceTree = "<group>"; };
-		6D16D73F1A08AD8E001D0939 /* UIImage+RoundedCorner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+RoundedCorner.m"; sourceTree = "<group>"; };
-		6D16D7991A08AE70001D0939 /* MKBlockAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKBlockAdditions.h; sourceTree = "<group>"; };
-		6D16D79A1A08AE70001D0939 /* NSObject+MKBlockAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+MKBlockAdditions.h"; sourceTree = "<group>"; };
-		6D16D79B1A08AE70001D0939 /* NSObject+MKBlockAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+MKBlockAdditions.m"; sourceTree = "<group>"; };
-		6D16D79C1A08AE70001D0939 /* UIActionSheet+MKBlockAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIActionSheet+MKBlockAdditions.h"; sourceTree = "<group>"; };
-		6D16D79D1A08AE70001D0939 /* UIActionSheet+MKBlockAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIActionSheet+MKBlockAdditions.m"; sourceTree = "<group>"; };
-		6D16D79E1A08AE70001D0939 /* UIAlertView+MKBlockAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+MKBlockAdditions.h"; sourceTree = "<group>"; };
-		6D16D79F1A08AE70001D0939 /* UIAlertView+MKBlockAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+MKBlockAdditions.m"; sourceTree = "<group>"; };
 		6D16D7A31A08AEA6001D0939 /* DefineDictionary.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DefineDictionary.h; sourceTree = "<group>"; };
 		6D16D7A41A08AEB9001D0939 /* pinyin.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pinyin.cc; sourceTree = "<group>"; };
 		6D16D7A51A08AEB9001D0939 /* pinyin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pinyin.h; sourceTree = "<group>"; };
@@ -413,13 +394,6 @@
 			children = (
 				6D16D7B81A08EFA0001D0939 /* base64 */,
 				6D16D7091A08AC01001D0939 /* ASIHTTPRequest */,
-				6D16D7981A08AE70001D0939 /* MKAdditions */,
-				6D16D7381A08AD7E001D0939 /* UIImage+Alpha.h */,
-				6D16D7391A08AD7E001D0939 /* UIImage+Alpha.m */,
-				6D16D73E1A08AD8E001D0939 /* UIImage+RoundedCorner.h */,
-				6D16D73F1A08AD8E001D0939 /* UIImage+RoundedCorner.m */,
-				6D16D73A1A08AD7E001D0939 /* UIImage+Resize.h */,
-				6D16D73B1A08AD7E001D0939 /* UIImage+Resize.m */,
 				6D16D7061A08ABD4001D0939 /* sha.c */,
 				6D16D7071A08ABD4001D0939 /* sha.h */,
 				6D16D7051A08AB7B001D0939 /* hashinternal.h */,
@@ -555,20 +529,6 @@
 			path = ASIHTTPRequest;
 			sourceTree = "<group>";
 		};
-		6D16D7981A08AE70001D0939 /* MKAdditions */ = {
-			isa = PBXGroup;
-			children = (
-				6D16D7991A08AE70001D0939 /* MKBlockAdditions.h */,
-				6D16D79A1A08AE70001D0939 /* NSObject+MKBlockAdditions.h */,
-				6D16D79B1A08AE70001D0939 /* NSObject+MKBlockAdditions.m */,
-				6D16D79C1A08AE70001D0939 /* UIActionSheet+MKBlockAdditions.h */,
-				6D16D79D1A08AE70001D0939 /* UIActionSheet+MKBlockAdditions.m */,
-				6D16D79E1A08AE70001D0939 /* UIAlertView+MKBlockAdditions.h */,
-				6D16D79F1A08AE70001D0939 /* UIAlertView+MKBlockAdditions.m */,
-			);
-			path = MKAdditions;
-			sourceTree = "<group>";
-		};
 		6D16D7B81A08EFA0001D0939 /* base64 */ = {
 			isa = PBXGroup;
 			children = (
@@ -682,17 +642,14 @@
 				6D16D7241A08AC01001D0939 /* ASIInputStream.m in Sources */,
 				6D16D6C11A08A921001D0939 /* SBJsonStreamWriterAccumulator.m in Sources */,
 				6D16D6BE1A08A921001D0939 /* SBJsonStreamParserAdapter.m in Sources */,
-				6D16D7A21A08AE70001D0939 /* UIAlertView+MKBlockAdditions.m in Sources */,
 				6D16D6C41A08A921001D0939 /* SBJsonUTF8Stream.m in Sources */,
 				6D16D6391A08A6BB001D0939 /* MMContact.m in Sources */,
 				6D16D6BF1A08A921001D0939 /* SBJsonStreamParserState.m in Sources */,
-				6D16D73D1A08AD7E001D0939 /* UIImage+Resize.m in Sources */,
 				6D16D6E71A08AB03001D0939 /* contact_match.cc in Sources */,
 				6D16D6C61A08A921001D0939 /* PlausibleDatabase.m in Sources */,
 				6D16D6BA1A08A921001D0939 /* SBJson.m in Sources */,
 				6D16D6D01A08A980001D0939 /* MMGlobalData.m in Sources */,
 				6D16D6C51A08A921001D0939 /* SBJsonWriter.m in Sources */,
-				6D16D7401A08AD8E001D0939 /* UIImage+RoundedCorner.m in Sources */,
 				6D16D6FB1A08AB31001D0939 /* MMServerContactManager.m in Sources */,
 				6D16D6BC1A08A921001D0939 /* SBJsonStreamParser.m in Sources */,
 				6D16D6FE1A08AB31001D0939 /* oauth.c in Sources */,
@@ -703,12 +660,10 @@
 				6D16D6C21A08A921001D0939 /* SBJsonStreamWriterState.m in Sources */,
 				6D16D7B41A08B287001D0939 /* MMSyncContact.m in Sources */,
 				6D16D6FC1A08AB31001D0939 /* MMUapRequest.m in Sources */,
-				6D16D7A01A08AE70001D0939 /* NSObject+MKBlockAdditions.m in Sources */,
 				6D16D6BB1A08A921001D0939 /* SBJsonParser.m in Sources */,
 				6D16D6C91A08A921001D0939 /* PLSqliteDatabase.m in Sources */,
 				6D16D71E1A08AC01001D0939 /* ASIAuthenticationDialog.m in Sources */,
 				6D16D7081A08ABD4001D0939 /* sha.c in Sources */,
-				6D16D7A11A08AE70001D0939 /* UIActionSheet+MKBlockAdditions.m in Sources */,
 				6D16D6E41A08AADC001D0939 /* Reachability.m in Sources */,
 				6D16D6E01A08AAB3001D0939 /* MMCommonAPI.m in Sources */,
 				6D16D7A71A08AEB9001D0939 /* pinyin.cc in Sources */,
@@ -727,7 +682,6 @@
 				6D16D6CB1A08A921001D0939 /* PLSqlitePreparedStatement.m in Sources */,
 				6D16D7211A08AC01001D0939 /* ASIDownloadCache.m in Sources */,
 				6D16D5FD1A08A36A001D0939 /* main.m in Sources */,
-				6D16D73C1A08AD7E001D0939 /* UIImage+Alpha.m in Sources */,
 				6D16D6CA1A08A921001D0939 /* PLSqliteMigrationVersionManager.m in Sources */,
 				6D16D6DD1A08AA5B001D0939 /* RegexKitLite.m in Sources */,
 				6D16D7221A08AC01001D0939 /* ASIFormDataRequest.m in Sources */,

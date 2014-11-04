@@ -22,27 +22,9 @@
 -(BOOL)remoteSync;
 @end
 
-static void MMABExternalChangeCallback(ABAddressBookRef addressBook, CFDictionaryRef info, void *context) {
-	MMSyncThread *thread = (MMSyncThread*)context;
-	[thread handleAddressBookChanged];
-}
-
 @implementation MMSyncThread
 @synthesize isSyncing = isSyncing_;
 @synthesize responseToAddressBookChange = responseToAddressBookChange_;
-
--(BOOL)registerAddressBookObserver {
-	addressBook_ = ABAddressBookCreate();
-	ABAddressBookRegisterExternalChangeCallback(addressBook_, MMABExternalChangeCallback, self);
-	return YES;
-}
-
--(BOOL)unregisterAddressBookObserver {
-	ABAddressBookUnregisterExternalChangeCallback(addressBook_, MMABExternalChangeCallback, self);
-	CFRelease(addressBook_);
-	addressBook_ = nil;
-	return YES;
-}
 
 
 -(BOOL)beginSync {
@@ -336,7 +318,6 @@ void timerCallback(CFRunLoopTimerRef timer, void *info) {
     NSNotificationCenter * center = [NSNotificationCenter defaultCenter];
 	
     [center addObserver:self selector:@selector(onContactChanged:) name:kMMMQContactChangedMsg object:nil];
-	[self registerAddressBookObserver];
     
 	CFRunLoopSourceContext context = {0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 	CFRunLoopSourceRef source = CFRunLoopSourceCreate(kCFAllocatorDefault, 0, &context);
@@ -348,9 +329,7 @@ void timerCallback(CFRunLoopTimerRef timer, void *info) {
 	CFRunLoopRemoveSource(CFRunLoopGetCurrent(), source, kCFRunLoopDefaultMode);
 	CFRelease(source);
 	
-    [self unregisterAddressBookObserver];
     [center removeObserver:self name:kMMMQContactChangedMsg object:nil];
-    [center removeObserver:self name:kMMMQContactGroupChangedMsg object:nil];
     
 	[pool release];
     
