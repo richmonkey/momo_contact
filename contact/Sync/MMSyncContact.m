@@ -68,7 +68,7 @@
 		if (![results isNullForColumn:@"avatar_md5"]) {
 			self.avatarMd5 = [results stringForColumn:@"avatar_md5"];
 		}
-        
+
 
 	}
 	return self;
@@ -326,7 +326,6 @@
 					NSDate *phoneModifyDate = [MMAddressBook getContactModifyDate:[[phoneContactIds objectAtIndex:index] intValue]];
 					info.phoneModifyDate = [phoneModifyDate timeIntervalSince1970] ;
 					info.avatarUrl = contact.avatarBigUrl;
-                    //					info.avatarPart = [self getAvatarPart:avatarData];
 					[self addContactSyncInfo:info];
                     
                     
@@ -334,25 +333,7 @@
 					MMContactSyncInfo *info = [tmp objectAtIndex:0];
 					info.modifyDate = [[dic objectForKey:@"modified_at"] longLongValue];
 					[self updateContactSyncInfo:info];
-                    
-                    //保留旧分组
-                    NSArray *categories = [self getContactCategoryByPhoneContactId:contact.phoneCid];
-                    for (NSNumber *n in categories) {
-                        if (![MMAddressBook isMember:info.phoneContactId inCategory:[n intValue]]) {
-                            [MMAddressBook addMemberToCategory:[n intValue] withCellId:info.phoneContactId];
-                        }
-                    }
-                    
-                    //保留铃声                                                          
-                    ABRecordRef newPerson = ABAddressBookGetPersonWithRecordID(addressBook, [[phoneContactIds objectAtIndex:index] intValue]);
-                    CFTypeRef newtypeRef = ABRecordCopyValue(newPerson, 16);
-                    if (ABMultiValueGetCount(newtypeRef)) {
-                        CFErrorRef errorRef = nil;
-                        ABRecordRef oldPerson = ABAddressBookGetPersonWithRecordID(addressBook, info.phoneContactId);
-                        ABRecordSetValue(oldPerson, 16, newtypeRef, &errorRef);  
-                        ABAddressBookSave(addressBook, &errorRef);
-                    }                        
-                    CFRelease(newtypeRef);
+ 
                     
 					[MMAddressBook deleteContact:[[phoneContactIds objectAtIndex:index] intValue]];
 				}
@@ -994,25 +975,6 @@
 	
 	CFRelease(groups);
 	return dic;
-}
-
--(void) loadCategoryCache:(ABAddressBookRef)addressBook {
-	[categoryCache_ release];
-	categoryCache_ = [[self getAllContactCategory:addressBook] retain];
-}
-
--(void) clearCategoryCache {
-	[categoryCache_ release];
-	categoryCache_ = nil;
-}
-
--(NSArray*) getContactCategoryByPhoneContactId:(NSInteger)phoneCid {
-	NSSet *set = [categoryCache_ objectForKey:[NSNumber numberWithInteger:phoneCid]];
-	NSMutableArray *array = [NSMutableArray array];
-	for (NSNumber *n in set) {
-		[array addObject:n];
-	}
-	return array;
 }
 
 

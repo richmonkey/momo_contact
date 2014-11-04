@@ -16,12 +16,10 @@
 #import "MMCardManager.h"
 
 @interface MMSyncThread()
--(void)setSyncMode:(NSInteger)mode;
 -(BOOL)sync;
 -(void)handleAddressBookChanged;
 -(void)wakeUpRunLoop:(CFRunLoopRef)runLoop;
 
--(BOOL)localSync;
 -(BOOL)remoteSync;
 @end
 
@@ -47,40 +45,6 @@ static void MMABExternalChangeCallback(ABAddressBookRef addressBook, CFDictionar
 	return YES;
 }
 
--(void)setSyncMode:(NSInteger)mode {
-    if (isSyncing_) {
-        return;
-    }
-    
-    pthread_mutex_lock(&mutex_);
-    if (nil == runLoop_) {
-        syncMode_ = mode;
-        pthread_mutex_unlock(&mutex_);
-        return;
-    }
-    CFRunLoopPerformBlock(runLoop_, kCFRunLoopDefaultMode, ^(void){
-        if (syncMode_ != mode) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [[NSNotificationCenter defaultCenter] postNotificationName:kMMBeginSync object:nil];
-            });
-
-            self.isSyncing = YES;
-            
-            syncMode_ = mode;
-            lastSyncResult_ = [self sync];
-            
-            self.isSyncing = NO;
-            
-            NSDictionary* userInfo = [NSDictionary dictionaryWithObject:BOOL_NUMBER(lastSyncResult_) forKey:@"result"];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [[NSNotificationCenter defaultCenter] postNotificationName:kMMEndSync object:userInfo];
-            });
-        }
-    } );
-    [self wakeUpRunLoop:runLoop_];
-
-    pthread_mutex_unlock(&mutex_);
-}
 
 -(BOOL)beginSync {
     if (isSyncing_) {
@@ -153,14 +117,6 @@ void timerCallback(CFRunLoopTimerRef timer, void *info) {
     [[MMContactManager instance] clearContactDB];
 }
 
--(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if ([keyPath isEqualToString:@"syncMode"]) {
-        int newMode = [[change objectForKey:NSKeyValueChangeNewKey] intValue];
-        if (kSyncModeNone != newMode) {
-            [self setSyncMode:newMode];
-        }
-    }
-}
 
 + (MMSyncThread*)shareInstance {
 	static MMSyncThread* instance = nil;
@@ -193,49 +149,6 @@ void timerCallback(CFRunLoopTimerRef timer, void *info) {
 	[super dealloc];
 }
 
-//本机联系人变更后调用, 上传后通过MQ或手动同步更新本地
--(void)doUpload {
-	if (kSyncModeLocal == syncMode_) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:kMMBeginSync object:[NSNumber numberWithBool:NO]]; //系统通讯录变更不显示进度
-        });
-        
-        [self localSync];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys:BOOL_NUMBER(lastSyncResult_),@"result", 
-                                      BOOL_NUMBER(NO), @"hide_hud", nil];
-            [[NSNotificationCenter defaultCenter] postNotificationName:kMMEndSync object:userInfo];
-        });
-		return;
-	} else if (kSyncModeRemote == syncMode_) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:kMMBeginSync object:[NSNumber numberWithBool:NO]]; //系统通讯录变更不显示进度
-        });
-        
-        if (!lastSyncResult_) {
-            lastSyncResult_ = [self sync];
-        }
-        
-        NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys:BOOL_NUMBER(lastSyncResult_),@"result", 
-                                 BOOL_NUMBER(NO), @"hide_hud", nil];
-
-        if (!lastSyncResult_) {
-            MLOG(@"ignore addressbook change");
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [[NSNotificationCenter defaultCenter] postNotificationName:kMMEndSync object:userInfo];
-            });
-            return;
-        }
-
-        MMContactSync *syncer = [[[MMContactSync alloc] init] autorelease];
-        [syncer uploadContact];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:kMMEndSync object:userInfo];
-        });
-    }
-}
 
 -(void)handleAddressBookChanged {
     if (!responseToAddressBookChange_ || isSyncing_) {
@@ -244,9 +157,6 @@ void timerCallback(CFRunLoopTimerRef timer, void *info) {
     
 	assert(addressBook_);
 	ABAddressBookRevert(addressBook_);
-	//预防连续修改    
-    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(doUpload) object:nil];
-    [self performSelector:@selector(doUpload) withObject:nil afterDelay:0.5];
 }
 
 -(void)onContactChangedInSyncThread:(NSNotification*)notification {
@@ -316,12 +226,6 @@ void timerCallback(CFRunLoopTimerRef timer, void *info) {
     pthread_mutex_unlock(&mutex_);
 }
 
--(BOOL)localSync {
-    MMContactSync *syncer = [[[MMContactSync alloc] init] autorelease];
-    syncer.syncProgress = [[[MMSyncProgressInfo alloc] init] autorelease];
-    [syncer addressBookToMomo];
-    return YES;
-}
 
 -(BOOL)remoteSync {
     MMSyncHistoryInfo *history = [[[MMSyncHistoryInfo alloc]init] autorelease];
@@ -399,9 +303,6 @@ void timerCallback(CFRunLoopTimerRef timer, void *info) {
     if (kSyncModeRemote == syncMode_) {
         [[MMContactManager instance] clearAddressBookContact];
         return [self remoteSync];
-    } else if (kSyncModeLocal == syncMode_) {
-        [[MMContactManager instance] clearMomoContact];
-        return [self localSync];
     }
     return YES;
 }

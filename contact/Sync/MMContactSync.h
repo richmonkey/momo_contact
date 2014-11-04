@@ -77,15 +77,6 @@
 @end
 
 
-@interface MMContactSync(Category)
-
--(void) loadCategoryCache:(ABAddressBookRef)addressBook;
--(void) clearCategoryCache;
-
--(NSArray*) getContactCategoryByPhoneContactId:(NSInteger)phoneCid;
-
-@end
-
 @interface MMContactSync(Contact)
 -(BOOL) addressBookToMomo;
 -(BOOL) downloadContactToMomo;
