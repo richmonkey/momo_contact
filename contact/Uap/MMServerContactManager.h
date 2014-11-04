@@ -40,16 +40,6 @@ typedef DbContactSyncInfo MMMomoContactSimple;
 + (NSArray*)getContactChangeHistory:(NSInteger)page withErrorString:(NSString**)errorString;
 + (BOOL)recoverContactChangeHistory:(NSInteger)dateLine;
 
-#pragma mark -
-#pragma mark 联系人界面上的机器人
-+ (NSArray*)getAllRobot;
 
-#pragma mark -
-#pragma mark momo名片 服务器操作
-
-
-+(BOOL)changeMobile:(NSString *)mobile password:(NSString *)password withErrorString:(NSString**)errorString;
-+(BOOL)bindingWeibo:(NSDictionary *)weiboDic withErrorString:(NSString**)errorString;
-+ (BOOL)cancelBindingWeiboWithErrorString:(NSString**)errorString; 
 
 @end

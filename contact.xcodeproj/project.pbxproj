@@ -53,7 +53,6 @@
 		6D16D6E01A08AAB3001D0939 /* MMCommonAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D6DF1A08AAB3001D0939 /* MMCommonAPI.m */; };
 		6D16D6E41A08AADC001D0939 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D6E31A08AADC001D0939 /* Reachability.m */; };
 		6D16D6E71A08AB03001D0939 /* contact_match.cc in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D6E51A08AB03001D0939 /* contact_match.cc */; };
-		6D16D6F81A08AB31001D0939 /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D6EB1A08AB31001D0939 /* GTMBase64.m */; };
 		6D16D6FB1A08AB31001D0939 /* MMServerContactManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D6F21A08AB31001D0939 /* MMServerContactManager.m */; };
 		6D16D6FC1A08AB31001D0939 /* MMUapRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D6F41A08AB31001D0939 /* MMUapRequest.m */; };
 		6D16D6FE1A08AB31001D0939 /* oauth.c in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D6F61A08AB31001D0939 /* oauth.c */; };
@@ -88,6 +87,7 @@
 		6D16D7B41A08B287001D0939 /* MMSyncContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D7B01A08B287001D0939 /* MMSyncContact.m */; };
 		6D16D7B51A08B287001D0939 /* MMSyncThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D7B21A08B287001D0939 /* MMSyncThread.m */; };
 		6D16D7B71A08C3FF001D0939 /* momo.db in Resources */ = {isa = PBXBuildFile; fileRef = 6D16D7B61A08C228001D0939 /* momo.db */; };
+		6D16D7BC1A08EFA0001D0939 /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D7BA1A08EFA0001D0939 /* GTMBase64.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -195,9 +195,6 @@
 		6D16D6E31A08AADC001D0939 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		6D16D6E51A08AB03001D0939 /* contact_match.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = contact_match.cc; sourceTree = "<group>"; };
 		6D16D6E61A08AB03001D0939 /* contact_match.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = contact_match.h; sourceTree = "<group>"; };
-		6D16D6EA1A08AB31001D0939 /* GTMBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMBase64.h; sourceTree = "<group>"; };
-		6D16D6EB1A08AB31001D0939 /* GTMBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTMBase64.m; sourceTree = "<group>"; };
-		6D16D6EC1A08AB31001D0939 /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
 		6D16D6F11A08AB31001D0939 /* MMServerContactManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMServerContactManager.h; sourceTree = "<group>"; };
 		6D16D6F21A08AB31001D0939 /* MMServerContactManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMServerContactManager.m; sourceTree = "<group>"; };
 		6D16D6F31A08AB31001D0939 /* MMUapRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMUapRequest.h; sourceTree = "<group>"; };
@@ -271,6 +268,9 @@
 		6D16D7B11A08B287001D0939 /* MMSyncThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMSyncThread.h; sourceTree = "<group>"; };
 		6D16D7B21A08B287001D0939 /* MMSyncThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMSyncThread.m; sourceTree = "<group>"; };
 		6D16D7B61A08C228001D0939 /* momo.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = momo.db; sourceTree = "<group>"; };
+		6D16D7B91A08EFA0001D0939 /* GTMBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMBase64.h; sourceTree = "<group>"; };
+		6D16D7BA1A08EFA0001D0939 /* GTMBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTMBase64.m; sourceTree = "<group>"; };
+		6D16D7BB1A08EFA0001D0939 /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -443,6 +443,8 @@
 		6D16D6861A08A921001D0939 /* third-party */ = {
 			isa = PBXGroup;
 			children = (
+				6D16D7B81A08EFA0001D0939 /* base64 */,
+				6D16D7091A08AC01001D0939 /* ASIHTTPRequest */,
 				6D16D7981A08AE70001D0939 /* MKAdditions */,
 				6D16D7381A08AD7E001D0939 /* UIImage+Alpha.h */,
 				6D16D7391A08AD7E001D0939 /* UIImage+Alpha.m */,
@@ -450,7 +452,6 @@
 				6D16D73F1A08AD8E001D0939 /* UIImage+RoundedCorner.m */,
 				6D16D73A1A08AD7E001D0939 /* UIImage+Resize.h */,
 				6D16D73B1A08AD7E001D0939 /* UIImage+Resize.m */,
-				6D16D7091A08AC01001D0939 /* ASIHTTPRequest */,
 				6D16D7061A08ABD4001D0939 /* sha.c */,
 				6D16D7071A08ABD4001D0939 /* sha.h */,
 				6D16D7051A08AB7B001D0939 /* hashinternal.h */,
@@ -549,7 +550,6 @@
 		6D16D6E81A08AB31001D0939 /* Uap */ = {
 			isa = PBXGroup;
 			children = (
-				6D16D6E91A08AB31001D0939 /* base64 */,
 				6D16D6F11A08AB31001D0939 /* MMServerContactManager.h */,
 				6D16D6F21A08AB31001D0939 /* MMServerContactManager.m */,
 				6D16D6F31A08AB31001D0939 /* MMUapRequest.h */,
@@ -558,16 +558,6 @@
 				6D16D6F71A08AB31001D0939 /* oauth.h */,
 			);
 			path = Uap;
-			sourceTree = "<group>";
-		};
-		6D16D6E91A08AB31001D0939 /* base64 */ = {
-			isa = PBXGroup;
-			children = (
-				6D16D6EA1A08AB31001D0939 /* GTMBase64.h */,
-				6D16D6EB1A08AB31001D0939 /* GTMBase64.m */,
-				6D16D6EC1A08AB31001D0939 /* GTMDefines.h */,
-			);
-			path = base64;
 			sourceTree = "<group>";
 		};
 		6D16D7091A08AC01001D0939 /* ASIHTTPRequest */ = {
@@ -609,6 +599,16 @@
 				6D16D79F1A08AE70001D0939 /* UIAlertView+MKBlockAdditions.m */,
 			);
 			path = MKAdditions;
+			sourceTree = "<group>";
+		};
+		6D16D7B81A08EFA0001D0939 /* base64 */ = {
+			isa = PBXGroup;
+			children = (
+				6D16D7B91A08EFA0001D0939 /* GTMBase64.h */,
+				6D16D7BA1A08EFA0001D0939 /* GTMBase64.m */,
+				6D16D7BB1A08EFA0001D0939 /* GTMDefines.h */,
+			);
+			path = base64;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -721,7 +721,6 @@
 				6D16D7371A08AD56001D0939 /* MMHttpDownloadMgr.m in Sources */,
 				6D16D73D1A08AD7E001D0939 /* UIImage+Resize.m in Sources */,
 				6D16D6E71A08AB03001D0939 /* contact_match.cc in Sources */,
-				6D16D6F81A08AB31001D0939 /* GTMBase64.m in Sources */,
 				6D16D6C61A08A921001D0939 /* PlausibleDatabase.m in Sources */,
 				6D16D6BA1A08A921001D0939 /* SBJson.m in Sources */,
 				6D16D6D01A08A980001D0939 /* MMGlobalData.m in Sources */,
@@ -749,6 +748,7 @@
 				6D16D7A71A08AEB9001D0939 /* pinyin.cc in Sources */,
 				6D16D6C31A08A921001D0939 /* SBJsonTokeniser.m in Sources */,
 				6D16D6011A08A36A001D0939 /* AppDelegate.m in Sources */,
+				6D16D7BC1A08EFA0001D0939 /* GTMBase64.m in Sources */,
 				6D16D7281A08AC1B001D0939 /* MMThread.m in Sources */,
 				6D16D7201A08AC01001D0939 /* ASIDataDecompressor.m in Sources */,
 				6D16D6C81A08A921001D0939 /* PLSqliteConnectionProvider.m in Sources */,

@@ -26,7 +26,7 @@
 
 @interface MMContactSyncInfo : DbContactId
 {
-	int64_t phoneContactId;
+	NSInteger phoneContactId;
 	int64_t modifyDate;
 	int64_t phoneModifyDate;
 	NSString *avatarUrl;
@@ -34,7 +34,7 @@
 	NSString *avatarMd5;
 
 }
-@property(nonatomic)int64_t phoneContactId;
+@property(nonatomic)NSInteger phoneContactId;
 @property(nonatomic)int64_t modifyDate;
 @property(nonatomic)int64_t phoneModifyDate;
 @property(nonatomic, copy)NSString *avatarUrl;
@@ -484,10 +484,7 @@
 	NSMutableArray *syncInfos = [self getContactSyncInfoList];
 	
     ABAddressBookRef addressBook = ABAddressBookCreate();
-	[self loadCategoryCache:addressBook];
-	
 
-       
     CFArrayRef peoples = ABAddressBookCopyArrayOfAllPeople(addressBook);
 
     {
@@ -530,7 +527,6 @@
 			MMContactSyncInfo *info = [syncInfos objectAtIndex:index];
 			if (modifyDate > info.phoneModifyDate ) {
 				if (![self updateContactUp:info person:person]) {
-					[self clearCategoryCache];
 					CFRelease(peoples);
 					CFRelease(addressBook);
 					return NO;
@@ -556,7 +552,6 @@
 
     //上传本地新增联系人
 	if (![self addContactUp:idsToAdd addressBook:addressBook]) {
-        [self clearCategoryCache];
         CFRelease(peoples);
         CFRelease(addressBook);
         return NO;
@@ -567,7 +562,6 @@
 	[self deleteContactUp:contactIdsToDel phoneCids:phoneContactIdsToDel];
 	syncResult_.uploadDelCount = syncResult_.uploadDelCount + [contactIdsToDel count];
     
-	[self clearCategoryCache];
     CFRelease(peoples);
 	CFRelease(addressBook);
 	return YES;
@@ -620,26 +614,6 @@
 	info.avatarUrl = contact.avatarBigUrl;
 	[self updateContactSyncInfo:info];
 	return YES;
-}
-
--(BOOL) updateContactAvatar:(MMMomoContact*)contact avatar:(NSData*)avatar {
-	UIImage *image = [UIImage imageWithData:avatar];
-	if (nil == image) {
-		MLOG(@"头像解码失败, contact id:%d", contact.contactId);
-		return NO;
-	}
-	NSAssert(image, @"image nil");
-	MMContactSyncInfo *info = [self getContactSyncInfo:contact.contactId];
-	NSAssert(info, @"info nil");
-	if([MMAddressBook updateContactAvatar:avatar byPhoneId:info.phoneContactId] != MM_DB_OK)
-		return NO;
-
-	NSDate *modifyDate = [MMAddressBook getContactModifyDate:info.phoneContactId];
-	NSAssert(modifyDate, @"modifydate nil");
-	info.phoneModifyDate = [modifyDate timeIntervalSince1970];
-	info.avatarUrl = contact.avatarBigUrl;
-	info.avatarPart = [self getAvatarPart:avatar];
-	return [self updateContactSyncInfo:info];
 }
 
 -(BOOL)downloadContactToMomo:(NSArray*)simpleList contacts:(NSMutableArray*)contacts {
@@ -944,39 +918,6 @@
 	NSArray *simpleList = [self getContactSimpleListFromMomoDb];
 	return [self downloadContact:simpleList infoList:syncInfos];
 }
-
--(NSDictionary*) getAllContactCategory:(ABAddressBookRef)addressBook {
-	NSMutableDictionary *dic = [NSMutableDictionary dictionary];
-    CFArrayRef groups = ABAddressBookCopyArrayOfAllGroups(addressBook);
-    CFIndex count_group = CFArrayGetCount(groups);
-    
-    for(CFIndex idx = 0; idx < count_group; ++idx) {
-        ABRecordRef group = CFArrayGetValueAtIndex(groups, idx);
-		NSInteger phoneCategoryId = (NSInteger)ABRecordGetRecordID(group);
-        CFArrayRef thePeoples = ABGroupCopyArrayOfAllMembers(group);
-        
-        if (thePeoples == NULL) {
-            continue;
-        }
-		
-        CFIndex count_group_people = CFArrayGetCount(thePeoples);
-        for(CFIndex idx_p = 0; idx_p < count_group_people; ++idx_p) {
-            ABRecordRef person = CFArrayGetValueAtIndex(thePeoples, idx_p);
-            NSInteger cellid = ABRecordGetRecordID(person);
-			NSMutableSet *categorySet = [dic objectForKey:[NSNumber numberWithInteger:cellid]];
-			if (nil == categorySet) {
-				categorySet = [NSMutableSet set];
-				[dic setObject:categorySet forKey:[NSNumber numberWithInteger:cellid]];
-			}
-			[categorySet addObject:[NSNumber numberWithInteger:phoneCategoryId]];
-        }
-        CFRelease(thePeoples);
-    }
-	
-	CFRelease(groups);
-	return dic;
-}
-
 
 -(BOOL) addressBookToMomo {
     syncProgress_.stageCount = 1;
