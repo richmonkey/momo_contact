@@ -334,6 +334,13 @@ NSInteger simpleContactCompare(id id1, id id2, void *context) {
     return contactSimplelist;
 }
 
++(int)getContactCount {
+    ABAddressBookRef addressBook = ABAddressBookCreate();
+    CFIndex count = ABAddressBookGetPersonCount(addressBook);
+    CFRelease(addressBook);
+    return count;
+}
+
 +(NSArray*) getContactSyncInfoList {
     ABAddressBookRef addressBook = ABAddressBookCreate();
     CFArrayRef peoples = ABAddressBookCopyArrayOfAllPeople(addressBook);

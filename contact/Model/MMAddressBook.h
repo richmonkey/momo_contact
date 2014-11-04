@@ -35,6 +35,8 @@ typedef int MMABErrorType;
 
 +(NSArray*) getContactSyncInfoList;
 
++(int)getContactCount;
+
 +(MMFullContact*)getContact:(NSInteger)phoneContactId;
 
 +(NSArray*)insertContacts:(NSArray*)fullContacts;
