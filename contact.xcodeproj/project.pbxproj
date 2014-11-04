@@ -68,15 +68,9 @@
 		6D16D7241A08AC01001D0939 /* ASIInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D71A1A08AC01001D0939 /* ASIInputStream.m */; };
 		6D16D7251A08AC01001D0939 /* ASINetworkQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D71C1A08AC01001D0939 /* ASINetworkQueue.m */; };
 		6D16D7281A08AC1B001D0939 /* MMThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D7271A08AC1B001D0939 /* MMThread.m */; };
-		6D16D72B1A08ACA3001D0939 /* MMMomoUserMgr.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D72A1A08ACA3001D0939 /* MMMomoUserMgr.m */; };
-		6D16D72E1A08ACFA001D0939 /* MMCardManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D72D1A08ACFA001D0939 /* MMCardManager.m */; };
-		6D16D7311A08AD22001D0939 /* MMMomoUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D7301A08AD22001D0939 /* MMMomoUser.m */; };
-		6D16D7341A08AD39001D0939 /* MMAvatarMgr.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D7331A08AD39001D0939 /* MMAvatarMgr.m */; };
-		6D16D7371A08AD56001D0939 /* MMHttpDownloadMgr.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D7361A08AD56001D0939 /* MMHttpDownloadMgr.m */; };
 		6D16D73C1A08AD7E001D0939 /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D7391A08AD7E001D0939 /* UIImage+Alpha.m */; };
 		6D16D73D1A08AD7E001D0939 /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D73B1A08AD7E001D0939 /* UIImage+Resize.m */; };
 		6D16D7401A08AD8E001D0939 /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D73F1A08AD8E001D0939 /* UIImage+RoundedCorner.m */; };
-		6D16D7431A08ADB5001D0939 /* MMDbProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D7421A08ADB5001D0939 /* MMDbProfile.m */; };
 		6D16D7A01A08AE70001D0939 /* NSObject+MKBlockAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D79B1A08AE70001D0939 /* NSObject+MKBlockAdditions.m */; };
 		6D16D7A11A08AE70001D0939 /* UIActionSheet+MKBlockAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D79D1A08AE70001D0939 /* UIActionSheet+MKBlockAdditions.m */; };
 		6D16D7A21A08AE70001D0939 /* UIAlertView+MKBlockAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D79F1A08AE70001D0939 /* UIAlertView+MKBlockAdditions.m */; };
@@ -230,24 +224,12 @@
 		6D16D71D1A08AC01001D0939 /* ASIProgressDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIProgressDelegate.h; sourceTree = "<group>"; };
 		6D16D7261A08AC1B001D0939 /* MMThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMThread.h; sourceTree = "<group>"; };
 		6D16D7271A08AC1B001D0939 /* MMThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMThread.m; sourceTree = "<group>"; };
-		6D16D7291A08ACA3001D0939 /* MMMomoUserMgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMMomoUserMgr.h; sourceTree = "<group>"; };
-		6D16D72A1A08ACA3001D0939 /* MMMomoUserMgr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMMomoUserMgr.m; sourceTree = "<group>"; };
-		6D16D72C1A08ACFA001D0939 /* MMCardManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMCardManager.h; sourceTree = "<group>"; };
-		6D16D72D1A08ACFA001D0939 /* MMCardManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMCardManager.m; sourceTree = "<group>"; };
-		6D16D72F1A08AD22001D0939 /* MMMomoUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMMomoUser.h; sourceTree = "<group>"; };
-		6D16D7301A08AD22001D0939 /* MMMomoUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMMomoUser.m; sourceTree = "<group>"; };
-		6D16D7321A08AD39001D0939 /* MMAvatarMgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMAvatarMgr.h; sourceTree = "<group>"; };
-		6D16D7331A08AD39001D0939 /* MMAvatarMgr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMAvatarMgr.m; sourceTree = "<group>"; };
-		6D16D7351A08AD56001D0939 /* MMHttpDownloadMgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMHttpDownloadMgr.h; sourceTree = "<group>"; };
-		6D16D7361A08AD56001D0939 /* MMHttpDownloadMgr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMHttpDownloadMgr.m; sourceTree = "<group>"; };
 		6D16D7381A08AD7E001D0939 /* UIImage+Alpha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Alpha.h"; sourceTree = "<group>"; };
 		6D16D7391A08AD7E001D0939 /* UIImage+Alpha.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Alpha.m"; sourceTree = "<group>"; };
 		6D16D73A1A08AD7E001D0939 /* UIImage+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Resize.h"; sourceTree = "<group>"; };
 		6D16D73B1A08AD7E001D0939 /* UIImage+Resize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Resize.m"; sourceTree = "<group>"; };
 		6D16D73E1A08AD8E001D0939 /* UIImage+RoundedCorner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+RoundedCorner.h"; sourceTree = "<group>"; };
 		6D16D73F1A08AD8E001D0939 /* UIImage+RoundedCorner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+RoundedCorner.m"; sourceTree = "<group>"; };
-		6D16D7411A08ADB5001D0939 /* MMDbProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMDbProfile.h; sourceTree = "<group>"; };
-		6D16D7421A08ADB5001D0939 /* MMDbProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMDbProfile.m; sourceTree = "<group>"; };
 		6D16D7991A08AE70001D0939 /* MKBlockAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKBlockAdditions.h; sourceTree = "<group>"; };
 		6D16D79A1A08AE70001D0939 /* NSObject+MKBlockAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+MKBlockAdditions.h"; sourceTree = "<group>"; };
 		6D16D79B1A08AE70001D0939 /* NSObject+MKBlockAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+MKBlockAdditions.m"; sourceTree = "<group>"; };
@@ -258,7 +240,6 @@
 		6D16D7A31A08AEA6001D0939 /* DefineDictionary.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DefineDictionary.h; sourceTree = "<group>"; };
 		6D16D7A41A08AEB9001D0939 /* pinyin.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pinyin.cc; sourceTree = "<group>"; };
 		6D16D7A51A08AEB9001D0939 /* pinyin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pinyin.h; sourceTree = "<group>"; };
-		6D16D7A61A08AEB9001D0939 /* SearchPinyin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchPinyin.h; sourceTree = "<group>"; };
 		6D16D7A81A08AFF0001D0939 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		6D16D7AA1A08AFFB001D0939 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		6D16D7AC1A08B003001D0939 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
@@ -397,20 +378,7 @@
 			children = (
 				6D16D7A41A08AEB9001D0939 /* pinyin.cc */,
 				6D16D7A51A08AEB9001D0939 /* pinyin.h */,
-				6D16D7A61A08AEB9001D0939 /* SearchPinyin.h */,
 				6D16D7A31A08AEA6001D0939 /* DefineDictionary.h */,
-				6D16D7411A08ADB5001D0939 /* MMDbProfile.h */,
-				6D16D7421A08ADB5001D0939 /* MMDbProfile.m */,
-				6D16D7321A08AD39001D0939 /* MMAvatarMgr.h */,
-				6D16D7351A08AD56001D0939 /* MMHttpDownloadMgr.h */,
-				6D16D7361A08AD56001D0939 /* MMHttpDownloadMgr.m */,
-				6D16D7331A08AD39001D0939 /* MMAvatarMgr.m */,
-				6D16D72F1A08AD22001D0939 /* MMMomoUser.h */,
-				6D16D7301A08AD22001D0939 /* MMMomoUser.m */,
-				6D16D72C1A08ACFA001D0939 /* MMCardManager.h */,
-				6D16D72D1A08ACFA001D0939 /* MMCardManager.m */,
-				6D16D7291A08ACA3001D0939 /* MMMomoUserMgr.h */,
-				6D16D72A1A08ACA3001D0939 /* MMMomoUserMgr.m */,
 				6D16D7261A08AC1B001D0939 /* MMThread.h */,
 				6D16D7271A08AC1B001D0939 /* MMThread.m */,
 				6D16D6E51A08AB03001D0939 /* contact_match.cc */,
@@ -718,7 +686,6 @@
 				6D16D6C41A08A921001D0939 /* SBJsonUTF8Stream.m in Sources */,
 				6D16D6391A08A6BB001D0939 /* MMContact.m in Sources */,
 				6D16D6BF1A08A921001D0939 /* SBJsonStreamParserState.m in Sources */,
-				6D16D7371A08AD56001D0939 /* MMHttpDownloadMgr.m in Sources */,
 				6D16D73D1A08AD7E001D0939 /* UIImage+Resize.m in Sources */,
 				6D16D6E71A08AB03001D0939 /* contact_match.cc in Sources */,
 				6D16D6C61A08A921001D0939 /* PlausibleDatabase.m in Sources */,
@@ -727,7 +694,6 @@
 				6D16D6C51A08A921001D0939 /* SBJsonWriter.m in Sources */,
 				6D16D7401A08AD8E001D0939 /* UIImage+RoundedCorner.m in Sources */,
 				6D16D6FB1A08AB31001D0939 /* MMServerContactManager.m in Sources */,
-				6D16D72E1A08ACFA001D0939 /* MMCardManager.m in Sources */,
 				6D16D6BC1A08A921001D0939 /* SBJsonStreamParser.m in Sources */,
 				6D16D6FE1A08AB31001D0939 /* oauth.c in Sources */,
 				6D16D6371A08A6BB001D0939 /* DbStruct.m in Sources */,
@@ -754,16 +720,12 @@
 				6D16D6C81A08A921001D0939 /* PLSqliteConnectionProvider.m in Sources */,
 				6D16D7031A08AB67001D0939 /* hmac.c in Sources */,
 				6D16D6D31A08A995001D0939 /* MMLogger.m in Sources */,
-				6D16D72B1A08ACA3001D0939 /* MMMomoUserMgr.m in Sources */,
 				6D16D6D61A08A9AE001D0939 /* MMGlobalPara.m in Sources */,
-				6D16D7341A08AD39001D0939 /* MMAvatarMgr.m in Sources */,
 				6D16D7251A08AC01001D0939 /* ASINetworkQueue.m in Sources */,
-				6D16D7311A08AD22001D0939 /* MMMomoUser.m in Sources */,
 				6D16D6C71A08A921001D0939 /* PLDatabaseMigrationManager.m in Sources */,
 				6D16D6381A08A6BB001D0939 /* MMAddressBook.m in Sources */,
 				6D16D6CB1A08A921001D0939 /* PLSqlitePreparedStatement.m in Sources */,
 				6D16D7211A08AC01001D0939 /* ASIDownloadCache.m in Sources */,
-				6D16D7431A08ADB5001D0939 /* MMDbProfile.m in Sources */,
 				6D16D5FD1A08A36A001D0939 /* main.m in Sources */,
 				6D16D73C1A08AD7E001D0939 /* UIImage+Alpha.m in Sources */,
 				6D16D6CA1A08A921001D0939 /* PLSqliteMigrationVersionManager.m in Sources */,

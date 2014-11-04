@@ -13,7 +13,6 @@
 #import "MMCommonAPI.h"
 #import "oauth.h"
 #import "MMGlobalData.h"
-#import "MMMomoUserMgr.h"
 
 @implementation MMMomoContact
 

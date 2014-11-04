@@ -13,13 +13,10 @@
 #import "SBJSON.h"
 #import "MMServerContactManager.h"
 #import "MMContact.h"
-#import "MMAvatarMgr.h"
-#import "MMMomoUserMgr.h"
 #import "MMLogger.h"
 #import "MMCommonAPI.h"
 #import "UIAlertView+MKBlockAdditions.h"
 #import "MMSyncThread.h"
-#import "MMCardManager.h"
 
 //避免momo模块重复下载本地上传的联系人
 #define UPDATE_MOMO_DATEBASE

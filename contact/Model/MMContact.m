@@ -13,10 +13,6 @@
 #import "MMGlobalData.h"
 #import "MMCommonAPI.h"
 #import "MMServerContactManager.h"
-#import "MMMomoUserMgr.h"
-#import "MMCardManager.h"
-
-static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
 @implementation NSString (NSStringCompare)
 
@@ -1437,43 +1433,7 @@ static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
     return array;
 }
 
-- (NSArray*)getFriendListNeedName:(BOOL)needName needPhone:(BOOL)needPhone inArray:(NSArray*)contactArray{
-    
-	[friendArray_ removeAllObjects];
-	
-    for (DbContactSimple* contactSimple in contactArray) {
-		
-		if (needName && contactSimple.fullName.length == 0) {
-			continue;
-		}
-		if (needPhone && contactSimple.cellPhoneNums.count == 0) {
-			continue;
-		}
-		
-		for (NSString *number in [contactSimple.cellPhoneNums allObjects]) {
-			if (![MMCommonAPI isValidTelNumber:number]) {
-				continue;
-			}
-			
-			//查该号码对应的uid，若为-2则continue。否则取出uid。
-			NSInteger uid = [[MMCardManager instance] getUidByNumber:number];
-			if (uid == mobileInvalid) {
-				continue;
-			}
-			
-			MMMomoUserInfo *friendInfo = [[[MMMomoUserInfo alloc] init] autorelease];
-			friendInfo.realName = contactSimple.fullName;
-			friendInfo.registerNumber = number;
-			friendInfo.avatarImageUrl = contactSimple.avatarUrl;
-			friendInfo.contactId = contactSimple.contactId;
-			friendInfo.uid = uid;
-			
-			[friendArray_ addObject:friendInfo];
-		}		
-    }
-	
-	return friendArray_;
-}
+
 
 - (NSArray*)searchContact:(NSString*)searchString
                  needName:(BOOL)needName    //是否包含没有名字联系人
@@ -1550,76 +1510,6 @@ static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 }
 
 
-//need modify
-- (NSArray*)searchFriendByNumber:(NSString*)searchNumber andZone:(NSString *)searchZone {
-	
-	//array存的是MMMomoUserInfo（用户信息）
-    NSMutableArray* array = [NSMutableArray array];
-    
-    NSArray* tmpArray = [NSArray arrayWithArray:contactArray_];
-    
-    for (DbContactSimple* contactSimple in tmpArray) {
-        
-        
-		for (NSString *number in [contactSimple.cellPhoneNums allObjects]) {
-			
-			if (![MMCommonAPI isValidTelNumber:number]) {
-				continue;
-			}
-			
-            //应该先匹配国家码+号码。若匹配则ok。若不匹配则再对号码进行匹配。
-            //同时，在进行替换时，也是先匹配国家码+号码，然后替换新的国家码+号码。否则只替换号码。
-			BOOL successMatch = NO;
-            
-			NSRange searchResult = [number rangeOfString:[NSString stringWithFormat:@"%@%@",searchZone, searchNumber] 
-                                                 options:NSNumericSearch];
-            
-			if (searchResult.location != NSNotFound) {
-                
-                successMatch = YES;
-                
-			} else {
-                
-                successMatch = NO;
-                searchResult = [number rangeOfString:searchNumber options:NSNumericSearch];
-                
-                if (searchResult.location != NSNotFound) {
-                    successMatch = YES;
-                }
-            }
-            
-            //			//直接查找
-            //			NSRange searchResult = [number rangeOfString:searchNumber options:NSNumericSearch];
-            //			//若匹配了号码，还需继续匹配国家代码
-            //            
-            //			if (searchResult.location != NSNotFound) {
-            //				
-            //				//need modify
-            //				//还需继续匹配国家代码			
-            //				successMatch = YES;					
-            //			}
-            
-			
-			if (successMatch) {			
-				
-				MMMomoUserInfo *friendInfo = [[[MMMomoUserInfo alloc] init] autorelease];
-				friendInfo.realName = contactSimple.fullName;
-				friendInfo.registerNumber = number;
-				friendInfo.avatarImageUrl = contactSimple.avatarUrl;
-				friendInfo.contactId = contactSimple.contactId;
-				friendInfo.uid = [[MMCardManager instance] getUidByNumber:number];
-				
-				[array addObject:friendInfo];
-			}
-		}
-    }
-    
-    //	NSLog(@"match array: %@",array);
-    return array;
-	
-}
-
-
 -(NSString*) getDefaulMMLabelByProperty:(NSInteger) property {
 	
 	switch (property) {
@@ -1669,68 +1559,4 @@ static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 }
 
 @end
-
-
-#ifdef MOMO_UNITTEST
-#import "GHTestCase.h"
-#import "MMCommonAPI.h"
-
-@interface MMContactUnitTest : GHTestCase {
-	
-}
-@end
-
-@implementation MMContactUnitTest
-
-
--(void)testContact {
-    //	DbContact *contact = [[[DbContact alloc] init] autorelease];
-    //	contact.lastName = @"test";
-    //	contact.birthday = [MMCommonAPI getDateBySting:@"0-0-0"];
-    //	
-    //    NSInteger cellId = 0;
-    //    MMABErrorType result = [MMAddressBook insertContact:contact withDataList:nil returnCellId:&cellId];
-    //    GHAssertEquals(result, MM_AB_OK, @"add contact fail");
-    //    DbContact *ncontact = [MMAddressBook getContact:cellId withError:nil];
-    //    GHAssertNotNULL(ncontact, @"read contact fail");   
-    //    GHAssertEquals(ncontact.birthday, contact.birthday, @"birthday 1900-1-1 can't save");
-	
-	[[MMContactManager instance] addObserver:self forKeyPath:@"contactArray" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:nil];
-	
-    
-	
-	DbContact *contact = [[[DbContact alloc] init] autorelease];
-	contact.lastName = @"1111111";
-	contact.contactId = 1;
-	[[MMContactManager instance] insertContact:contact withDataList:nil];
-	
-	contact = [[[DbContact alloc] init] autorelease];
-	contact.lastName = @"2222222";
-	contact.contactId = 2;
-	[[MMContactManager instance] insertContact:contact withDataList:nil];
-	
-	contact = [[[DbContact alloc] init] autorelease];
-	contact.lastName = @"3333333";
-	contact.contactId = 3;
-	[[MMContactManager instance] insertContact:contact withDataList:nil];
-	
-	[[MMContactManager instance] deleteContact:1];
-	
-	contact = [[[DbContact alloc] init] autorelease];
-	contact.lastName = @"4444444";
-	contact.contactId = 3;	
-	[[MMContactManager instance] updateContact:contact withDataList:nil];	
-	
-}
-
--(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context  {
-	
-	if ([keyPath isEqualToString:@"contactArray"]) {
-		NSLog(@"keyPath:%@  object:%@  change:%@",keyPath,object,change);
-	}
-}
-
-@end
-
-#endif
 

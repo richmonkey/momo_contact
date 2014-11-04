@@ -38,13 +38,6 @@ static void*  thread_main(void* arg) {
 		return;
 	}
 	autoCancel_ = autoCancel;
-	if (autoCancel_) {
-		NSNotificationCenter * center = [NSNotificationCenter defaultCenter];
-//		[center addObserver:self selector:@selector(onUserLogout:) name:kMMUserLogout object:nil];
-	} else {
-		NSNotificationCenter * center = [NSNotificationCenter defaultCenter];
-//		[center removeObserver:self name:kMMUserLogout object:nil];
-	}
 }
 
 + (void)initialize {

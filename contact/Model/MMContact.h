@@ -60,10 +60,7 @@
  */
 - (MMErrorType)insertContact:(DbContact *)contact withDataList:(NSArray*)listData returnContactId:(NSInteger*)contactId;
 
-/*
- * 插入联系人, 使用DbContact和DdData List
- */
-- (MMErrorType)insertContact:(DbContact *)contact withDataList:(NSArray*)listData returnContactId:(NSInteger*)contactId;
+
 /*
  * 更新联系人, 使用DbContact和DdData List
  */
@@ -93,8 +90,6 @@
 - (void)killSelf;
 
 
-//Friends
-- (NSArray*)getFriendListNeedName:(BOOL)needName needPhone:(BOOL)needPhone inArray:(NSArray*)contactArray;
 //contact
 - (NSArray*)getContactListNeedName:(BOOL)needName needPhone:(BOOL)needPhone; 
 
@@ -105,9 +100,6 @@
 
 //根据名字或者拼音 匹配好友
 - (NSArray*)searchFriend:(NSString*)searchString;
-//根据号码 匹配好友
-- (NSArray*)searchFriendByNumber:(NSString*)searchNumber andZone:(NSString *)searchZone;
-
 
 //@private
 

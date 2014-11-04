@@ -76,9 +76,6 @@ typedef enum {
 + (NSString*)getLongTextURL:(NSString*)statusId;
 + (NSString*)getIMLongTextURL:(NSString*)msdId;
 
-#ifndef MOMO_UNITTEST
-+ (MMWebViewController*)openUrl:(NSString*)url;
-#endif
 
 + (MMMomoUserInfo*)loginUserInfo;
 

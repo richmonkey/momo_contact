@@ -13,7 +13,6 @@
 #import "DbStruct.h"
 #import "MMContact.h"
 #import "MMLogger.h"
-#import "MMCardManager.h"
 
 @interface MMSyncThread()
 -(BOOL)sync;
@@ -276,11 +275,7 @@ void timerCallback(CFRunLoopTimerRef timer, void *info) {
     [pool release];
     END_TICKET(downcontact);
 
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSArray* numberArray = [[MMContactManager instance] getAllTelList:nil];
-        [[MMCardManager instance] refreshNeedDownloadCards:numberArray];
-    });
-    
+
     history.endTime = [[NSDate date] timeIntervalSince1970];
     history.errorcode = 0;
     
