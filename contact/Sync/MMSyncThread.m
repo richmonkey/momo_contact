@@ -268,28 +268,28 @@ void timerCallback(CFRunLoopTimerRef timer, void *info) {
 	runLoop_ = CFRunLoopGetCurrent();
     pthread_cond_signal(&condition_);
     pthread_mutex_unlock(&mutex_);
-    {
-
-        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:kMMBeginSync object:nil];
-        });
-        self.isSyncing = YES;
-        
-        lastSyncResult_ = [self sync];
-        if (!lastSyncResult_)
-            MLOG(@"同步失败");
-        
-        self.isSyncing = NO;
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            NSDictionary* userInfo = [NSDictionary dictionaryWithObject:BOOL_NUMBER(lastSyncResult_) forKey:@"result"];
-            [[NSNotificationCenter defaultCenter] postNotificationName:kMMEndSync object:userInfo];
-        });
-        
-        [pool release];
-
-	}
+//    {
+//
+//        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [[NSNotificationCenter defaultCenter] postNotificationName:kMMBeginSync object:nil];
+//        });
+//        self.isSyncing = YES;
+//        
+//        lastSyncResult_ = [self sync];
+//        if (!lastSyncResult_)
+//            MLOG(@"同步失败");
+//        
+//        self.isSyncing = NO;
+//        
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            NSDictionary* userInfo = [NSDictionary dictionaryWithObject:BOOL_NUMBER(lastSyncResult_) forKey:@"result"];
+//            [[NSNotificationCenter defaultCenter] postNotificationName:kMMEndSync object:userInfo];
+//        });
+//        
+//        [pool release];
+//
+//	}
 
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 

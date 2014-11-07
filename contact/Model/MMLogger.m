@@ -40,15 +40,19 @@ MMLogger *g_logger = NULL;
 	if (!g_logger) {
 		@synchronized(self) {
 			if (!g_logger) {
-				NSDate* date = [NSDate date];
-				NSDateFormatter* formatter = [[[NSDateFormatter alloc] init] autorelease];
-				[formatter setDateFormat:@"yyy-MM-dd"];
-				NSString* dateString = [formatter stringFromDate:date];
+
 				
-				NSString* path = [NSHomeDirectory() stringByAppendingFormat:@"/tmp/%@.log", dateString];
+				NSString* path = [NSHomeDirectory() stringByAppendingFormat:@"/tmp/momo.log"];
 				if (![[NSFileManager defaultManager] fileExistsAtPath:path]) {
 					[[NSFileManager defaultManager] createFileAtPath:path contents:nil attributes:nil];
-				}
+				} else {
+                    NSDictionary *dict = [[NSFileManager defaultManager] attributesOfFileSystemForPath:path error:nil];
+                    unsigned long long size = [dict fileSize];
+                    if (size > 10*1024*1024) {
+                        [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
+                        [[NSFileManager defaultManager] createFileAtPath:path contents:nil attributes:nil];
+                    }
+                }
 				g_logger = [[MMLogger alloc] initWithFilePath:path];
 			}
 		}
@@ -81,7 +85,6 @@ MMLogger *g_logger = NULL;
 - (void)log:(NSString*)s{
 	[logFile_ seekToEndOfFile];
 	[logFile_ writeData:[s dataUsingEncoding:NSUTF8StringEncoding]];
-	[logFile_ synchronizeFile];
 }
 
 - (void)dealloc

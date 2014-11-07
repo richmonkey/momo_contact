@@ -9,8 +9,7 @@
 
 
 
-//外网
-#define ALBUM_URL @"http://v3.api.momo.im/"
+
 
 
 

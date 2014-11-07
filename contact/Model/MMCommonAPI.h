@@ -77,7 +77,7 @@ typedef enum {
 + (NSString*)getIMLongTextURL:(NSString*)msdId;
 
 
-+ (MMMomoUserInfo*)loginUserInfo;
+
 
 +(NSString *)changeToValidNumber:(NSString*)mobile;
 + (BOOL)isValidTelNumber:(NSString*)mobile;

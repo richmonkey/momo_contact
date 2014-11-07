@@ -1477,39 +1477,6 @@
     return array;
 }
 
-- (NSArray*)searchFriend:(NSString*)searchString				
-{
-    NSMutableArray* array = [NSMutableArray array];
-    searchString = [searchString lowercaseString];
-    
-    for (MMMomoUserInfo* friendInfo in friendArray_) {
-        
-        BOOL successMatch = NO;
-        do {
-            //直接查找
-            NSRange searchResult = [friendInfo.realName rangeOfString:searchString options:NSCaseInsensitiveSearch];
-            if (searchResult.location != NSNotFound) {
-                successMatch = YES;
-                break;
-            }
-            
-            //拼音匹配
-            if ([MMPhoneticAbbr contactMatch:friendInfo.realName pattern:searchString isFuzzy:NO isDigital:NO]) {
-                successMatch = YES;
-                break;
-            }
-            
-        } while (0);
-        
-        if (successMatch) {
-            [array addObject:friendInfo];
-        }
-    }
-    
-    return array;
-}
-
-
 -(NSString*) getDefaulMMLabelByProperty:(NSInteger) property {
 	
 	switch (property) {

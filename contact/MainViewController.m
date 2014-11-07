@@ -17,6 +17,7 @@
 @interface MainViewController ()
 @property(nonatomic)dispatch_source_t refreshTimer;
 @property(nonatomic)int refreshFailCount;
+@property(nonatomic, assign)ABAddressBookRef addressBook;
 @end
 
 @implementation MainViewController
@@ -32,7 +33,34 @@
     dispatch_source_set_event_handler(self.refreshTimer, ^{
         [self refreshAccessToken];
     });
-    [self startRefreshTimer];
+  //  [self startRefreshTimer];
+    
+    CFErrorRef err = nil;
+    self.addressBook = ABAddressBookCreateWithOptions(NULL, &err);
+    if (err) {
+        NSString *s = (__bridge NSString*)CFErrorCopyDescription(err);
+        NSLog(@"address book error:%@", s);
+        return;
+    }
+    
+    
+    __block BOOL accessGranted = NO;
+    
+    ABAuthorizationStatus status = ABAddressBookGetAuthorizationStatus();
+    if (status == kABAuthorizationStatusNotDetermined) {
+        NSLog(@"not determined");
+        
+        ABAddressBookRequestAccessWithCompletion(self.addressBook, ^(bool granted, CFErrorRef error) {
+            NSLog(@"grant:%d", granted);
+  
+        });
+
+        
+    } else if (status == kABAuthorizationStatusAuthorized){
+        accessGranted = YES;
+    } else {
+        accessGranted = NO;
+    }
     
 }
 

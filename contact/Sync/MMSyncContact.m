@@ -271,6 +271,7 @@
             [MMAddressBook ABRecord2DbStruct:dbContact withDataList:dbDataList  withPerson:person];
             dbContact.properties = dbDataList;
             [array addObject:dbContact];
+            MLOG(@"upload phone contact:%@", phoneid);
         }
         
 		NSArray *response = nil;
@@ -290,7 +291,8 @@
 		for (NSDictionary *dic in response) {
 			MMMomoContact *contact = [array objectAtIndex:index];
 			int status = [[dic objectForKey:@"status"] intValue];
-			if ( 201 == status) {
+			if (201 == status) {
+
 				MMContactSyncInfo *info = [[[MMContactSyncInfo alloc] init] autorelease];	
 				info.contactId = [[dic objectForKey:@"id"] intValue];
 				info.phoneContactId = contact.phoneCid;
@@ -307,6 +309,7 @@
 					syncResult_.momoDownloadAddCount = syncResult_.momoDownloadAddCount + 1;
 				}
 #endif
+                MLOG(@"upload phone contact:%ld success, contact id:%ld", (long)contact.phoneCid, (long)info.contactId);
 			} else if (303 == status) {
 				NSArray *array = [NSArray arrayWithObject:[dic objectForKey:@"id"]];
                 

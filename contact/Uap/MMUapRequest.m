@@ -17,7 +17,7 @@
 #import "ASIHTTPRequest.h"
 #import "oauth.h"
 #import "ASIFormDataRequest.h"
-
+#import "Config.h"
 
 @implementation MMUapRequest
 + (MMUapRequest*)shareInstance {
@@ -394,7 +394,7 @@
 
 + (id)requestWithPath:(NSString *)path usingSSL:(BOOL)usingSSL {
     NSString* fullUrl = nil;
-    fullUrl = [ALBUM_URL stringByAppendingFormat:@"%@",path];
+    fullUrl = [[[Config instance] URL] stringByAppendingFormat:@"%@",path];
 	NSURL*url = [NSURL URLWithString:fullUrl];
     
 	ASIHTTPRequest* request = [self requestWithURL:url];
@@ -411,7 +411,7 @@
 
 + (id)requestWithPath:(NSString*)path withObject:(NSObject*)object usingSSL:(BOOL)usingSSL {
     NSString* fullUrl = nil;
-    fullUrl = [ALBUM_URL stringByAppendingFormat:@"%@",path];
+    fullUrl = [[[Config instance] URL] stringByAppendingFormat:@"%@",path];
 	NSURL* url = [NSURL URLWithString:fullUrl];
 
 	ASIHTTPRequest* request = [self requestWithURL:url];
@@ -457,6 +457,9 @@
 
 -(id)responseObject {
 	NSString *response = [self responseString];
+    if ([self responseStatusCode] != 200) {
+        NSLog(@"response:%@", response);
+    }
 	SBJSON* sbjson = [[[SBJSON alloc] init] autorelease];
     if (response.length == 0) {
         return nil;

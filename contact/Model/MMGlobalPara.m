@@ -22,7 +22,7 @@ static UITabBarController *g_tabBarController;
 }
 
 + (NSString*)documentDirectory {
-	return [NSString stringWithFormat:@"%@/Documents/MomoData/", NSHomeDirectory()];
+	return [NSString stringWithFormat:@"%@/Documents/", NSHomeDirectory()];
 }
 
 
