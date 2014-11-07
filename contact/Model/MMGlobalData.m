@@ -24,7 +24,7 @@
 	if(!instance) {
 		@synchronized(self) {
 			if(!instance) {
-				instance = [[[MMGlobalData alloc] init] autorelease];
+				instance = [[MMGlobalData alloc] init];
 			}
 		}
 	}

@@ -721,10 +721,6 @@
 }
 
 
-+ (BOOL)isRobot:(NSInteger)uid {
-    return (uid == YOU_DAO_ID || uid == WEARTHER_91);
-}
-
 + (NSArray*)sortIntArray:(NSArray *)array {
     return  [array sortedArrayUsingComparator:^(id obj1, id obj2) {
         if ([obj1 longLongValue] < [obj2 longLongValue]) {

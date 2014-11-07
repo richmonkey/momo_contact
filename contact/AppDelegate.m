@@ -7,6 +7,10 @@
 //
 
 #import "AppDelegate.h"
+#import "AskPhoneNumberViewController.h"
+#import "MainViewController.h"
+#import "Token.h"
+
 #if ! __has_feature(objc_arc)
 #error This file must be compiled with ARC. Either turn on ARC for the project or use -fobjc-arc flag
 #endif
@@ -14,7 +18,25 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
+    
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    application.statusBarHidden = NO;
+    
+    
+    Token *token = [Token instance];
+    if (token.accessToken) {
+        MainViewController *controller = [[MainViewController alloc] init];
+        self.window.rootViewController = controller;
+    }else{
+        // Override point for customization after application launch.
+        AskPhoneNumberViewController *ctl = [[AskPhoneNumberViewController alloc] init];
+        UINavigationController * navCtr = [[UINavigationController alloc] initWithRootViewController: ctl];
+        self.window.rootViewController = navCtr;
+    }
+    
+    self.window.backgroundColor = [UIColor whiteColor];
+    [self.window makeKeyAndVisible];
+    
     return YES;
 }
 							

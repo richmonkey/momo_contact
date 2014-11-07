@@ -7,6 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
+#import "Token.h"
 
 @interface contactTests : XCTestCase
 
@@ -28,7 +29,7 @@
 
 - (void)testExample
 {
-    XCTFail(@"No implementation for \"%s\"", __PRETTY_FUNCTION__);
+
 }
 
 @end
