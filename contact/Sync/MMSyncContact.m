@@ -471,7 +471,7 @@
 		
         ABRecordID phoneid = ABRecordGetRecordID(person);
 		
-		int index = [syncInfos indexOfObjectPassingTest:^(id obj, NSUInteger idx, BOOL *stop){
+		NSInteger index = [syncInfos indexOfObjectPassingTest:^(id obj, NSUInteger idx, BOOL *stop){
 			MMContactSyncInfo *info = (MMContactSyncInfo*)obj;
 			if(info.phoneContactId == phoneid)
 				return YES;

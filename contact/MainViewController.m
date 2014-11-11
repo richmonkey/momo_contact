@@ -92,14 +92,13 @@ static void ABChangeCallback(ABAddressBookRef addressBook, CFDictionaryRef info,
 
 - (void)onEndSync:(NSNotification*)notification {
     NSLog(@"onEndSync");
-    ABAddressBookRevert(self.addressBook);
-    int count = [MMAddressBook getContactCount];
-    NSLog(@"contact count:%d", count);
+    NSInteger count = [MMAddressBook getContactCount];
+    NSLog(@"contact count:%ld", count);
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         int count;
         [MMServerContactManager getContactCount:&count];
-        NSLog(@"server count:%d", count);
+        NSLog(@"server count:%ld", count);
     });
 }
 
