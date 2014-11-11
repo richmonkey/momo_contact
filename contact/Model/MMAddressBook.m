@@ -63,7 +63,7 @@
 
 + (MMErrorType)clearAddressBook {
     //删除AddressBook		
-    ABAddressBookRef addressBook = ABAddressBookCreate();
+    ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, NULL);
     CFArrayRef people = ABAddressBookCopyArrayOfAllPeople(addressBook);
     CFIndex count = CFArrayGetCount(people);	
     
@@ -187,14 +187,14 @@ NSString* formatTelNumber(NSString* strTel){
                     NSMutableDictionary* addressDict = [NSMutableDictionary dictionary];
                     for(int i = 2; i < 7; i++) {
                         NSString* str = [listItems objectAtIndex:i];
-                        if(str && str != @"")
+                        if(str && ![str isEqualToString:@""])
                             [addressDict setObject:str forKey:(NSString*)[dictKey valueForKey:[NSString stringWithFormat:@"%d", i]]];
                     }
                     ABMultiValueAddValueAndLabel(multiData, addressDict, label, nil);
                 }
                     break;
                 case kMoBday: 
-                    if(data.value && data.value != @"") {
+                    if(data.value && ![data.value isEqualToString:@""]) {
                         NSDateFormatter* formater = [NSDateFormatter new];
                         [formater setDateFormat:@"YYYY-MM-dd"];
                         NSDate* date = [formater dateFromString:data.value];
@@ -212,7 +212,7 @@ NSString* formatTelNumber(NSString* strTel){
                 case kMoImQQ:
                 case kMoImGtalk:
                 case kMoImSkype:
-                    if(data.value && data.value != @"") {
+                    if(data.value && ![data.value isEqualToString:@""]) {
                         CFStringRef aService = kABPersonInstantMessageServiceICQ;
 						
                         switch(data.property) {
@@ -281,14 +281,14 @@ NSInteger simpleContactCompare(id id1, id id2, void *context) {
 }
 
 +(int)getContactCount {
-    ABAddressBookRef addressBook = ABAddressBookCreate();
+    ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, NULL);
     CFIndex count = ABAddressBookGetPersonCount(addressBook);
     CFRelease(addressBook);
     return count;
 }
 
 +(MMFullContact*)getContact:(NSInteger)cellId {
-    ABAddressBookRef abAddressbook = ABAddressBookCreate();
+    ABAddressBookRef abAddressbook = ABAddressBookCreateWithOptions(NULL, NULL);
     ABRecordRef person = ABAddressBookGetPersonWithRecordID(abAddressbook, cellId);
     if(nil == person) {
         CFRelease(abAddressbook);
@@ -445,7 +445,7 @@ NSInteger simpleContactCompare(id id1, id id2, void *context) {
 +(MMABErrorType)insertContact:(DbContact *)dbcontact withDataList:(NSArray*)listData returnCellId:(NSInteger*)cellId{
     CFErrorRef errorRef = NULL; 
     
-    ABAddressBookRef abAddressbook = ABAddressBookCreate();
+    ABAddressBookRef abAddressbook = ABAddressBookCreateWithOptions(NULL, NULL);
     
     ABRecordRef newPerson = [self insertContact:abAddressbook contact:dbcontact withDataList:listData];
     if (nil == newPerson) {
@@ -468,7 +468,7 @@ NSInteger simpleContactCompare(id id1, id id2, void *context) {
 
 +(NSArray*)insertContacts:(NSArray*)fullContacts {
     CFErrorRef errorRef = NULL;
-    ABAddressBookRef abAddressbook = ABAddressBookCreate();
+    ABAddressBookRef abAddressbook = ABAddressBookCreateWithOptions(NULL, NULL);
     NSMutableArray *newPersons = [NSMutableArray array];
     NSMutableArray *array = [NSMutableArray array];
   
@@ -516,7 +516,7 @@ NSInteger simpleContactCompare(id id1, id id2, void *context) {
         return ret;
     }
     
-    ABAddressBookRef abAddressbook = ABAddressBookCreate();
+    ABAddressBookRef abAddressbook = ABAddressBookCreateWithOptions(NULL, NULL);
     CFErrorRef errorRef = nil;
     
     ABRecordRef person = ABAddressBookGetPersonWithRecordID(abAddressbook, cellId);
@@ -537,7 +537,7 @@ NSInteger simpleContactCompare(id id1, id id2, void *context) {
     MMABErrorType ret = 0;
     CFErrorRef errorRef = NULL; 
 
-    ABAddressBookRef abAddressbook = ABAddressBookCreate();
+    ABAddressBookRef abAddressbook = ABAddressBookCreateWithOptions(NULL, NULL);
     do {
         if (dbcontact.phoneCid <= 0) {
             ret = MM_AB_RECORD_NOT_EXIST;
@@ -654,7 +654,7 @@ NSInteger simpleContactCompare(id id1, id id2, void *context) {
     MMABErrorType ret = MM_AB_OK;
     CFErrorRef errorRef = NULL; 
     
-    ABAddressBookRef abAddressbook = ABAddressBookCreate();
+    ABAddressBookRef abAddressbook = ABAddressBookCreateWithOptions(NULL, NULL);
     do {
         
         ABRecordRef updatePerson = ABAddressBookGetPersonWithRecordID(abAddressbook, cellId);
@@ -692,7 +692,7 @@ NSInteger simpleContactCompare(id id1, id id2, void *context) {
 
 +(NSArray*)getContactNumberList:(MMABErrorType*)error{
 	NSMutableArray *numbers = [NSMutableArray array];
-    ABAddressBookRef addressBook = ABAddressBookCreate();
+    ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, NULL);
     NSArray* people = (NSArray*)ABAddressBookCopyArrayOfAllPeople(addressBook);
     for(NSUInteger i = 0; i < [people count]; ++i) {
         ABRecordRef person = (ABRecordRef)[people objectAtIndex:i];
@@ -726,7 +726,7 @@ NSInteger simpleContactCompare(id id1, id id2, void *context) {
     CFErrorRef errorRef = NULL; 
     NSInteger tmpCateId = 0;
     
-    ABAddressBookRef abAddressbook = ABAddressBookCreate();
+    ABAddressBookRef abAddressbook = ABAddressBookCreateWithOptions(NULL, NULL);
     do {
         ABRecordRef group = ABGroupCreate();
         ABRecordSetValue(group, kABGroupNameProperty, cateName, &errorRef);
@@ -756,7 +756,7 @@ NSInteger simpleContactCompare(id id1, id id2, void *context) {
     MMABErrorType ret = MM_AB_OK;
     CFErrorRef errorRef = NULL; 
     
-    ABAddressBookRef abAddressbook = ABAddressBookCreate();
+    ABAddressBookRef abAddressbook = ABAddressBookCreateWithOptions(NULL, NULL);
     do {
 //        CFErrorRef errorRef;
         ABRecordRef group = ABAddressBookGetGroupWithRecordID(abAddressbook, cateId);
@@ -781,7 +781,7 @@ NSInteger simpleContactCompare(id id1, id id2, void *context) {
 
 +(NSDate*)getContactModifyDate:(NSInteger)cellId {
 	
-	ABAddressBookRef abAddressbook = ABAddressBookCreate();	
+	ABAddressBookRef abAddressbook = ABAddressBookCreateWithOptions(NULL, NULL);
 	ABRecordRef person = ABAddressBookGetPersonWithRecordID(abAddressbook, cellId);
 	if (nil == person) {
 		CFRelease(abAddressbook);
@@ -817,7 +817,7 @@ NSInteger simpleContactCompare(id id1, id id2, void *context) {
 
 
 + (DbContact*)getContact:(NSInteger)cellId withError:(MMABErrorType*)error {
-	ABAddressBookRef abAddressbook = ABAddressBookCreate();
+	ABAddressBookRef abAddressbook = ABAddressBookCreateWithOptions(NULL, NULL);
     ABRecordRef person = ABAddressBookGetPersonWithRecordID(abAddressbook,cellId);
 	if (person == NULL) {
 		if (error) {
@@ -845,7 +845,7 @@ NSInteger simpleContactCompare(id id1, id id2, void *context) {
 }
 
 + (NSArray*)getDataList:(NSInteger)cellId withType:(NSInteger)cType withError:(MMABErrorType*)error {
-	ABAddressBookRef abAddressbook = ABAddressBookCreate();
+	ABAddressBookRef abAddressbook = ABAddressBookCreateWithOptions(NULL, NULL);
     ABRecordRef person = ABAddressBookGetPersonWithRecordID(abAddressbook,cellId);
 	if (person == NULL) {
 		if (error) {
@@ -880,7 +880,7 @@ NSInteger simpleContactCompare(id id1, id id2, void *context) {
 }
 
 + (NSArray*) getDataList:(NSInteger)cellId withError:(MMABErrorType*)error {
-	ABAddressBookRef abAddressbook = ABAddressBookCreate();
+	ABAddressBookRef abAddressbook = ABAddressBookCreateWithOptions(NULL, NULL);
     ABRecordRef person = ABAddressBookGetPersonWithRecordID(abAddressbook,cellId);
 	if (person == NULL) {
 		if (error) {
@@ -1233,7 +1233,7 @@ NSInteger simpleContactCompare(id id1, id id2, void *context) {
 }
 
 + (BOOL)isContactExist:(NSInteger)cellId {
-	ABAddressBookRef abAddressbook = ABAddressBookCreate();
+	ABAddressBookRef abAddressbook = ABAddressBookCreateWithOptions(NULL, NULL);
     ABRecordRef person = ABAddressBookGetPersonWithRecordID(abAddressbook,cellId);
 	if (person == NULL) {
 		CFRelease(abAddressbook);
@@ -1245,7 +1245,7 @@ NSInteger simpleContactCompare(id id1, id id2, void *context) {
 }
 
 + (NSData*)getAvatarData:(NSInteger)phonecid {
-	ABAddressBookRef abAddressbook = ABAddressBookCreate();
+	ABAddressBookRef abAddressbook = ABAddressBookCreateWithOptions(NULL, NULL);
     ABRecordRef person = ABAddressBookGetPersonWithRecordID(abAddressbook,phonecid);
 	if (person == NULL) {
 		CFRelease(abAddressbook);
@@ -1269,7 +1269,7 @@ NSInteger simpleContactCompare(id id1, id id2, void *context) {
 
 + (MMErrorType) updateContactAvatar:(NSData*)avatar byPhoneId:(NSInteger)phoneContactId {
     CFErrorRef  error;
-	ABAddressBookRef abAddressbook = ABAddressBookCreate();
+	ABAddressBookRef abAddressbook = ABAddressBookCreateWithOptions(NULL, NULL);
     ABRecordRef person = ABAddressBookGetPersonWithRecordID(abAddressbook,phoneContactId);
 	
 	MMErrorType iRet = MM_DB_OK;

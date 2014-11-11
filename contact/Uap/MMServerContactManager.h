@@ -40,6 +40,6 @@ typedef DbContactSyncInfo MMMomoContactSimple;
 + (NSArray*)getContactChangeHistory:(NSInteger)page withErrorString:(NSString**)errorString;
 + (BOOL)recoverContactChangeHistory:(NSInteger)dateLine;
 
-
++(BOOL)getContactCount:(NSInteger*)count;
 
 @end

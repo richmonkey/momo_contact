@@ -10,22 +10,32 @@
 #import "MMSyncThread.h"
 #import "Token.h"
 #import "APIRequest.h"
+#import "MMAddressBook.h"
+#import "MMServerContactManager.h"
 
 #if ! __has_feature(objc_arc)
 #error This file must be compiled with ARC. Either turn on ARC for the project or use -fobjc-arc flag
 #endif
+
 @interface MainViewController ()
 @property(nonatomic)dispatch_source_t refreshTimer;
 @property(nonatomic)int refreshFailCount;
 @property(nonatomic, assign)ABAddressBookRef addressBook;
+
+- (void)onAddressBookChanged;
 @end
+
+static void ABChangeCallback(ABAddressBookRef addressBook, CFDictionaryRef info, void *context) {
+    MainViewController *controller = (__bridge MainViewController *)(context);
+    [controller onAddressBookChanged];
+}
 
 @implementation MainViewController
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+
     [[MMSyncThread shareInstance] start];
     
     dispatch_queue_t queue = dispatch_get_main_queue();
@@ -33,7 +43,7 @@
     dispatch_source_set_event_handler(self.refreshTimer, ^{
         [self refreshAccessToken];
     });
-  //  [self startRefreshTimer];
+    [self startRefreshTimer];
     
     CFErrorRef err = nil;
     self.addressBook = ABAddressBookCreateWithOptions(NULL, &err);
@@ -42,26 +52,55 @@
         NSLog(@"address book error:%@", s);
         return;
     }
-    
-    
-    __block BOOL accessGranted = NO;
-    
+
     ABAuthorizationStatus status = ABAddressBookGetAuthorizationStatus();
     if (status == kABAuthorizationStatusNotDetermined) {
         NSLog(@"not determined");
-        
         ABAddressBookRequestAccessWithCompletion(self.addressBook, ^(bool granted, CFErrorRef error) {
             NSLog(@"grant:%d", granted);
-  
+            if (granted) {
+               ABAddressBookRegisterExternalChangeCallback(self.addressBook, ABChangeCallback, (__bridge void *)(self));
+            }
         });
-
-        
     } else if (status == kABAuthorizationStatusAuthorized){
-        accessGranted = YES;
+        ABAddressBookRegisterExternalChangeCallback(self.addressBook, ABChangeCallback, (__bridge void *)(self));
+        NSLog(@"addressbook authorized");
     } else {
-        accessGranted = NO;
+        NSLog(@"no addressbook authorization");
     }
     
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSInteger count;
+        [MMServerContactManager getContactCount:&count];
+        NSLog(@"server count:%d", count);
+    });
+    
+    NSNotificationCenter * center = [NSNotificationCenter defaultCenter];
+    [center addObserver:self selector:@selector(onBeginSync:) name:kMMBeginSync object:nil];
+    [center addObserver:self selector:@selector(onEndSync:) name:kMMEndSync object:nil];
+}
+
+- (void)onAddressBookChanged {
+    ABAddressBookRevert(self.addressBook);
+    int count = [MMAddressBook getContactCount];
+    NSLog(@"contact count:%d", count);
+}
+
+- (void)onBeginSync:(NSNotification*)notification {
+    NSLog(@"onBeginSync");
+}
+
+- (void)onEndSync:(NSNotification*)notification {
+    NSLog(@"onEndSync");
+    ABAddressBookRevert(self.addressBook);
+    int count = [MMAddressBook getContactCount];
+    NSLog(@"contact count:%d", count);
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSInteger count;
+        [MMServerContactManager getContactCount:&count];
+        NSLog(@"server count:%d", count);
+    });
 }
 
 - (void)didReceiveMemoryWarning

@@ -65,6 +65,19 @@
     return YES;
 }
 
++(BOOL)getContactCount:(NSInteger*)count {
+    NSDictionary *response = nil;
+	NSInteger statusCode = [MMUapRequest getSync:@"contact/count.json" jsonValue:&response compress:YES];
+	if (statusCode != 200 || !response) {
+		return NO;
+	}
+    if ([response objectForKey:@"all_count"] && count != NULL) {
+        *count = [[response objectForKey:@"all_count"] integerValue];
+        return YES;
+    }
+    return NO;
+}
+
 +(NSArray*)getSimpleContactList {
 	NSArray *response = nil;
 	NSInteger statusCode = [MMUapRequest getSync:@"contact.json?contact_group_id=all&info=0" jsonValue:&response compress:YES];
@@ -178,7 +191,7 @@
 	[dic setObject:PARSE_NULL_STR(contact.jobTitle) forKey:@"title"];
 	[dic setObject:PARSE_NULL_STR(contact.note) forKey:@"note"];
     
-	[dic setObject:[NSNumber numberWithInteger:contact.modifyDate] forKey:@"modified_at"];
+	[dic setObject:[NSNumber numberWithLongLong:contact.modifyDate] forKey:@"modified_at"];
 	[dic setObject:PARSE_NULL_STR(contact.avatarUrl) forKey:@"avatar"];
     
     
