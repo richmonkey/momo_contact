@@ -62,7 +62,7 @@
      
         NSString *accessToken = [resp objectForKey:@"access_token"];
         NSString *refreshToken = [resp objectForKey:@"refresh_token"];
-        int expireTimestamp = time(NULL) + [[resp objectForKey:@"expires_in"] intValue];
+        int expireTimestamp = (int)time(NULL) + [[resp objectForKey:@"expires_in"] intValue];
         int64_t uid = [[resp objectForKey:@"uid"] longLongValue];
         NSString *state = [resp objectForKey:@"state"];
         success(uid, accessToken, refreshToken, expireTimestamp, state);
@@ -87,7 +87,7 @@
     request.postBody = data;
     request.method = @"POST";
     request.successCB = ^(TAHttpOperation*commObj, NSURLResponse *response, NSData *data) {
-        int statusCode = [(NSHTTPURLResponse*)response statusCode];
+        int statusCode = (int)[(NSHTTPURLResponse*)response statusCode];
         if (statusCode != 200) {
             NSDictionary *e = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:nil];
             NSLog(@"refresh token fail:%@", e);
@@ -97,7 +97,7 @@
         NSDictionary *resp = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:nil];
         NSString *accessToken = [resp objectForKey:@"access_token"];
         NSString *refreshToken = [resp objectForKey:@"refresh_token"];
-        int expireTimestamp = time(NULL) + [[resp objectForKey:@"expires_in"] intValue];
+        int expireTimestamp = (int)time(NULL) + [[resp objectForKey:@"expires_in"] intValue];
         success(accessToken, refreshToken, expireTimestamp);
     };
     request.failCB = ^(TAHttpOperation*commObj, TAHttpOperationError error) {

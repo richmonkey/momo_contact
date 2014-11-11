@@ -154,7 +154,7 @@ void timerCallback(CFRunLoopTimerRef timer, void *info) {
 	MMSyncResult *result = [syncer syncResult];
     history.detailInfo = [NSString stringWithFormat: @"%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld",
                           result.downloadAddCount + result.downloadUpdateCount + result.downloadDelCount,
-                          result.downloadAddCount, result.downloadDelCount, result.downloadUpdateCount, 
+                          result.downloadAddCount, result.downloadDelCount, result.downloadUpdateCount,
                           result.uploadAddCount + result.uploadUpdateCount + result.uploadDelCount,
                           result.uploadAddCount,  result.uploadDelCount, result.uploadUpdateCount];
     

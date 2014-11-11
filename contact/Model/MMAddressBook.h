@@ -36,19 +36,19 @@ typedef int MMABErrorType;
 
 +(int)getContactCount;
 
-+(MMFullContact*)getContact:(NSInteger)phoneContactId;
++(MMFullContact*)getContact:(int32_t)phoneContactId;
 
 +(NSArray*)insertContacts:(NSArray*)fullContacts;
 
 /*
  * 向Iphone的AddressBook插入联系人数据
  */
-+(MMABErrorType)insertContact:(DbContact*)dbcontact withDataList:(NSArray*)listData returnCellId:(NSInteger*)cellId;
++(MMABErrorType)insertContact:(DbContact*)dbcontact withDataList:(NSArray*)listData returnCellId:(int32_t*)cellId;
 
 /*
  * 删除IPHONE的ADDRESSBOOK的联系人
  */
-+(MMABErrorType)deleteContact:(NSInteger)cellId;
++(MMABErrorType)deleteContact:(int32_t)cellId;
 
 /*
  * 更新联系人数据
@@ -58,21 +58,21 @@ typedef int MMABErrorType;
 /*
  * 只更新联系人的多元数据
  */
-+(MMABErrorType)updateData:(NSInteger)cellId withDataList:(NSArray*)listData;
++(MMABErrorType)updateData:(int32_t)cellId withDataList:(NSArray*)listData;
 
 
 +(NSArray*)getContactNumberList:(MMABErrorType*)error;
 
-+(NSDate*) getContactModifyDate:(NSInteger)cellId;
++(NSDate*) getContactModifyDate:(int32_t)cellId;
 
-+(MMErrorType) updateContactAvatar:(NSData*)avatar byPhoneId:(NSInteger)phoneContactId;
++(MMErrorType) updateContactAvatar:(NSData*)avatar byPhoneId:(int32_t)phoneContactId;
 
-+(NSData*)getAvatarData:(NSInteger)phonecid;
-+(UIImage *)getAvatar:(NSInteger)phonecid;
++(NSData*)getAvatarData:(int32_t)phonecid;
++(UIImage *)getAvatar:(int32_t)phonecid;
 
-+(BOOL)isContactExist:(NSInteger)cellId;
++(BOOL)isContactExist:(int32_t)cellId;
 
-+ (NSArray*) getDataList:(NSInteger)cellId withError:(MMABErrorType*)error; 
++ (NSArray*) getDataList:(int32_t)cellId withError:(MMABErrorType*)error; 
 
 @end
 

@@ -47,11 +47,11 @@
 
 +(MMABErrorType)setRecordData:(ABRecordRef) person andDatalist:(NSArray*) listData;
 
-+ (DbContact*)getContact:(NSInteger)cellId withError:(MMABErrorType*)error;
++ (DbContact*)getContact:(int32_t)cellId withError:(MMABErrorType*)error;
 
-+ (NSArray*)getDataList:(NSInteger)cellId withType:(NSInteger)cType withError:(MMABErrorType*)error;
++ (NSArray*)getDataList:(int32_t)cellId withType:(NSInteger)cType withError:(MMABErrorType*)error;
 
-+ (NSArray*) getDataList:(NSInteger)cellId withError:(MMABErrorType*)error;
++ (NSArray*) getDataList:(int32_t)cellId withError:(MMABErrorType*)error;
 
 + (BOOL)dbContactFromABRecord:(DbContact*)dbContact abRecord:(ABRecordRef)person;
 
@@ -261,7 +261,7 @@ NSString* formatTelNumber(NSString* strTel){
         }
         
         for(NSString* key in [multiValueDictionary allKeys]) {
-            ABPropertyID aPropertyID = [key integerValue];
+            ABPropertyID aPropertyID = [key intValue];
             ABMutableMultiValueRef multiData = (ABMutableMultiValueRef)[multiValueDictionary valueForKey:key];
             ABRecordSetValue(person, aPropertyID, multiData, &errorRef);
         }
@@ -275,10 +275,10 @@ NSString* formatTelNumber(NSString* strTel){
     ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, NULL);
     CFIndex count = ABAddressBookGetPersonCount(addressBook);
     CFRelease(addressBook);
-    return count;
+    return (int)count;
 }
 
-+(MMFullContact*)getContact:(NSInteger)cellId {
++(MMFullContact*)getContact:(int32_t)cellId {
     ABAddressBookRef abAddressbook = ABAddressBookCreateWithOptions(NULL, NULL);
     ABRecordRef person = ABAddressBookGetPersonWithRecordID(abAddressbook, cellId);
     if(nil == person) {
@@ -380,7 +380,7 @@ NSString* formatTelNumber(NSString* strTel){
 /*
  * 向Iphone的AddressBook插入联系人数据
  */
-+(MMABErrorType)insertContact:(DbContact *)dbcontact withDataList:(NSArray*)listData returnCellId:(NSInteger*)cellId{
++(MMABErrorType)insertContact:(DbContact *)dbcontact withDataList:(NSArray*)listData returnCellId:(int32_t*)cellId{
     CFErrorRef errorRef = NULL; 
     
     ABAddressBookRef abAddressbook = ABAddressBookCreateWithOptions(NULL, NULL);
@@ -434,7 +434,7 @@ NSString* formatTelNumber(NSString* strTel){
 
     for (id person in newPersons) {
         ABRecordRef newPerson = (ABRecordRef)person;
-        NSInteger cellId = ABRecordGetRecordID(newPerson);
+        int32_t cellId = ABRecordGetRecordID(newPerson);
         [array addObject:[NSNumber numberWithInt:cellId]];
     }
     [newPersons removeAllObjects];
@@ -446,7 +446,7 @@ NSString* formatTelNumber(NSString* strTel){
 /*
  * 删除IPHONE的ADDRESSBOOK的联系人
  */
-+(MMABErrorType)deleteContact:(NSInteger)cellId{
++(MMABErrorType)deleteContact:(int32_t)cellId{
     MMABErrorType ret = MM_AB_OK;
     
     if(cellId <= 0) {
@@ -588,7 +588,7 @@ NSString* formatTelNumber(NSString* strTel){
 /*
  * 只更新联系人的多元数据
  */
-+(MMABErrorType)updateData:(NSInteger)cellId withDataList:(NSArray*)listData{
++(MMABErrorType)updateData:(int32_t)cellId withDataList:(NSArray*)listData{
     MMABErrorType ret = MM_AB_OK;
     CFErrorRef errorRef = NULL; 
     
@@ -717,7 +717,7 @@ NSString* formatTelNumber(NSString* strTel){
     return ret;
 }
 
-+(NSDate*)getContactModifyDate:(NSInteger)cellId {
++(NSDate*)getContactModifyDate:(int32_t)cellId {
 	
 	ABAddressBookRef abAddressbook = ABAddressBookCreateWithOptions(NULL, NULL);
 	ABRecordRef person = ABAddressBookGetPersonWithRecordID(abAddressbook, cellId);
@@ -754,7 +754,7 @@ NSString* formatTelNumber(NSString* strTel){
 }
 
 
-+ (DbContact*)getContact:(NSInteger)cellId withError:(MMABErrorType*)error {
++ (DbContact*)getContact:(int32_t)cellId withError:(MMABErrorType*)error {
 	ABAddressBookRef abAddressbook = ABAddressBookCreateWithOptions(NULL, NULL);
     ABRecordRef person = ABAddressBookGetPersonWithRecordID(abAddressbook,cellId);
 	if (person == NULL) {
@@ -782,7 +782,7 @@ NSString* formatTelNumber(NSString* strTel){
 	return dbContact;
 }
 
-+ (NSArray*)getDataList:(NSInteger)cellId withType:(NSInteger)cType withError:(MMABErrorType*)error {
++ (NSArray*)getDataList:(int32_t)cellId withType:(NSInteger)cType withError:(MMABErrorType*)error {
 	ABAddressBookRef abAddressbook = ABAddressBookCreateWithOptions(NULL, NULL);
     ABRecordRef person = ABAddressBookGetPersonWithRecordID(abAddressbook,cellId);
 	if (person == NULL) {
@@ -817,7 +817,7 @@ NSString* formatTelNumber(NSString* strTel){
 	return resultList;
 }
 
-+ (NSArray*) getDataList:(NSInteger)cellId withError:(MMABErrorType*)error {
++ (NSArray*) getDataList:(int32_t)cellId withError:(MMABErrorType*)error {
 	ABAddressBookRef abAddressbook = ABAddressBookCreateWithOptions(NULL, NULL);
     ABRecordRef person = ABAddressBookGetPersonWithRecordID(abAddressbook,cellId);
 	if (person == NULL) {
@@ -1170,7 +1170,7 @@ NSString* formatTelNumber(NSString* strTel){
     return YES;
 }
 
-+ (BOOL)isContactExist:(NSInteger)cellId {
++ (BOOL)isContactExist:(int32_t)cellId {
 	ABAddressBookRef abAddressbook = ABAddressBookCreateWithOptions(NULL, NULL);
     ABRecordRef person = ABAddressBookGetPersonWithRecordID(abAddressbook,cellId);
 	if (person == NULL) {
@@ -1182,7 +1182,7 @@ NSString* formatTelNumber(NSString* strTel){
 	return YES;
 }
 
-+ (NSData*)getAvatarData:(NSInteger)phonecid {
++ (NSData*)getAvatarData:(int32_t)phonecid {
 	ABAddressBookRef abAddressbook = ABAddressBookCreateWithOptions(NULL, NULL);
     ABRecordRef person = ABAddressBookGetPersonWithRecordID(abAddressbook,phonecid);
 	if (person == NULL) {
@@ -1194,7 +1194,7 @@ NSString* formatTelNumber(NSString* strTel){
     return [(NSData*)data autorelease];
 }
 
-+ (UIImage *)getAvatar:(NSInteger)phonecid {
++ (UIImage *)getAvatar:(int32_t)phonecid {
     NSData *data = [self getAvatarData:phonecid];
     if (nil == data) {
         return nil;
@@ -1205,7 +1205,7 @@ NSString* formatTelNumber(NSString* strTel){
 
 
 
-+ (MMErrorType) updateContactAvatar:(NSData*)avatar byPhoneId:(NSInteger)phoneContactId {
++ (MMErrorType) updateContactAvatar:(NSData*)avatar byPhoneId:(int32_t)phoneContactId {
     CFErrorRef  error;
 	ABAddressBookRef abAddressbook = ABAddressBookCreateWithOptions(NULL, NULL);
     ABRecordRef person = ABAddressBookGetPersonWithRecordID(abAddressbook,phoneContactId);

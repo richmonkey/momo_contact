@@ -119,7 +119,7 @@ static void ABChangeCallback(ABAddressBookRef addressBook, CFDictionaryRef info,
 
 -(void)prepareTimer {
     Token *token = [Token instance];
-    int now = time(NULL);
+    int now = (int)time(NULL);
     if (now >= token.expireTimestamp - 1) {
         dispatch_time_t w = dispatch_walltime(NULL, 0);
         dispatch_source_set_timer(self.refreshTimer, w, DISPATCH_TIME_FOREVER, 0);
