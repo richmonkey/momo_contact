@@ -33,7 +33,6 @@ typedef int MMABErrorType;
 +(ABRecordRef)ABRecordFromDbStruct:(DbContact *)dbcontact withDataList:(NSArray *)listData;
 
 
-+(NSArray*) getContactSyncInfoList;
 
 +(int)getContactCount;
 

@@ -33,10 +33,7 @@
 @property(nonatomic)NSInteger uploadAddCount;
 @property(nonatomic)NSInteger uploadDelCount;
 @property(nonatomic)NSInteger uploadUpdateCount;
-@property(nonatomic)NSInteger momoDownloadAddCount;
-@property(nonatomic)NSInteger momoDownloadDelCount;
-@property(nonatomic)NSInteger momoDownloadUpdateCount;
-@property(nonatomic)NSInteger momoCardDownloadCount;
+
 @end
 
 //同步进度
@@ -64,13 +61,9 @@
 
 //同步联系人（包含头像）及其分组
 @interface MMContactSync : MMModel {
-	NSDictionary *categoryCache_;
 	MMSyncResult *syncResult_;
-	
-    MMSyncProgressInfo* syncProgress_;
 }
 @property(nonatomic, readonly)MMSyncResult *syncResult;
-@property (nonatomic, retain) MMSyncProgressInfo* syncProgress;
 
 -(BOOL) isCancelled;
 -(BOOL) clearSyncDb;
@@ -78,11 +71,8 @@
 
 
 @interface MMContactSync(Contact)
--(BOOL) downloadContactToMomo;
--(BOOL) downloadContactToMomo:(NSArray*)simpleList;
--(BOOL) uploadContact;
 -(BOOL) downloadContact;
--(BOOL) downloadContact:(NSArray*)simpleList;
+-(BOOL) uploadContact;
 
 -(NSMutableArray*)getContactSyncInfoList;
 

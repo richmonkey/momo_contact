@@ -14,21 +14,19 @@
 #import "SBJSON.h"
 #import "MMServerContactManager.h"
 #import "MMLogger.h"
-#import "MMContact.h"
 #import "MMGlobalDefine.h"
 
 @implementation MMSyncResult
 
 @synthesize 	downloadAddCount, downloadDelCount, downloadUpdateCount, uploadAddCount, 
-				uploadDelCount, uploadUpdateCount,  momoDownloadAddCount, momoDownloadDelCount, momoDownloadUpdateCount;
-@synthesize		momoCardDownloadCount;
+				uploadDelCount, uploadUpdateCount;
+
 
 @end
 
 @implementation MMContactSync
 
 @synthesize syncResult = syncResult_;
-@synthesize syncProgress = syncProgress_;
 
 -(id)init {
 	self = [super init];
@@ -39,8 +37,6 @@
 }
 -(void)dealloc {
 	[syncResult_ release];
-	[categoryCache_ release];
-    self.syncProgress = nil;
 	[super dealloc];
 }
 

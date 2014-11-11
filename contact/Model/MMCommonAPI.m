@@ -11,7 +11,6 @@
 #import "MMGlobalData.h"
 #import "MMUapRequest.h"
 #import "MMPhoneticAbbr.h"
-#import "MMContact.h"
 #import "RegexKitLite.h"
 
 @implementation MMCommonAPI

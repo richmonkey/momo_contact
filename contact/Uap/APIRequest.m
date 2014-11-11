@@ -7,13 +7,13 @@
 //
 
 #import "APIRequest.h"
-#import "Config.h"
+#import "MMGlobalDefine.h"
 
 @implementation APIRequest
 +(TAHttpOperation*)requestVerifyCode:(NSString*)zone number:(NSString*)number
                               success:(void (^)(NSString* code))success fail:(void (^)())fail{
     TAHttpOperation *request = [TAHttpOperation httpOperationWithTimeoutInterval:60];
-    request.targetURL = [[Config instance].URL stringByAppendingFormat:@"/verify_code?zone=%@&number=%@", zone, number];
+    request.targetURL = [API_URL stringByAppendingFormat:@"/verify_code?zone=%@&number=%@", zone, number];
     request.method = @"POST";
     request.successCB = ^(TAHttpOperation*commObj, NSURLResponse *response, NSData *data) {
         NSInteger statusCode = [(NSHTTPURLResponse*)response statusCode];
@@ -37,7 +37,7 @@
                             success:(void (^)(int64_t uid, NSString* accessToken, NSString *refreshToken, int expireTimestamp, NSString *state))success
                                fail:(void (^)())fail {
     TAHttpOperation *request = [TAHttpOperation httpOperationWithTimeoutInterval:60];
-    request.targetURL = [[Config instance].URL stringByAppendingString:@"/auth/token"];
+    request.targetURL = [API_URL stringByAppendingString:@"/auth/token"];
     
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     [dict setObject:code forKey:@"code"];
@@ -78,7 +78,7 @@
                               success:(void (^)(NSString *accessToken, NSString *refreshToken, int expireTimestamp))success
                                  fail:(void (^)())fail{
     TAHttpOperation *request = [TAHttpOperation httpOperationWithTimeoutInterval:60];
-    request.targetURL = [[Config instance].URL stringByAppendingString:@"/auth/refresh_token"];
+    request.targetURL = [API_URL stringByAppendingString:@"/auth/refresh_token"];
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     [dict setObject:refreshToken forKey:@"refresh_token"];
     NSDictionary *headers = [NSDictionary dictionaryWithObject:@"application/json" forKey:@"Content-Type"];

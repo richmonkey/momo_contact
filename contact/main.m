@@ -10,7 +10,6 @@
 #import <sqlite3.h>
 #import "AppDelegate.h"
 #import "MMSyncThread.h"
-#import "MMContact.h"
 #import "MMGlobalData.h"
 
 int main(int argc, char * argv[])
@@ -27,7 +26,6 @@ int main(int argc, char * argv[])
         
         [MMSyncThread shareInstance];
         [MMUapRequest shareInstance];
-        [MMContactManager instance];
         MLOG(@"app startup");
         return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
     }

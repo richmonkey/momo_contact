@@ -11,7 +11,6 @@
 #import "MMGlobalData.h"
 #import "MMServerContactManager.h"
 #import "DbStruct.h"
-#import "MMContact.h"
 #import "MMLogger.h"
 
 @interface MMSyncThread()
@@ -85,16 +84,6 @@ void timerCallback(CFRunLoopTimerRef timer, void *info) {
     pthread_mutex_unlock(&mutex_);
 }
 
--(void) onUserLogout:(NSNotification*)notification {
-    [self cancel];
-    [self wait];
-    
-    //注销后清空联系人数据
-    MMContactSync *syncer = [[[MMContactSync alloc] init] autorelease];
-    [syncer clearSyncDb];
-    [[MMContactManager instance] clearContactDB];
-}
-
 
 + (MMSyncThread*)shareInstance {
 	static MMSyncThread* instance = nil;
@@ -125,70 +114,6 @@ void timerCallback(CFRunLoopTimerRef timer, void *info) {
 	[super dealloc];
 }
 
--(void)onContactChangedInSyncThread:(NSNotification*)notification {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:kMMBeginSync object:[NSNumber numberWithBool:NO]]; //MQ下发变更不显示同步进度
-    });
-    
-    if (!lastSyncResult_) {
-        lastSyncResult_ = [self sync];
-    }
-    
-    NSDictionary* userInfo = [NSDictionary dictionaryWithObjectsAndKeys:BOOL_NUMBER(lastSyncResult_),@"result", 
-                              BOOL_NUMBER(NO), @"hide_hud", nil];
-    
-    if (!lastSyncResult_) {
-        MLOG(@"ignore server change");
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:kMMEndSync object:userInfo];
-        });
-        return;
-    }
-    
-	MMContactSync *syncer = [[[MMContactSync alloc] init] autorelease];
-	NSArray *array = (NSArray*)(notification.object);
-	NSMutableArray *simpleList = [NSMutableArray array];
-	for (NSDictionary *dic in array) {
-		NSString *type = [dic objectForKey:@"type"];
-		if ([type isEqualToString:@"delete"]) {
-			int contactId = [[dic objectForKey:@"id"] intValue];
-			[[MMContactManager instance] deleteContact:contactId];
-			[syncer deleteContactDown:contactId];
-		} else {
-			MMMomoContactSimple *c = [[[MMMomoContactSimple alloc] init] autorelease];
-			c.contactId = [[dic objectForKey:@"id"] intValue];
-			c.modifyDate = [[dic objectForKey:@"modified_at"] longLongValue];
-			[simpleList addObject:c];
-		}
-	}
-	if ([syncer downloadContactToMomo:simpleList]) {
-		[syncer downloadContact:simpleList ];
-	}
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:kMMEndSync object:userInfo];
-    });
-}
-
--(void)onContactChanged:(NSNotification*)notification {
-    if (isSyncing_) {
-        return;
-    }
-    
-    pthread_mutex_lock(&mutex_);
-    if (nil == runLoop_) {
-        pthread_mutex_unlock(&mutex_);
-        return;
-    }
-    CFRunLoopPerformBlock(runLoop_, kCFRunLoopDefaultMode, ^(void){
-        //等待主线程将修改信息入库
-        [self performSelector:@selector(onContactChangedInSyncThread:) withObject:notification afterDelay:2];
-    } );
-    [self wakeUpRunLoop:runLoop_];
-    pthread_mutex_unlock(&mutex_);
-}
-
-
 -(BOOL)remoteSync {
     MMSyncHistoryInfo *history = [[[MMSyncHistoryInfo alloc]init] autorelease];
 	
@@ -196,11 +121,7 @@ void timerCallback(CFRunLoopTimerRef timer, void *info) {
 	history.syncType  = 0;	
     
 	MMContactSync *syncer = [[[MMContactSync alloc] init] autorelease];
-    syncer.syncProgress = [[[MMSyncProgressInfo alloc] init] autorelease];
-    syncer.syncProgress.stageCount = 3;
-    syncer.syncProgress.stageTitle = @"同步联系人中...";
-    
-    syncer.syncProgress.currentStageIndex = 1;
+
     BEGIN_TICKET(uploadcontact);
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     if (![syncer uploadContact]){
@@ -213,31 +134,19 @@ void timerCallback(CFRunLoopTimerRef timer, void *info) {
 	if (self.isCancelled) {
 		return NO;
 	}
-    
-    syncer.syncProgress.currentStageIndex = 2;
-    BEGIN_TICKET(downcontacttomomo);
+
+    BEGIN_TICKET(downcontact);
     pool = [[NSAutoreleasePool alloc] init];
-	if (![syncer downloadContactToMomo]) {
+	if (![syncer downloadContact]) {
         [pool release];
 		return NO;
 	}
     [pool release];
-    END_TICKET(downcontacttomomo);
+    END_TICKET(downcontact);
 	
     if (syncer.isCancelled) {
         return NO;
     }
-    
-    syncer.syncProgress.currentStageIndex = 3;
-    BEGIN_TICKET(downcontact);
-    pool = [[NSAutoreleasePool alloc] init];
-    if (![syncer downloadContact]) {
-        [pool release];
-        return NO;
-    }
-    [pool release];
-    END_TICKET(downcontact);
-
 
     history.endTime = [[NSDate date] timeIntervalSince1970];
     history.errorcode = 0;
@@ -250,15 +159,14 @@ void timerCallback(CFRunLoopTimerRef timer, void *info) {
                           result.uploadAddCount,  result.uploadDelCount, result.uploadUpdateCount];
     
 	MLOG(@"downadd:%d, downup:%d, downdel:%d, uploadadd:%d, "
-         @"uploadup:%d, uploaddel:%d, mmadd:%d, mmup:%d, mmdel:%d",
+         @"uploadup:%d, uploaddel:%d",
          result.downloadAddCount, result.downloadUpdateCount, result.downloadDelCount,
-         result.uploadAddCount, result.uploadUpdateCount, result.uploadDelCount,
-         result.momoDownloadAddCount, result.momoDownloadUpdateCount, result.momoDownloadDelCount);
+         result.uploadAddCount, result.uploadUpdateCount, result.uploadDelCount);
+         
 	return YES;
 }
 
 -(BOOL)sync {
-    [[MMContactManager instance] clearAddressBookContact];
     return [self remoteSync];
 }
 
@@ -268,34 +176,10 @@ void timerCallback(CFRunLoopTimerRef timer, void *info) {
 	runLoop_ = CFRunLoopGetCurrent();
     pthread_cond_signal(&condition_);
     pthread_mutex_unlock(&mutex_);
-//    {
-//
-//        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [[NSNotificationCenter defaultCenter] postNotificationName:kMMBeginSync object:nil];
-//        });
-//        self.isSyncing = YES;
-//        
-//        lastSyncResult_ = [self sync];
-//        if (!lastSyncResult_)
-//            MLOG(@"同步失败");
-//        
-//        self.isSyncing = NO;
-//        
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            NSDictionary* userInfo = [NSDictionary dictionaryWithObject:BOOL_NUMBER(lastSyncResult_) forKey:@"result"];
-//            [[NSNotificationCenter defaultCenter] postNotificationName:kMMEndSync object:userInfo];
-//        });
-//        
-//        [pool release];
-//
-//	}
+
 
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
-    NSNotificationCenter * center = [NSNotificationCenter defaultCenter];
-	
-    [center addObserver:self selector:@selector(onContactChanged:) name:kMMMQContactChangedMsg object:nil];
     
 	CFRunLoopSourceContext context = {0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 	CFRunLoopSourceRef source = CFRunLoopSourceCreate(kCFAllocatorDefault, 0, &context);
@@ -307,7 +191,6 @@ void timerCallback(CFRunLoopTimerRef timer, void *info) {
 	CFRunLoopRemoveSource(CFRunLoopGetCurrent(), source, kCFRunLoopDefaultMode);
 	CFRelease(source);
 	
-    [center removeObserver:self name:kMMMQContactChangedMsg object:nil];
     
 	[pool release];
     

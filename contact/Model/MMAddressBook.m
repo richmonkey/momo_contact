@@ -8,7 +8,6 @@
 #import "MMAddressBook.h"
 #import <AddressBook/AddressBook.h>
 #import "MMPhoneticAbbr.h"
-#import "MMContact.h"
 #import "JSON.h"
 
 #define PARSE_NULL_STR(nsstr) nsstr ? nsstr : @""
@@ -339,45 +338,6 @@ NSInteger simpleContactCompare(id id1, id id2, void *context) {
     CFIndex count = ABAddressBookGetPersonCount(addressBook);
     CFRelease(addressBook);
     return count;
-}
-
-+(NSArray*) getContactSyncInfoList {
-    ABAddressBookRef addressBook = ABAddressBookCreate();
-    CFArrayRef peoples = ABAddressBookCopyArrayOfAllPeople(addressBook);
-    {
-        CFMutableArrayRef peopleMutable = CFArrayCreateMutableCopy(kCFAllocatorDefault,
-                                                                   CFArrayGetCount(peoples),
-                                                                   peoples
-                                                                   );
-        
-        CFArraySortValues(peopleMutable,
-                          CFRangeMake(0, CFArrayGetCount(peopleMutable)),
-                          (CFComparatorFunction) ABPersonComparePeopleByName,
-                          (void*)ABPersonGetSortOrdering()
-                          );
-        CFRelease(peoples);
-        peoples = peopleMutable;
-    }
-    
-    NSMutableArray* contactSimplelist = [NSMutableArray array];
-    CFIndex count = CFArrayGetCount(peoples);
-    for(NSUInteger i = 0; i < count; ++i) {
-        ABRecordRef person = (ABRecordRef) CFArrayGetValueAtIndex(peoples, i);
-
-        
-        DbContactSyncInfo* contact = [DbContactSyncInfo new];
-        NSInteger cellId = ABRecordGetRecordID(person);
-		contact.contactId = cellId;
-        CFTypeRef modifydateRef = ABRecordCopyValue(person, kABPersonModificationDateProperty);
-        NSDate* modifydate = (NSDate*)modifydateRef;
-        contact.modifyDate = [modifydate timeIntervalSince1970];
-        CFRelease(modifydateRef);
-        [contactSimplelist addObject:contact];
-        [contact release];
-    }
-    CFRelease(peoples);
-    CFRelease(addressBook);
-    return contactSimplelist;
 }
 
 +(MMFullContact*)getContact:(NSInteger)cellId {

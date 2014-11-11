@@ -98,8 +98,6 @@
                  needName:(BOOL)needName    //是否包含没有名字联系人
                 needPhone:(BOOL)needPhone; //是否包含没有手机号的联系人  
 
-//根据名字或者拼音 匹配好友
-- (NSArray*)searchFriend:(NSString*)searchString;
 
 //@private
 

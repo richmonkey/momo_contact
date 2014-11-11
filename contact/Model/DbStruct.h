@@ -157,30 +157,6 @@
 @end
 
 
-//根据联系人获取简单电话信息
-@interface DbContactPhone : NSObject {
-	NSString	*label;		//标签(home,work等)
-	NSString	*value;		//联系方式(电话号码)
-	NSString	*location;	//归属地
-}
-
-@property (copy, nonatomic) NSString  *label;
-@property (copy, nonatomic) NSString  *value;
-@property (copy, nonatomic) NSString  *location;
-
-@end
-
-/*
- * 如果label isa NSNumber 那么他是个内置标签,可以多国语言化
- * 如果label isa NSString 那么是自定义标签,直接显示
- */
-@interface MMContactInfo : NSObject {
-    id label;
-    NSString *value;
-}
-@property (copy, nonatomic) NSString  *value;
-@property (nonatomic,retain) id  label;
-@end
 
 //同步记录
 @interface MMSyncHistoryInfo : NSObject {

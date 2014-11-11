@@ -22,7 +22,6 @@
 		6D16D61C1A08A36A001D0939 /* contactTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D61B1A08A36A001D0939 /* contactTests.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		6D16D6371A08A6BB001D0939 /* DbStruct.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D6301A08A6BB001D0939 /* DbStruct.m */; };
 		6D16D6381A08A6BB001D0939 /* MMAddressBook.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D6321A08A6BB001D0939 /* MMAddressBook.m */; };
-		6D16D6391A08A6BB001D0939 /* MMContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D6341A08A6BB001D0939 /* MMContact.m */; };
 		6D16D63A1A08A6BB001D0939 /* MMModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D6361A08A6BB001D0939 /* MMModel.mm */; };
 		6D16D65C1A08A89C001D0939 /* MMPhoneticAbbr.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D65B1A08A89C001D0939 /* MMPhoneticAbbr.mm */; };
 		6D16D6B91A08A921001D0939 /* NSObject+SBJson.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D68A1A08A921001D0939 /* NSObject+SBJson.m */; };
@@ -82,7 +81,6 @@
 		6D16D7C91A0B86D1001D0939 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D7C81A0B86D1001D0939 /* MBProgressHUD.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		6D16D7CC1A0B86E6001D0939 /* TAHttpOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D7CB1A0B86E6001D0939 /* TAHttpOperation.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		6D16D7CF1A0B86F5001D0939 /* APIRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D7CE1A0B86F5001D0939 /* APIRequest.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
-		6D16D7D21A0B870A001D0939 /* Config.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D7D11A0B870A001D0939 /* Config.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		6D16D7D41A0C6F5A001D0939 /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6D16D7D31A0C6F5A001D0939 /* MainViewController.xib */; };
 		6D16D7D71A0C702B001D0939 /* Token.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D7D61A0C702B001D0939 /* Token.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 /* End PBXBuildFile section */
@@ -253,8 +251,6 @@
 		6D16D7CB1A0B86E6001D0939 /* TAHttpOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TAHttpOperation.m; sourceTree = "<group>"; };
 		6D16D7CD1A0B86F5001D0939 /* APIRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIRequest.h; sourceTree = "<group>"; };
 		6D16D7CE1A0B86F5001D0939 /* APIRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APIRequest.m; sourceTree = "<group>"; };
-		6D16D7D01A0B870A001D0939 /* Config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Config.h; sourceTree = "<group>"; };
-		6D16D7D11A0B870A001D0939 /* Config.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Config.m; sourceTree = "<group>"; };
 		6D16D7D31A0C6F5A001D0939 /* MainViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainViewController.xib; sourceTree = "<group>"; };
 		6D16D7D51A0C702B001D0939 /* Token.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Token.h; sourceTree = "<group>"; };
 		6D16D7D61A0C702B001D0939 /* Token.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Token.m; sourceTree = "<group>"; };
@@ -328,8 +324,6 @@
 				6D16D6251A08A57B001D0939 /* Sync */,
 				6D16D5FF1A08A36A001D0939 /* AppDelegate.h */,
 				6D16D6001A08A36A001D0939 /* AppDelegate.m */,
-				6D16D7D01A0B870A001D0939 /* Config.h */,
-				6D16D7D11A0B870A001D0939 /* Config.m */,
 				6D16D6051A08A36A001D0939 /* MainViewController.h */,
 				6D16D6061A08A36A001D0939 /* MainViewController.m */,
 				6D16D7D31A0C6F5A001D0939 /* MainViewController.xib */,
@@ -686,7 +680,6 @@
 				6D16D6C11A08A921001D0939 /* SBJsonStreamWriterAccumulator.m in Sources */,
 				6D16D6BE1A08A921001D0939 /* SBJsonStreamParserAdapter.m in Sources */,
 				6D16D6C41A08A921001D0939 /* SBJsonUTF8Stream.m in Sources */,
-				6D16D6391A08A6BB001D0939 /* MMContact.m in Sources */,
 				6D16D6BF1A08A921001D0939 /* SBJsonStreamParserState.m in Sources */,
 				6D16D6E71A08AB03001D0939 /* contact_match.cc in Sources */,
 				6D16D6C61A08A921001D0939 /* PlausibleDatabase.m in Sources */,
@@ -694,7 +687,6 @@
 				6D16D6D01A08A980001D0939 /* MMGlobalData.m in Sources */,
 				6D16D6C51A08A921001D0939 /* SBJsonWriter.m in Sources */,
 				6D16D6FB1A08AB31001D0939 /* MMServerContactManager.m in Sources */,
-				6D16D7D21A0B870A001D0939 /* Config.m in Sources */,
 				6D16D6BC1A08A921001D0939 /* SBJsonStreamParser.m in Sources */,
 				6D16D6FE1A08AB31001D0939 /* oauth.c in Sources */,
 				6D16D6371A08A6BB001D0939 /* DbStruct.m in Sources */,
@@ -952,6 +944,7 @@
 				6D16D6211A08A36A001D0939 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		6D16D6221A08A36A001D0939 /* Build configuration list for PBXNativeTarget "contactTests" */ = {
 			isa = XCConfigurationList;
@@ -960,6 +953,7 @@
 				6D16D6241A08A36A001D0939 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

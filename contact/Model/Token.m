@@ -9,7 +9,6 @@
 #import "Token.h"
 #import "MMGlobalData.h"
 #import "TAHttpOperation.h"
-#import "Config.h"
 #import "APIRequest.h"
 
 @interface Token()

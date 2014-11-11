@@ -98,8 +98,6 @@ typedef enum {
 
 + (NSString*)computeKCode:(double)longitude latitude:(double)latitude;
 
-+ (BOOL)isRobot:(NSInteger)uid;
-
 + (NSArray* )sortIntArray:(NSArray*)array;
 
 @end

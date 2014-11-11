@@ -17,7 +17,7 @@
 #import "ASIHTTPRequest.h"
 #import "oauth.h"
 #import "ASIFormDataRequest.h"
-#import "Config.h"
+#import "Token.h"
 
 @implementation MMUapRequest
 + (MMUapRequest*)shareInstance {
@@ -394,11 +394,14 @@
 
 + (id)requestWithPath:(NSString *)path usingSSL:(BOOL)usingSSL {
     NSString* fullUrl = nil;
-    fullUrl = [[[Config instance] URL] stringByAppendingFormat:@"%@",path];
+    fullUrl = [ALBUM_URL stringByAppendingFormat:@"%@",path];
 	NSURL*url = [NSURL URLWithString:fullUrl];
     
 	ASIHTTPRequest* request = [self requestWithURL:url];
 	request.timeOutSeconds = HTTP_REQUEST_TIME_OUT_SECONDS;
+    
+    NSString *auth = [NSString stringWithFormat:@"Bearer %@", [Token instance].accessToken];
+    [request addRequestHeader:@"Authorization" value:auth];
     
 	[request setRequestMethod:@"GET"];
 	
@@ -411,7 +414,7 @@
 
 + (id)requestWithPath:(NSString*)path withObject:(NSObject*)object usingSSL:(BOOL)usingSSL {
     NSString* fullUrl = nil;
-    fullUrl = [[[Config instance] URL] stringByAppendingFormat:@"%@",path];
+    fullUrl = [ALBUM_URL stringByAppendingFormat:@"%@",path];
 	NSURL* url = [NSURL URLWithString:fullUrl];
 
 	ASIHTTPRequest* request = [self requestWithURL:url];
@@ -419,6 +422,8 @@
 	[request setRequestMethod:@"POST"];
 	[request addRequestHeader:@"Content-Type" value:@"application/json"];
 	
+    NSString *auth = [NSString stringWithFormat:@"Bearer %@", [Token instance].accessToken];
+    [request addRequestHeader:@"Authorization" value:auth];
     
     // post body
     if (object != nil) {

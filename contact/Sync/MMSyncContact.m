@@ -12,13 +12,9 @@
 #import "MMAddressBook.h"
 #import "SBJSON.h"
 #import "MMServerContactManager.h"
-#import "MMContact.h"
 #import "MMLogger.h"
 #import "MMCommonAPI.h"
 #import "MMSyncThread.h"
-
-//避免momo模块重复下载本地上传的联系人
-#define UPDATE_MOMO_DATEBASE
 
 @interface MMContactSyncInfo : DbContactId
 {
@@ -64,8 +60,6 @@
 		if (![results isNullForColumn:@"avatar_md5"]) {
 			self.avatarMd5 = [results stringForColumn:@"avatar_md5"];
 		}
-
-
 	}
 	return self;
 }
@@ -286,8 +280,9 @@
 			MLOG(@"服务器返回错误, ids:%@, response:%@", [array subarrayWithRange:NSMakeRange(index, len)], response);
 			return NO;
 		}
+
         
-        [[[MMContactManager instance] db] beginTransaction];
+        [[self db] beginTransaction];
 		for (NSDictionary *dic in response) {
 			MMMomoContact *contact = [array objectAtIndex:index];
 			int status = [[dic objectForKey:@"status"] intValue];
@@ -302,23 +297,15 @@
 				info.phoneModifyDate = [phoneModifyDate timeIntervalSince1970];
 				info.avatarUrl = contact.avatarBigUrl;
 				[self addContactSyncInfo:info];
-#ifdef UPDATE_MOMO_DATEBASE
-				contact.contactId = [[dic objectForKey:@"id"] intValue];
-				contact.modifyDate = [[dic objectForKey:@"modified_at"] longLongValue];
-				if ([[MMContactManager instance] insertContact:contact withDataList:contact.properties] == MM_DB_OK) {
-					syncResult_.momoDownloadAddCount = syncResult_.momoDownloadAddCount + 1;
-				}
-#endif
                 MLOG(@"upload phone contact:%ld success, contact id:%ld", (long)contact.phoneCid, (long)info.contactId);
 			} else if (303 == status) {
 				NSArray *array = [NSArray arrayWithObject:[dic objectForKey:@"id"]];
                 
 				NSArray *tmp = [self getContactSyncInfoList:array];
 				if ([tmp count] == 0) {
-					MMContactSyncInfo *info = [[[MMContactSyncInfo alloc] init] autorelease];	
+                    //本地不存在与此重复的联系人
+					MMContactSyncInfo *info = [[[MMContactSyncInfo alloc] init] autorelease];
 					info.contactId = [[dic objectForKey:@"id"] intValue];
-                    if(info.contactId == 72010)
-                        NSLog(@"debug");
 					info.phoneContactId = [[phoneContactIds objectAtIndex:index] intValue];
 					info.modifyDate = [[dic objectForKey:@"modified_at"] longLongValue];
 					info.phoneContactId = contact.phoneCid;
@@ -326,25 +313,19 @@
 					info.phoneModifyDate = [phoneModifyDate timeIntervalSince1970] ;
 					info.avatarUrl = contact.avatarBigUrl;
 					[self addContactSyncInfo:info];
-                    
-                    
+                    MLOG(@"upload phone contact:%ld, contact id:%ld exists", (long)info.phoneContactId, (long)info.contactId);
 				} else {
-					MMContactSyncInfo *info = [tmp objectAtIndex:0];
-					info.modifyDate = [[dic objectForKey:@"modified_at"] longLongValue];
-					[self updateContactSyncInfo:info];
- 
-                    
+                    //本地存在与此重复的联系人
+                    MLOG(@"delete repeat phone contact:%ld", (long)[[phoneContactIds objectAtIndex:index] intValue]);
 					[MMAddressBook deleteContact:[[phoneContactIds objectAtIndex:index] intValue]];
 				}
-                
 			} else {
 				MLOG(@"添加联系人失败, statusCode:%d, %@", status, dic);
 			}
             
 			index++;
-            syncProgress_.stageOperationIndex++;
 		}
-        [[[MMContactManager instance] db] commitTransaction];
+        [[self db] commitTransaction];
 	}
 	return YES;
 }
@@ -354,7 +335,6 @@
 		return YES;
 	}
     unsigned int index= 0;
-    NSMutableArray *deleteErrorArr = [NSMutableArray array];
 	while (index < [contactIds count]) {
 		unsigned int len = MIN(10, [contactIds count] - index);
 
@@ -367,25 +347,17 @@
         for (NSDictionary *dic in response) {
             //删除momo小秘 或者 删除失败的联系人。
             if ([[dic objectForKey:@"status"] intValue] != 200) {
-                [deleteErrorArr addObject:[contactIds objectAtIndex:index]];
+                MLOG(@"delete contact:%@ status:%d", [contactIds objectAtIndex:index], [[dic objectForKey:@"status"] intValue]);
             }
         }
      
         index += len;
-        syncProgress_.stageOperationIndex += len;
     }
 
 	for (NSNumber *n in contactIds) {
 		[self deleteContactSyncInfo:[n intValue]];
+        MLOG(@"delete contact id:%lld", [n longLongValue]);
 	}
-    
-	for (NSNumber *e in deleteErrorArr) {
-        NSMutableDictionary *dic1 = [NSMutableDictionary dictionary];
-        [dic1 setObject:e forKey:@"id"];
-        [[NSNotificationCenter defaultCenter] postNotificationName:kMMMQContactChangedMsg
-                                                            object:[NSArray arrayWithObject:dic1]];        
-	}
-        
 	return YES;
 }
 
@@ -431,7 +403,6 @@
         NSRange range = NSMakeRange(1, [info.avatarUrl length] - 2);
         dbContact.avatarUrl = [info.avatarUrl substringWithRange:range];
     }
-    
 
 	NSDictionary *response = nil;
 	NSInteger statusCode = [MMServerContactManager updateContact:dbContact response:&response];
@@ -440,6 +411,7 @@
 		info.modifyDate = modifyDate;
 		info.phoneModifyDate = [[MMAddressBook getContactModifyDate:info.phoneContactId] timeIntervalSince1970];
 		[self updateContactSyncInfo:info];
+        MLOG(@"update phone contact:%d contact:%lld to server success", info.phoneContactId, (int64_t)info.contactId);
 		return YES;
 	} else if(statusCode == 409) {
 		NSArray *array = [NSArray arrayWithObject:dbContact];
@@ -451,18 +423,13 @@
 		}
 		[self deleteContactSyncInfo:info.contactId];
         
-        NSMutableDictionary *dic1 = [NSMutableDictionary dictionary];
-        [dic1 setObject:[NSNumber numberWithInt:info.contactId] forKey:@"id"];
-        [dic1 setObject:[NSNumber numberWithLongLong:info.modifyDate]    forKey:@"modified_at"];
-        [[NSNotificationCenter defaultCenter] postNotificationName:kMMMQContactChangedMsg 
-                                                            object:[NSArray arrayWithObject:dic1]];
-        
 		NSAssert([addResponse count] == 1, @"len invalid");
 		NSDictionary *dic = [addResponse objectAtIndex:0] ;
 		info.contactId = [[dic objectForKey:@"id"] intValue];
 		info.modifyDate = [[dic objectForKey:@"modified_at"] longLongValue];
 		info.phoneModifyDate = [[MMAddressBook getContactModifyDate:info.phoneContactId] timeIntervalSince1970];
 		[self addContactSyncInfo:info];
+        MLOG(@"add conflicted phone conatct:%ld contact id:%lld to server", (long)info.phoneContactId, (int64_t)info.contactId);
         
 		return YES;
 	} else {
@@ -536,17 +503,6 @@
 			[syncInfos removeObjectAtIndex:index];
 		}
     }
-    
-    //获取本地已删除联系人
-    NSMutableArray *contactIdsToDel = [NSMutableArray array];
-	NSMutableArray *phoneContactIdsToDel = [NSMutableArray array];
-	
-	for (MMContactSyncInfo *info in syncInfos) {
-		[contactIdsToDel addObject:[NSNumber numberWithInteger:info.contactId]];
-		[phoneContactIdsToDel addObject:[NSNumber numberWithInteger:info.phoneContactId]];
-	}
-    
-    syncProgress_.stageOperationCount = idsToAdd.count + contactIdsToDel.count;
 
     //上传本地新增联系人
 	if (![self addContactUp:idsToAdd addressBook:addressBook]) {
@@ -556,6 +512,15 @@
     }
 	syncResult_.uploadAddCount = syncResult_.uploadAddCount + [idsToAdd count];
 
+    //获取本地已删除联系人
+    NSMutableArray *contactIdsToDel = [NSMutableArray array];
+	NSMutableArray *phoneContactIdsToDel = [NSMutableArray array];
+	
+	for (MMContactSyncInfo *info in syncInfos) {
+		[contactIdsToDel addObject:[NSNumber numberWithInteger:info.contactId]];
+		[phoneContactIdsToDel addObject:[NSNumber numberWithInteger:info.phoneContactId]];
+	}
+    
     //上传本地删除联系人
 	[self deleteContactUp:contactIdsToDel phoneCids:phoneContactIdsToDel];
 	syncResult_.uploadDelCount = syncResult_.uploadDelCount + [contactIdsToDel count];
@@ -576,6 +541,7 @@
 		return NO;
 	}
 	[self deleteContactSyncInfo:contactId];
+    MLOG(@"delete phone contact:%d contact id:%lld from phone", cellId, (int64_t)contactId);
 	return YES;
 }
 
@@ -614,26 +580,25 @@
 	return YES;
 }
 
--(BOOL)downloadContactToMomo:(NSArray*)simpleList contacts:(NSMutableArray*)contacts {
-	NSMutableArray *idsToDown = [NSMutableArray array];
-	NSMutableArray *contactsToUpdate = [NSMutableArray array];
-	
+-(BOOL)downloadContact:(NSArray*)simpleList contacts:(NSMutableArray*)contacts {
+    NSMutableArray *idsToAdd = [NSMutableArray array];
+    NSMutableArray *idsToUpdate = [NSMutableArray array];
+    
     //需要下载的联系人列表
 	for (MMMomoContactSimple *c in simpleList) {
 		int index = [contacts indexOfObjectPassingTest:^(id obj, NSUInteger idx, BOOL *stop){
-			DbContactSyncInfo *info = (DbContactSyncInfo*)obj;
+			MMContactSyncInfo *info = (MMContactSyncInfo*)obj;
 			if(info.contactId == c.contactId)
 				return YES;
 			return NO;
 		}];
 		
 		if (NSNotFound == index) {
-			[idsToDown addObject:[NSNumber numberWithInteger:c.contactId]];
+            [idsToAdd addObject:[NSNumber numberWithInteger:c.contactId]];
 		} else {
-			DbContactSyncInfo *info = [contacts objectAtIndex:index];
+			MMContactSyncInfo *info = [contacts objectAtIndex:index];
 			if (c.modifyDate > info.modifyDate ) {
-				[idsToDown addObject:[NSNumber numberWithInteger:c.contactId]];
-				[contactsToUpdate addObject:info];
+                [idsToUpdate addObject:[NSNumber numberWithInteger:c.contactId]];
 			}
 			[contacts removeObjectAtIndex:index];
 		}
@@ -641,162 +606,35 @@
 	
     //需要删除本地的列表
     if (contacts.count > 0) {
-        [[self db] beginTransaction];
-        for (MMMomoContactSimple *c in contacts) {
-            [[MMContactManager instance] deleteContact:c.contactId];
+        for (MMContactSyncInfo *c in contacts) {
+            [self deleteContactDown:c.contactId];
         }
-        [[self db] commitTransaction];
     }
     
-	syncResult_.momoDownloadDelCount = syncResult_.momoDownloadDelCount + [contacts count];
-    syncProgress_.stageOperationCount = idsToDown.count;
+	syncResult_.downloadDelCount = syncResult_.downloadDelCount + [contacts count];
     
     NSMutableArray* downloadedContacts = [NSMutableArray array];
-    for (unsigned int i = 0; i < [idsToDown count]; i+= 50) {
-		int len = MIN(50, [idsToDown count] - i);
-		NSArray *array = [MMServerContactManager getContactList:[idsToDown subarrayWithRange:NSMakeRange(i, len)]];
+    
+    for (unsigned int i = 0; i < [idsToAdd count]; i+= 50) {
+		int len = MIN(50, [idsToAdd count] - i);
+		NSArray *array = [MMServerContactManager getContactList:[idsToAdd subarrayWithRange:NSMakeRange(i, len)]];
         if (nil == array) {
             break;
         }
         [downloadedContacts addObjectsFromArray:array];
         
-        [[self db] beginTransaction];
-        for (MMMomoContact *contact in array ){
-            int index = [contactsToUpdate indexOfObjectPassingTest:^(id obj, NSUInteger idx, BOOL *stop){
-                DbContactSimple *info = (DbContactSimple*)obj;
-                if(info.contactId == contact.contactId)
-                    return YES;
-                return NO;
-            }];
-            if (self.isCancelled) {
-                break;
-            }
-            if (NSNotFound == index) {
-                if ([[MMContactManager instance] insertContact:contact withDataList:contact.properties] != MM_DB_OK) {
-                    MLOG(@"insert contact fail, contact id:%d", contact.contactId);
-                }
-                
-                syncResult_.momoDownloadAddCount = syncResult_.momoDownloadAddCount + 1;
-
-            } else {
-                if ([[MMContactManager instance] updateContact:contact withDataList:contact.properties] != MM_DB_OK) {
-                    MLOG(@"update contact fail contact id:%d", contact.contactId);
-                }
-                syncResult_.momoDownloadUpdateCount = syncResult_.momoDownloadUpdateCount + 1;
-            }
-            
-            syncProgress_.stageOperationIndex++;
-        }
-        [[self db] commitTransaction];
-
-        if (self.isCancelled) {
-            return NO;
-        }
-	}
-    
-    if (idsToDown.count > downloadedContacts.count) {
-        return NO;
-    }
-    
-    if (self.isCancelled) {
-        return NO;
-    }
-
-	return YES;
-}
-
--(BOOL) downloadContactToMomo {
-	NSArray *tmp = [[MMContactManager instance] getContactSyncInfoList:nil];
-	NSMutableArray *syncInfos = [NSMutableArray arrayWithArray:tmp];
-	NSArray *simpleList = [MMServerContactManager getSimpleContactList];
-	if (nil == simpleList) {
-		return NO;
-	}
-    
-    //从服务器返回的数据为空,
-    if (simpleList.count == 0) {
-        NSLog(@"server db is empty");
-    }
-    
-	return [self downloadContactToMomo:simpleList contacts:syncInfos];
-}
-
--(BOOL) downloadContactToMomo:(NSArray*)simpleList {
-	if ([simpleList count] == 0)
-		return YES;
-	NSMutableArray *array = [NSMutableArray array];
-	for (MMMomoContactSimple *c in simpleList) {
-		[array addObject:[NSNumber numberWithInteger:c.contactId]];
-	}
-	NSArray *tmp = [[MMContactManager instance] getContactSyncInfoList:array withError:nil];
-	NSMutableArray *syncInfos = [NSMutableArray arrayWithArray:tmp];
-	return [self downloadContactToMomo:simpleList contacts:syncInfos];
-}
-
--(NSArray*)getContactListFromMomoDb:(NSArray*)ids {
-	NSMutableArray *array = [NSMutableArray array];
-	for (NSNumber *n in ids){
-		NSInteger contactId = [n intValue];
-		DbContact *tmp = [[MMContactManager instance] getContact:contactId withError:nil];
-        MMMomoContact *contact = [[[MMMomoContact alloc] initWithContact:tmp] autorelease];
-		NSArray *datas = [[MMContactManager instance] getDataList:contactId withError:nil];
-		contact.properties = datas;
-		[array addObject:contact];
-	}
-
-	return array;
-}
-
--(BOOL) downloadContact:(NSArray*)simpleList infoList:(NSMutableArray*)syncInfos {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    
-	NSMutableArray *idsToDown = [NSMutableArray array];
-	NSMutableArray *contactsToUpdate = [NSMutableArray array];
-
-    NSMutableSet *set1 = [NSMutableSet setWithArray:simpleList];
-    NSMutableSet *set2 = [NSMutableSet setWithArray:syncInfos];
-    
-    NSMutableSet *deletedSet = [NSMutableSet setWithSet:set2];
-    [deletedSet minusSet:set1];
-    NSMutableSet *addedSet = [NSMutableSet setWithSet:set1];
-    [addedSet minusSet:set2];
-    NSMutableSet *iset = [NSMutableSet setWithSet:set2];
-    [iset intersectSet:set1];
-    
-    for (MMContactSyncInfo *info in deletedSet) {
-        [self deleteContactDown:info.contactId];
-    }
-    
-    syncResult_.downloadDelCount = syncResult_.downloadDelCount + [deletedSet count];
-    
-    for (MMMomoContactSimple *c in addedSet) {
-        [idsToDown addObject:[NSNumber numberWithInt:c.contactId]];
-    }
-    
-    syncProgress_.stageOperationCount = idsToDown.count;
-
-	NSArray *addedArray = [self getContactListFromMomoDb:idsToDown];
-    unsigned int index = 0;
-    while (index < [addedArray count]) {
-        if (self.isCancelled) {
-            [pool release];
-			return NO;
-		}
-        unsigned int len = MIN(100, [addedArray count] - index);
-        NSArray *addedPhoneId = [MMAddressBook insertContacts:[addedArray subarrayWithRange:NSMakeRange(index, len)]];
         
-        if (nil == addedPhoneId || [addedPhoneId count] != len) {
-            [pool release];
+        NSArray *addedPhoneId = [MMAddressBook insertContacts:array];
+        
+        if (nil == addedPhoneId || [addedPhoneId count] != [array count]) {
             return NO;
         }
         
         NSMutableArray* addContactSyncArray = [NSMutableArray array];
-        for (unsigned int i = index; i < index + len; i++) {
-            MMMomoContact *contact = [addedArray objectAtIndex:i];
+        for (unsigned int i = 0; i < [array count]; i++) {
+            MMMomoContact *contact = [array objectAtIndex:i];
 
-            NSString *oldUrl = [[contact.avatarUrl copy] autorelease];
-
-            NSInteger cellId = [[addedPhoneId objectAtIndex:i - index] intValue];
+            NSInteger cellId = [[addedPhoneId objectAtIndex:i] intValue];
             contact.phoneCid = cellId;
             
             MMContactSyncInfo *info = [[[MMContactSyncInfo alloc] init] autorelease];
@@ -806,9 +644,9 @@
             info.phoneModifyDate = [[MMAddressBook getContactModifyDate:cellId] timeIntervalSince1970];
             info.avatarUrl = contact.avatarBigUrl; //下载大头像
             [addContactSyncArray addObject:info];
-            contact.avatarUrl = oldUrl;
-            syncResult_.downloadAddCount = syncResult_.downloadAddCount + 1; 
-            syncProgress_.stageOperationIndex++;
+            
+            MLOG(@"add contact:%lld, phone contact id:%d to phone", (int64_t)info.contactId, info.phoneContactId);
+            syncResult_.downloadAddCount = syncResult_.downloadAddCount + 1;
         }
         
         //优化本地数据库写入
@@ -817,66 +655,71 @@
             [self addContactSyncInfo:info];
         }
         [[self db] commitTransaction];
+       
+        if (self.isCancelled) {
+            return NO;
+        }
+	}
+    
+    if (idsToAdd.count > downloadedContacts.count) {
+        return NO;
+    }
+    
+    
+    downloadedContacts = [NSMutableArray array];
+    
+    for (unsigned int i = 0; i < [idsToUpdate count]; i+= 50) {
+		int len = MIN(50, [idsToUpdate count] - i);
+		NSArray *array = [MMServerContactManager getContactList:[idsToUpdate subarrayWithRange:NSMakeRange(i, len)]];
+        if (nil == array) {
+            break;
+        }
+        [downloadedContacts addObjectsFromArray:array];
         
-        index += len;
-    }
+        [[self db] beginTransaction];
+        for (MMMomoContact *contact in array ){
+            int index = [contacts indexOfObjectPassingTest:^(id obj, NSUInteger idx, BOOL *stop){
+                MMContactSyncInfo *info = (MMContactSyncInfo*)obj;
+                if(info.contactId == contact.contactId)
+                    return YES;
+                return NO;
+            }];
+            assert(index != NSNotFound);
+            MMContactSyncInfo *info = [contacts objectAtIndex:index];
+            assert(info);
+            contact.phoneCid = info.phoneContactId;
+            [self updateContactDown:contact];
+            
+            MLOG(@"update contact:%lld phone contact id:%d to phone", (int64_t)info.contactId, info.phoneContactId);
+            syncResult_.downloadUpdateCount = syncResult_.downloadUpdateCount + 1;
+        }
+        [[self db] commitTransaction];
+        
+        if (self.isCancelled) {
+            return NO;
+        }
+	}
     
-    [idsToDown removeAllObjects];
-    
-    for (MMContactSyncInfo *info in iset) {
-        MMMomoContactSimple *c = [set1 member:info];
-        assert(c);
-        if (c.modifyDate > info.modifyDate) {
-            [idsToDown addObject:[NSNumber numberWithInteger:c.contactId]];
-            [contactsToUpdate addObject:info];
-        } 
+    if (idsToUpdate.count > downloadedContacts.count) {
+        return NO;
     }
 
-    NSArray *array2 = [self getContactListFromMomoDb:idsToDown];
-    NSMutableSet *updatedSet = [NSMutableSet setWithArray:array2];
-  
-    for (MMMomoContact *contact in updatedSet) {
-        MMContactSyncInfo *info = [iset member:contact];
-        assert(info);
-        contact.phoneCid = info.phoneContactId;
-        NSString *oldUrl = [[contact.avatarUrl copy] autorelease];
-        [self updateContactDown:contact];
-        contact.avatarUrl = oldUrl;
-        syncResult_.downloadUpdateCount = syncResult_.downloadUpdateCount + 1;
-    }
-
-    [pool release];
-    
 	return YES;
 }
 
--(NSMutableArray*)getContactSimpleListFromMomoDb {
-	NSMutableArray *array = [NSMutableArray array];
-	NSArray *tmp = [[MMContactManager instance] getContactSyncInfoList:nil];
-	for (DbContactSyncInfo *info in tmp) {
-		MMMomoContactSimple *i = [[[MMMomoContactSimple alloc] init] autorelease];
-		i.contactId = info.contactId;
-		i.modifyDate = info.modifyDate;
-		[array addObject:i];
+-(BOOL) downloadContact {
+  	NSMutableArray *syncInfos = [self getContactSyncInfoList];
+	NSArray *simpleList = [MMServerContactManager getSimpleContactList];
+	if (nil == simpleList) {
+		return NO;
 	}
-	return array;
-}
-
--(BOOL) downloadContact:(NSArray*)simpleList {
-	if ([simpleList count] == 0)
-		return YES;
-	NSMutableArray *array = [NSMutableArray array];
-	for (MMMomoContactSimple *c in simpleList) {
-		[array addObject:[NSNumber numberWithInteger:c.contactId]];
-	}
-	NSMutableArray *syncInfos = [self getContactSyncInfoList:array];
-	return [self downloadContact:simpleList infoList:syncInfos];
-}
-
--(BOOL) downloadContact{
-	NSMutableArray *syncInfos = [self getContactSyncInfoList];
-	NSArray *simpleList = [self getContactSimpleListFromMomoDb];
-	return [self downloadContact:simpleList infoList:syncInfos];
+    
+    //从服务器返回的数据为空,
+    if (simpleList.count == 0) {
+        MLOG(@"server db is empty");
+    }
+    
+	return [self downloadContact:simpleList contacts:syncInfos];
 }
 
 @end
