@@ -583,6 +583,7 @@
 -(BOOL)downloadContact:(NSArray*)simpleList contacts:(NSMutableArray*)contacts {
     NSMutableArray *idsToAdd = [NSMutableArray array];
     NSMutableArray *idsToUpdate = [NSMutableArray array];
+    NSMutableArray *contactsToUpdate = [NSMutableArray array];
     
     //需要下载的联系人列表
 	for (MMMomoContactSimple *c in simpleList) {
@@ -599,6 +600,7 @@
 			MMContactSyncInfo *info = [contacts objectAtIndex:index];
 			if (c.modifyDate > info.modifyDate ) {
                 [idsToUpdate addObject:[NSNumber numberWithInteger:c.contactId]];
+                [contactsToUpdate addObject:info];
 			}
 			[contacts removeObjectAtIndex:index];
 		}
@@ -678,14 +680,14 @@
         
         [[self db] beginTransaction];
         for (MMMomoContact *contact in array ){
-            int index = [contacts indexOfObjectPassingTest:^(id obj, NSUInteger idx, BOOL *stop){
+            int index = [contactsToUpdate indexOfObjectPassingTest:^(id obj, NSUInteger idx, BOOL *stop){
                 MMContactSyncInfo *info = (MMContactSyncInfo*)obj;
                 if(info.contactId == contact.contactId)
                     return YES;
                 return NO;
             }];
             assert(index != NSNotFound);
-            MMContactSyncInfo *info = [contacts objectAtIndex:index];
+            MMContactSyncInfo *info = [contactsToUpdate objectAtIndex:index];
             assert(info);
             contact.phoneCid = info.phoneContactId;
             [self updateContactDown:contact];
