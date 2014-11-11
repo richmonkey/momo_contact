@@ -124,7 +124,7 @@
 +(NSArray*)getContactList:(NSArray*)ids {
 	NSMutableArray *array = [NSMutableArray array];
 	for (unsigned int i = 0; i < [ids count]; i+= 100) {
-		int len = MIN(100, [ids count] - i);
+		int len = (int)MIN(100, [ids count] - i);
 		NSArray *tmp = [self getContactListUp100:[ids subarrayWithRange:NSMakeRange(i, len)]];
 		[array addObjectsFromArray:tmp];
 	}
@@ -176,7 +176,7 @@
 
 +(NSDictionary*)encodeContact:(MMFullContact *)contact {
 	NSMutableDictionary *dic = [NSMutableDictionary dictionary];
-	[dic setObject:[NSNumber numberWithInt:contact.contactId] forKey:@"id"];
+	[dic setObject:[NSNumber numberWithLongLong:contact.contactId] forKey:@"id"];
 	[dic setObject:PARSE_NULL_STR(contact.lastName) forKey:@"family_name"];
 	[dic setObject:PARSE_NULL_STR(contact.firstName) forKey:@"given_name"];
 	[dic setObject:PARSE_NULL_STR(contact.middleName) forKey:@"middle_name"];
@@ -442,7 +442,7 @@
 //    NSLog(@"update name:%@",contact.fullName);
     
 	NSDictionary *dic = [self encodeContact:contact];
-	NSString *request = [NSString stringWithFormat:@"contact/update/%d.json", contact.contactId];
+	NSString *request = [NSString stringWithFormat:@"contact/update/%lld.json", contact.contactId];
 	return [MMUapRequest postSync:request withObject:dic jsonValue:response];
 }
 
@@ -486,8 +486,8 @@
 }
 
 
-+(NSInteger)deleteContact:(NSInteger)contactId {
-	NSDictionary *dic = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%d", contactId] forKey:@"ids"];
++(NSInteger)deleteContact:(int64_t)contactId {
+	NSDictionary *dic = [NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%lld", contactId] forKey:@"ids"];
 	NSArray *response = nil;
 	NSInteger statusCode = [MMUapRequest postSync:@"contact/destroy_batch.json" withObject:dic jsonValue:&response];
 	if (statusCode != 200) {

@@ -14,9 +14,9 @@
 #import "DefineEnum.h"
 
 @interface DbContactId : NSObject {
-	NSInteger contactId;
+	int64_t contactId;
 }
-@property(nonatomic)NSInteger contactId;
+@property(nonatomic)int64_t contactId;
 @end
 
 @interface DbContactSyncInfo : DbContactId {
@@ -25,16 +25,24 @@
 @property(nonatomic)int64_t modifyDate;
 @end
 
-//简单联系人
-@interface DbContactSimple : DbContactId {
-    
-	NSString    *avatarUrl;
+//联系人
+@interface DbContact : DbContactId {
+    NSString    *avatarUrl;
 	NSString	*firstName;	//姓名
-	NSString	*middleName;//(姓)名	
+	NSString	*middleName;//(姓)名
 	NSString	*lastName;	//姓
 	NSString	*namePhonetic;	//姓名
     
     NSMutableSet    *cellPhoneNums; //用户手机号数组
+    
+    
+	NSString	*organization;//公司
+	NSString	*department;//部门
+	NSString	*note;//备注
+	NSDate		*birthday;//生日
+	int64_t     modifyDate;
+	NSString	*jobTitle;//职称
+	NSString	*nickName;//昵称
 }
 @property (nonatomic) NSInteger	phoneCid;
 @property (copy, nonatomic) NSString *firstName;
@@ -47,24 +55,8 @@
 @property (copy, nonatomic) NSString *namePhonetic;
 @property (nonatomic, retain) NSMutableSet    *cellPhoneNums;
 
--(id)init;
-
 - (BOOL)isEnglishName;
 
-@end
-
-
-//联系人
-@interface DbContact : DbContactSimple {
-	NSString	*organization;//公司
-	NSString	*department;//部门
-	NSString	*note;//备注
-	NSDate		*birthday;//生日
-	int64_t     modifyDate;
-	NSString	*jobTitle;//职称
-	NSString	*nickName;//昵称
-    
-}
 @property (nonatomic, copy) NSString *organization;
 @property (nonatomic, copy) NSString *department;
 @property (nonatomic, copy) NSString *note;

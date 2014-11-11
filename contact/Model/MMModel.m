@@ -11,7 +11,7 @@
 
 
 #define DB_FILENAME @"momo.db"
-static pthread_key_t threadDBKey = NULL;
+static pthread_key_t threadDBKey;
 
 @implementation MMModel
 
