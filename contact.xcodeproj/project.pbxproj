@@ -93,6 +93,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1DF778221A12346B007059F5 /* icon_120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_120.png; sourceTree = "<group>"; };
+		1DF778231A123545007059F5 /* icon_80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_80.png; sourceTree = "<group>"; };
+		1DF778251A1235E7007059F5 /* icon_58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_58.png; sourceTree = "<group>"; };
 		6D16D5ED1A08A36A001D0939 /* contact.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = contact.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D16D5F01A08A36A001D0939 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6D16D5F21A08A36A001D0939 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -274,6 +277,9 @@
 		6D16D5E41A08A36A001D0939 = {
 			isa = PBXGroup;
 			children = (
+				1DF778251A1235E7007059F5 /* icon_58.png */,
+				1DF778231A123545007059F5 /* icon_80.png */,
+				1DF778221A12346B007059F5 /* icon_120.png */,
 				6D16D5F61A08A36A001D0939 /* contact */,
 				6D16D6151A08A36A001D0939 /* contactTests */,
 				6D16D5EF1A08A36A001D0939 /* Frameworks */,
@@ -602,6 +608,9 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = momo;
 				TargetAttributes = {
+					6D16D5EC1A08A36A001D0939 = {
+						DevelopmentTeam = M967NHPY8J;
+					};
 					6D16D60D1A08A36A001D0939 = {
 						TestTargetID = 6D16D5EC1A08A36A001D0939;
 					};
@@ -826,10 +835,11 @@
 		6D16D6201A08A36A001D0939 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-2";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-2";
 				CLANG_ENABLE_OBJC_ARC = NO;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "contact/contact-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -838,6 +848,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "contact/contact-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				OTHER_LDFLAGS = "-licucore";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -848,14 +859,16 @@
 		6D16D6211A08A36A001D0939 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-2";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-2";
 				CLANG_ENABLE_OBJC_ARC = NO;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "contact/contact-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = PL_DB_PRIVATE;
 				INFOPLIST_FILE = "contact/contact-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				OTHER_LDFLAGS = "-licucore";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
