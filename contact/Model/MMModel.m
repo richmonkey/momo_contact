@@ -7,11 +7,7 @@
 //
 
 #import "MMModel.h"
-#import "contact_match.h"
 #import "MMGlobalPara.h"
-//#import <Single
-//#import <PlausibleDatabase/PlausibleDatabase.h>
-//#import <PlausibleDatabase/PLSqliteDatabase.h>
 
 
 #define DB_FILENAME @"momo.db"
@@ -117,13 +113,6 @@ void closeThreadDBConnenction(void* parameter) {
         currentThreadDB = [[PLSqliteDatabase alloc] initWithPath:path];
         if(path) {
             [currentThreadDB open];
-			
-			sqlite3 *db = [currentThreadDB sqliteHandle];
-			if (db) {
-				if (0 != sqlite3_create_function(db, "contact_match", 6, SQLITE_ANY, NULL, contact_match, NULL, NULL)) {
-					NSLog(@"sqlite3_create_function failed");
-				}
-			}
         }
 		
 		pthread_setspecific(threadDBKey, (void*)currentThreadDB);

@@ -74,31 +74,6 @@ typedef int MMABErrorType;
 
 + (NSArray*) getDataList:(NSInteger)cellId withError:(MMABErrorType*)error; 
 
-/*
- * 插入分组
- */
-+(MMABErrorType) insertCategory:(NSString*)cateName returnedCateId:(NSInteger*)cateId;
-
-/*
- * 更新分组
- */
-+(MMABErrorType) updateCategory:(NSString*)cateName withCateId:(NSInteger)cateId;
-
-/*
- * 删除分组
- */
-+(MMABErrorType) deleteCategory:(NSInteger)cateId;
-
-/*
- * 添加成员
- */
-+(MMABErrorType) addMemberToCategory:(NSInteger)cateId withCellId:(NSInteger)cellId;
-/*
- * 踢除成员
- */
-+(MMABErrorType) kickOutMemberFromCategory:(NSInteger)cellId withCateId:(NSInteger)cateId;
-
-+(BOOL) isMember:(NSInteger)cellId inCategory:(NSInteger)cateId;
 @end
 
 #endif

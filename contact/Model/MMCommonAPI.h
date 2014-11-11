@@ -70,8 +70,6 @@ typedef enum {
 
 + (NSInteger)countWord:(NSString*)text;
 
-+ (NSArray*)sortArrayByAbbr:(NSArray*)objectArray key:(NSString*)key;
-
 + (NSString*)getDetailURL:(NSUInteger)typeId applicationId:(uint64_t)appId;
 + (NSString*)getLongTextURL:(NSString*)statusId;
 + (NSString*)getIMLongTextURL:(NSString*)msdId;

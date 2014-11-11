@@ -7,21 +7,11 @@
 //
 #import "MMAddressBook.h"
 #import <AddressBook/AddressBook.h>
-#import "MMPhoneticAbbr.h"
 #import "JSON.h"
 
 #define PARSE_NULL_STR(nsstr) nsstr ? nsstr : @""
 
 @interface MMAddressBook()
-+(MMABErrorType) addMemberToCategory:(ABAddressBookRef)abAddressbook categoryId:(NSInteger)cateId withPerson:(ABRecordRef)person;
-
-+(NSArray*)getSimpleContactList:(MMABErrorType*)error;
-
-+(NSData*)getImageByCellId:(NSInteger)cellId withError:(MMABErrorType*)error;
-
-+(NSArray *) getAllCategory;
-
-+ (NSInteger) getCategoryMemberCount:(NSInteger)phoneCategoryId withError:(NSInteger*)error;
 
 +(NSString*) getIphoneLabelByMMLabel:(NSString*)label andByProperty:(NSInteger) property;
 
@@ -288,49 +278,6 @@ NSInteger simpleContactCompare(id id1, id id2, void *context) {
 	NSString *name1 = [NSString stringWithFormat:@"%@%@", simpleContact1.lastName, simpleContact1.firstName];
 	NSString *name2 = [NSString stringWithFormat:@"%@%@", simpleContact2.lastName, simpleContact2.firstName];
 	return [name1 compare:name2 options:NSCaseInsensitiveSearch range:NSMakeRange(0, [name1 length]) locale:[NSLocale currentLocale]];
-}
-
-/*
- * 从ADDRESSBOOK获得联系人列表
- */
-+(NSArray*)getSimpleContactList:(MMABErrorType*)error{
-    ABAddressBookRef addressBook = ABAddressBookCreate();
-    NSArray* people = (NSArray*)ABAddressBookCopyArrayOfAllPeople(addressBook);
-    
-    NSMutableArray* contactSimplelist = [NSMutableArray array];
-    for(NSUInteger i = 0; i < [people count]; ++i) {
-        ABRecordRef person = (ABRecordRef)[people objectAtIndex:i];
-        
-        DbContactSimple* contact = [DbContactSimple new];
-        NSInteger cellId = ABRecordGetRecordID(person);
-		contact.phoneCid = cellId;
-        {
-            NSString* str =  (NSString*)ABRecordCopyValue(person, kABPersonFirstNameProperty);
-            contact.firstName = PARSE_NULL_STR(str);
-            [str release];
-        }
-        {
-            NSString* str =  (NSString*)ABRecordCopyValue(person, kABPersonLastNameProperty);
-            contact.lastName = PARSE_NULL_STR(str);
-            [str release];
-        }
-        {
-            NSString* fullname = [contact.lastName stringByAppendingString:contact.firstName];
-            
-            if(fullname)
-                contact.namePhonetic = [MMPhoneticAbbr getPinyin:fullname];
-        }
-        
-        [contactSimplelist addObject:contact];
-        [contact release];
-    }
-	
-    //sort
-	[contactSimplelist sortUsingFunction:simpleContactCompare context:nil];
-    
-    [people release];
-    CFRelease(addressBook);
-    return contactSimplelist;
 }
 
 +(int)getContactCount {
@@ -770,24 +717,6 @@ NSInteger simpleContactCompare(id id1, id id2, void *context) {
 }
 
 
-/*
- * 获得头像,如果不存在返回nil
- */
-+(NSData*)getImageByCellId:(NSInteger)cellId withError:(MMABErrorType*)error{
-    ABAddressBookRef abAddressbook = ABAddressBookCreate();
-    ABRecordRef person = ABAddressBookGetPersonWithRecordID(abAddressbook,cellId);
-    NSData* imageData = nil;
-    
-    CFDataRef imgRef = ABPersonCopyImageData(person);
-    if(imgRef) {
-        imageData = [NSData dataWithData:(NSData*)imgRef];
-        CFRelease(imgRef);
-    }
-
-    CFRelease(abAddressbook);
-    return imageData;
-}
-
 
 /*
  * 插入分组
@@ -849,208 +778,6 @@ NSInteger simpleContactCompare(id id1, id id2, void *context) {
     
     return ret;
 }
-
-/*
- * 删除分组
- */
-+(MMABErrorType) deleteCategory:(NSInteger)cateId{
-    MMABErrorType ret = MM_AB_OK;
-    CFErrorRef errorRef = NULL; 
-    
-    ABAddressBookRef abAddressbook = ABAddressBookCreate();
-    do {
-//        CFErrorRef errorRef;
-        ABRecordRef group = ABAddressBookGetGroupWithRecordID(abAddressbook, cateId);
-        
-        if(group == nil) {
-            ret = MM_AB_RECORD_NOT_EXIST;
-            break;
-        }
-        
-        ABAddressBookRemoveRecord(abAddressbook, group, &errorRef) ;
-        
-        // 保存
-        if (!ABAddressBookSave(abAddressbook, &errorRef)) {
-            ret = MM_AB_SAVE_FAILED;
-        }
-    }
-    while(0);
-    
-    CFRelease(abAddressbook);
-    
-    return ret;
-}
-
-/*
- * 添加成员
- */
-+(MMABErrorType) addMemberToCategory:(ABAddressBookRef)abAddressbook categoryId:(NSInteger)cateId withPerson:(ABRecordRef)person {
-    CFErrorRef errorRef = NULL; 
-    ABRecordRef group = ABAddressBookGetGroupWithRecordID(abAddressbook, cateId);
-    if(group == nil) {
-        return MM_AB_RECORD_NOT_EXIST;
-    }
-    
-      
-    if (!ABGroupAddMember(group, person, &errorRef)) {
-        return MM_AB_FAILED;
-    }
-    return MM_AB_OK;
-}
-
-/*
- * 添加成员
- */
-+(MMABErrorType) addMemberToCategory:(NSInteger)cateId withCellId:(NSInteger)cellId{
-    MMABErrorType ret = MM_AB_OK;
-    CFErrorRef errorRef = NULL; 
-    
-    ABAddressBookRef abAddressbook = ABAddressBookCreate();
-    
-    ABRecordRef person = ABAddressBookGetPersonWithRecordID(abAddressbook, cellId);
-    if(person == nil) {
-        CFRelease(abAddressbook);
-        return MM_AB_RECORD_NOT_EXIST;
-    }
-    
-    ret = [self addMemberToCategory:abAddressbook categoryId:cateId withPerson:person];
-    
-    if (ret != MM_AB_OK) {
-        CFRelease(abAddressbook);
-        return ret;
-    }
-
-    if (!ABAddressBookSave(abAddressbook, &errorRef))
-       ret = MM_AB_SAVE_FAILED;
-    
-    CFRelease(abAddressbook);
-    return ret;
-}
-/*
- * 踢除成员
- */
-+(MMABErrorType) kickOutMemberFromCategory:(NSInteger)cellId withCateId:(NSInteger)cateId{
-    MMABErrorType ret = MM_AB_OK;
-    CFErrorRef errorRef = NULL; 
-    
-    ABAddressBookRef abAddressbook = ABAddressBookCreate();
-    do {
-        //        CFErrorRef errorRef;
-        ABRecordRef group = ABAddressBookGetGroupWithRecordID(abAddressbook, cateId);
-        
-        if(group == nil) {
-            ret = MM_AB_RECORD_NOT_EXIST;
-            break;
-        }
-        
-        ABRecordRef person = ABAddressBookGetPersonWithRecordID(abAddressbook, cellId);
-        if(person == nil) {
-            ret = MM_AB_RECORD_NOT_EXIST;
-            break;
-        }
-        
-        //ABGroupAddMember(group, person, &errorRef);
-        ABGroupRemoveMember(group, person, &errorRef);
-        
-        // 保存
-        if (!ABAddressBookSave(abAddressbook, &errorRef))
-            ret = MM_AB_SAVE_FAILED;
-    }
-    while(0);
-    
-    CFRelease(abAddressbook);
-    
-    return ret;
-}
-
-+(BOOL) isMember:(NSInteger)cellId inCategory:(NSInteger)cateId {
-    BOOL result = NO;
-    ABAddressBookRef abAddressbook = ABAddressBookCreate();
-    ABRecordRef group = ABAddressBookGetGroupWithRecordID(abAddressbook, cateId);
-    assert(group);
-    CFArrayRef thePeoples = ABGroupCopyArrayOfAllMembers(group);
-	if (thePeoples == nil) {
-		CFRelease(abAddressbook);
-		return NO;
-	}
-    CFIndex count_group_people = CFArrayGetCount(thePeoples);
-	
-    for(CFIndex idx_p = 0; idx_p < count_group_people; ++idx_p) {
-        ABRecordRef person = CFArrayGetValueAtIndex(thePeoples, idx_p);
-        NSInteger personId = ABRecordGetRecordID(person);
-        if (cellId == personId) {
-            result = YES;
-            break;
-        }
-    }
-    CFRelease(thePeoples);
-    CFRelease(abAddressbook);
-    return YES;
-}
-
-// 获取分组
-+(NSArray *) getAllCategory {
-    NSMutableArray *result = [NSMutableArray array];
-    
-    ABAddressBookRef abAddressbook = ABAddressBookCreate();
-    NSArray *groups = (NSArray *)ABAddressBookCopyArrayOfAllGroups(abAddressbook);
-    
-    for (NSUInteger i = 0; i < [groups count]; ++i) {
-        ABRecordRef group = (ABRecordRef)[groups objectAtIndex:i];
-        DbCategory *record = [[DbCategory alloc] init];
-        record.phoneCategoryId = ABRecordGetRecordID(group);
-        
-        NSString *name =  (NSString*)ABRecordCopyValue(group, kABGroupNameProperty);
-        record.categoryName = PARSE_NULL_STR(name);
-        [name release];
-        [result addObject:record];
-        [record release];
-    }
-    
-    CFRelease(abAddressbook);
-    CFRelease(groups);
-    
-    return result;
-}
-
-+ (NSInteger) getCategoryMemberCount:(NSInteger)phoneCategoryId withError:(NSInteger*)error {
-    ABAddressBookRef abAddressbook = ABAddressBookCreate();
-	
-	if (phoneCategoryId == 0) {
-		int memberCount = ABAddressBookGetPersonCount(abAddressbook);
-		if (error) {
-			*error = MM_AB_OK;
-		}
-		CFRelease(abAddressbook);
-		return memberCount;
-	}
-
-	ABRecordRef group = ABAddressBookGetGroupWithRecordID(abAddressbook, phoneCategoryId);
-	if (group == NULL) {
-		if (error)
-			*error = MM_AB_RECORD_NOT_EXIST;
-		CFRelease(abAddressbook);
-		return 0;
-	}
-	
-	NSArray *members = (NSArray *)ABGroupCopyArrayOfAllMembers(group);
-	if (members == NULL) {
-		if (error)
-			*error = MM_AB_RECORD_NOT_EXIST;
-		CFRelease(abAddressbook);
-		return 0;
-	}
-	
-	int memberCount = members.count;
-	CFRelease(members);
-	CFRelease(abAddressbook);
-	if (error) {
-		*error = MM_AB_OK;
-	}
-	return memberCount;
-}
-
-
 
 +(NSDate*)getContactModifyDate:(NSInteger)cellId {
 	

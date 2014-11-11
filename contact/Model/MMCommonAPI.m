@@ -10,7 +10,7 @@
 #import "MMGlobalPara.h"
 #import "MMGlobalData.h"
 #import "MMUapRequest.h"
-#import "MMPhoneticAbbr.h"
+//#import "MMPhoneticAbbr.h"
 #import "RegexKitLite.h"
 
 @implementation MMCommonAPI
@@ -426,31 +426,6 @@
 		return 0;
 	
     return l+(int)ceilf((float)(a+b)/2.0);
-}
-
-+ (NSArray*)sortArrayByAbbr:(NSArray*)objectArray key:(NSString*)key {
-	return [objectArray sortedArrayUsingComparator:(NSComparator)^(id obj1, id obj2){
-		NSString* value1 = [obj1 valueForKey:key];
-		NSString* value2 = [obj2 valueForKey:key];
-		
-		if (!value1 || value1.length == 0) {
-			return NSOrderedAscending;
-		} else if (!value2 || value2.length == 0) {
-			return NSOrderedDescending;
-		}
-		
-		//第一个字符是英文字母的, 直接比较
-		unichar char1 = [value1 characterAtIndex:0];
-		unichar char2 = [value2 characterAtIndex:0];
-		if (char1 <= 'z' || char2 <= 'z') {
-			return (NSInteger)[value1 caseInsensitiveCompare:value2];
-		}
-		
-		//中文字符用拼音比较
-		NSString* abbr1 = [MMPhoneticAbbr getPinyinAbbr:value1];
-		NSString* abbr2 = [MMPhoneticAbbr getPinyinAbbr:value2];
-		return (NSInteger)[abbr1 caseInsensitiveCompare:abbr2];
-	}];
 }
 
 + (NSString*)getDetailURL:(NSUInteger)typeId applicationId:(uint64_t)appId {

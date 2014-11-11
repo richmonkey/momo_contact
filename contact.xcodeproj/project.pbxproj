@@ -22,8 +22,7 @@
 		6D16D61C1A08A36A001D0939 /* contactTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D61B1A08A36A001D0939 /* contactTests.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		6D16D6371A08A6BB001D0939 /* DbStruct.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D6301A08A6BB001D0939 /* DbStruct.m */; };
 		6D16D6381A08A6BB001D0939 /* MMAddressBook.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D6321A08A6BB001D0939 /* MMAddressBook.m */; };
-		6D16D63A1A08A6BB001D0939 /* MMModel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D6361A08A6BB001D0939 /* MMModel.mm */; };
-		6D16D65C1A08A89C001D0939 /* MMPhoneticAbbr.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D65B1A08A89C001D0939 /* MMPhoneticAbbr.mm */; };
+		6D16D63A1A08A6BB001D0939 /* MMModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D6361A08A6BB001D0939 /* MMModel.m */; };
 		6D16D6B91A08A921001D0939 /* NSObject+SBJson.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D68A1A08A921001D0939 /* NSObject+SBJson.m */; };
 		6D16D6BA1A08A921001D0939 /* SBJson.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D68C1A08A921001D0939 /* SBJson.m */; };
 		6D16D6BB1A08A921001D0939 /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D68E1A08A921001D0939 /* SBJsonParser.m */; };
@@ -50,7 +49,6 @@
 		6D16D6DD1A08AA5B001D0939 /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D6DC1A08AA5B001D0939 /* RegexKitLite.m */; };
 		6D16D6E01A08AAB3001D0939 /* MMCommonAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D6DF1A08AAB3001D0939 /* MMCommonAPI.m */; };
 		6D16D6E41A08AADC001D0939 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D6E31A08AADC001D0939 /* Reachability.m */; };
-		6D16D6E71A08AB03001D0939 /* contact_match.cc in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D6E51A08AB03001D0939 /* contact_match.cc */; };
 		6D16D6FB1A08AB31001D0939 /* MMServerContactManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D6F21A08AB31001D0939 /* MMServerContactManager.m */; };
 		6D16D6FC1A08AB31001D0939 /* MMUapRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D6F41A08AB31001D0939 /* MMUapRequest.m */; };
 		6D16D6FE1A08AB31001D0939 /* oauth.c in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D6F61A08AB31001D0939 /* oauth.c */; };
@@ -66,7 +64,6 @@
 		6D16D7241A08AC01001D0939 /* ASIInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D71A1A08AC01001D0939 /* ASIInputStream.m */; };
 		6D16D7251A08AC01001D0939 /* ASINetworkQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D71C1A08AC01001D0939 /* ASINetworkQueue.m */; };
 		6D16D7281A08AC1B001D0939 /* MMThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D7271A08AC1B001D0939 /* MMThread.m */; };
-		6D16D7A71A08AEB9001D0939 /* pinyin.cc in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D7A41A08AEB9001D0939 /* pinyin.cc */; };
 		6D16D7AB1A08AFFB001D0939 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D16D7AA1A08AFFB001D0939 /* libz.dylib */; };
 		6D16D7AD1A08B003001D0939 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D16D7AC1A08B003001D0939 /* libsqlite3.dylib */; };
 		6D16D7B31A08B287001D0939 /* MMContactSync.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D7AF1A08B287001D0939 /* MMContactSync.m */; };
@@ -118,14 +115,10 @@
 		6D16D6301A08A6BB001D0939 /* DbStruct.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DbStruct.m; sourceTree = "<group>"; };
 		6D16D6311A08A6BB001D0939 /* MMAddressBook.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMAddressBook.h; sourceTree = "<group>"; };
 		6D16D6321A08A6BB001D0939 /* MMAddressBook.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMAddressBook.m; sourceTree = "<group>"; };
-		6D16D6331A08A6BB001D0939 /* MMContact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMContact.h; sourceTree = "<group>"; };
-		6D16D6341A08A6BB001D0939 /* MMContact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMContact.m; sourceTree = "<group>"; };
 		6D16D6351A08A6BB001D0939 /* MMModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMModel.h; sourceTree = "<group>"; };
-		6D16D6361A08A6BB001D0939 /* MMModel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MMModel.mm; sourceTree = "<group>"; };
+		6D16D6361A08A6BB001D0939 /* MMModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMModel.m; sourceTree = "<group>"; };
 		6D16D6581A08A799001D0939 /* DefineEnum.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DefineEnum.h; sourceTree = "<group>"; };
 		6D16D6591A08A799001D0939 /* ErrorType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ErrorType.h; sourceTree = "<group>"; };
-		6D16D65A1A08A89C001D0939 /* MMPhoneticAbbr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMPhoneticAbbr.h; sourceTree = "<group>"; };
-		6D16D65B1A08A89C001D0939 /* MMPhoneticAbbr.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MMPhoneticAbbr.mm; sourceTree = "<group>"; };
 		6D16D6881A08A921001D0939 /* JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSON.h; sourceTree = "<group>"; };
 		6D16D6891A08A921001D0939 /* NSObject+SBJson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+SBJson.h"; sourceTree = "<group>"; };
 		6D16D68A1A08A921001D0939 /* NSObject+SBJson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+SBJson.m"; sourceTree = "<group>"; };
@@ -187,8 +180,6 @@
 		6D16D6DF1A08AAB3001D0939 /* MMCommonAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMCommonAPI.m; sourceTree = "<group>"; };
 		6D16D6E21A08AADC001D0939 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		6D16D6E31A08AADC001D0939 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
-		6D16D6E51A08AB03001D0939 /* contact_match.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = contact_match.cc; sourceTree = "<group>"; };
-		6D16D6E61A08AB03001D0939 /* contact_match.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = contact_match.h; sourceTree = "<group>"; };
 		6D16D6F11A08AB31001D0939 /* MMServerContactManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMServerContactManager.h; sourceTree = "<group>"; };
 		6D16D6F21A08AB31001D0939 /* MMServerContactManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMServerContactManager.m; sourceTree = "<group>"; };
 		6D16D6F31A08AB31001D0939 /* MMUapRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMUapRequest.h; sourceTree = "<group>"; };
@@ -225,8 +216,6 @@
 		6D16D7261A08AC1B001D0939 /* MMThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMThread.h; sourceTree = "<group>"; };
 		6D16D7271A08AC1B001D0939 /* MMThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMThread.m; sourceTree = "<group>"; };
 		6D16D7A31A08AEA6001D0939 /* DefineDictionary.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DefineDictionary.h; sourceTree = "<group>"; };
-		6D16D7A41A08AEB9001D0939 /* pinyin.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pinyin.cc; sourceTree = "<group>"; };
-		6D16D7A51A08AEB9001D0939 /* pinyin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pinyin.h; sourceTree = "<group>"; };
 		6D16D7A81A08AFF0001D0939 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		6D16D7AA1A08AFFB001D0939 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		6D16D7AC1A08B003001D0939 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
@@ -386,13 +375,9 @@
 			children = (
 				6D16D7D51A0C702B001D0939 /* Token.h */,
 				6D16D7D61A0C702B001D0939 /* Token.m */,
-				6D16D7A41A08AEB9001D0939 /* pinyin.cc */,
-				6D16D7A51A08AEB9001D0939 /* pinyin.h */,
 				6D16D7A31A08AEA6001D0939 /* DefineDictionary.h */,
 				6D16D7261A08AC1B001D0939 /* MMThread.h */,
 				6D16D7271A08AC1B001D0939 /* MMThread.m */,
-				6D16D6E51A08AB03001D0939 /* contact_match.cc */,
-				6D16D6E61A08AB03001D0939 /* contact_match.h */,
 				6D16D6DE1A08AAB3001D0939 /* MMCommonAPI.h */,
 				6D16D6DF1A08AAB3001D0939 /* MMCommonAPI.m */,
 				6D16D6D41A08A9AE001D0939 /* MMGlobalPara.h */,
@@ -403,17 +388,13 @@
 				6D16D6D21A08A995001D0939 /* MMLogger.m */,
 				6D16D6CF1A08A980001D0939 /* MMGlobalDefine.h */,
 				6D16D62F1A08A6BB001D0939 /* DbStruct.h */,
+				6D16D6301A08A6BB001D0939 /* DbStruct.m */,
 				6D16D6581A08A799001D0939 /* DefineEnum.h */,
 				6D16D6591A08A799001D0939 /* ErrorType.h */,
-				6D16D65A1A08A89C001D0939 /* MMPhoneticAbbr.h */,
-				6D16D65B1A08A89C001D0939 /* MMPhoneticAbbr.mm */,
-				6D16D6301A08A6BB001D0939 /* DbStruct.m */,
 				6D16D6311A08A6BB001D0939 /* MMAddressBook.h */,
 				6D16D6321A08A6BB001D0939 /* MMAddressBook.m */,
-				6D16D6331A08A6BB001D0939 /* MMContact.h */,
-				6D16D6341A08A6BB001D0939 /* MMContact.m */,
 				6D16D6351A08A6BB001D0939 /* MMModel.h */,
-				6D16D6361A08A6BB001D0939 /* MMModel.mm */,
+				6D16D6361A08A6BB001D0939 /* MMModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -681,7 +662,6 @@
 				6D16D6BE1A08A921001D0939 /* SBJsonStreamParserAdapter.m in Sources */,
 				6D16D6C41A08A921001D0939 /* SBJsonUTF8Stream.m in Sources */,
 				6D16D6BF1A08A921001D0939 /* SBJsonStreamParserState.m in Sources */,
-				6D16D6E71A08AB03001D0939 /* contact_match.cc in Sources */,
 				6D16D6C61A08A921001D0939 /* PlausibleDatabase.m in Sources */,
 				6D16D6BA1A08A921001D0939 /* SBJson.m in Sources */,
 				6D16D6D01A08A980001D0939 /* MMGlobalData.m in Sources */,
@@ -702,7 +682,6 @@
 				6D16D7081A08ABD4001D0939 /* sha.c in Sources */,
 				6D16D6E41A08AADC001D0939 /* Reachability.m in Sources */,
 				6D16D6E01A08AAB3001D0939 /* MMCommonAPI.m in Sources */,
-				6D16D7A71A08AEB9001D0939 /* pinyin.cc in Sources */,
 				6D16D6C31A08A921001D0939 /* SBJsonTokeniser.m in Sources */,
 				6D16D6011A08A36A001D0939 /* AppDelegate.m in Sources */,
 				6D16D7BC1A08EFA0001D0939 /* GTMBase64.m in Sources */,
@@ -730,10 +709,9 @@
 				6D16D71F1A08AC01001D0939 /* ASIDataCompressor.m in Sources */,
 				6D16D6CC1A08A921001D0939 /* PLSqliteResultSet.m in Sources */,
 				6D16D7B51A08B287001D0939 /* MMSyncThread.m in Sources */,
-				6D16D63A1A08A6BB001D0939 /* MMModel.mm in Sources */,
+				6D16D63A1A08A6BB001D0939 /* MMModel.m in Sources */,
 				6D16D6BD1A08A921001D0939 /* SBJsonStreamParserAccumulator.m in Sources */,
 				6D16D6B91A08A921001D0939 /* NSObject+SBJson.m in Sources */,
-				6D16D65C1A08A89C001D0939 /* MMPhoneticAbbr.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
