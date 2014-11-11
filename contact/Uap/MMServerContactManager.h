@@ -30,7 +30,7 @@ typedef DbContactSyncInfo MMMomoContactSimple;
 +(NSInteger)updateContact:(MMMomoContact*)contact response:(NSDictionary**)response;
 +(BOOL)deleteContacts:(NSArray*)contactIds;
 +(BOOL)deleteContacts:(NSArray*)contactIds response:(NSArray**)response;
-+(NSInteger)deleteContact:(NSInteger)contactId;
++(NSInteger)deleteContact:(int64_t)contactId;
 +(NSDictionary*)encodeContact:(MMFullContact *)contact;
 +(MMMomoContact*)decodeContact:(NSDictionary*)dic;
 

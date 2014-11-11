@@ -36,28 +36,7 @@
 
 @end
 
-//同步进度
-@interface MMSyncProgressInfo : NSObject {
-    NSString* stageTitle_;
-    NSInteger stageCount_;
-    NSInteger currentStageIndex_;
-    
-    NSInteger stageOperationCount_;
-    NSInteger stageOperationIndex_;
-    float currentProgress_;
-    
-    BOOL infoChanged_;
-}
-@property (nonatomic, copy) NSString* stageTitle;
-@property (nonatomic) NSInteger stageCount;
-@property (nonatomic) NSInteger currentStageIndex;
-@property (nonatomic) NSInteger stageOperationCount;
-@property (nonatomic) NSInteger stageOperationIndex;
-@property (nonatomic, readonly) float currentProgress;
 
-- (void)notifyProgressIfNeed;
-
-@end
 
 //同步联系人（包含头像）及其分组
 @interface MMContactSync : MMModel {
@@ -76,8 +55,8 @@
 
 -(NSMutableArray*)getContactSyncInfoList;
 
--(NSInteger)getCellIdByContactId:(NSInteger)contactId;
--(BOOL) deleteContactDown:(NSInteger)contactId;
+-(NSInteger)getCellIdByContactId:(int64_t)contactId;
+-(BOOL) deleteContactDown:(int64_t)contactId;
 -(NSInteger)getContactIdByCellId:(NSInteger)cellId;
 -(BOOL)touchPhoneContact:(NSInteger)contactId;
 

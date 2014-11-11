@@ -95,10 +95,10 @@
 	[results close];
 	return contactId;
 }
--(NSInteger)getCellIdByContactId:(NSInteger)contactId {
+-(NSInteger)getCellIdByContactId:(int64_t)contactId {
 	NSError *outError = nil;
 	NSString* sql = @"select phone_contact_id from contact_sync where contact_id = ? ";
-	id<PLResultSet> results = [[self db]  executeQueryAndReturnError:&outError statement:sql, [NSNumber numberWithInt:contactId]];
+	id<PLResultSet> results = [[self db]  executeQueryAndReturnError:&outError statement:sql, [NSNumber numberWithLongLong:contactId]];
 	
 	if(SQLITE_OK != [outError code]) {
 		return 0;
@@ -143,8 +143,8 @@
 	[results close];
 	return array;
 }
--(MMContactSyncInfo*)getContactSyncInfo:(NSInteger)contactId {
-	NSMutableArray *array = [self getContactSyncInfoList:[NSArray arrayWithObject:[NSNumber numberWithInt:contactId]]];
+-(MMContactSyncInfo*)getContactSyncInfo:(int64_t)contactId {
+	NSMutableArray *array = [self getContactSyncInfoList:[NSArray arrayWithObject:[NSNumber numberWithLongLong:contactId]]];
 	if ([array count] == 0) {
 		return nil;
 	}
@@ -175,7 +175,7 @@
 
 
 	if(![[self db]  executeUpdate:sql, 
-		 [NSNumber numberWithInteger:info.contactId],
+		 [NSNumber numberWithLongLong:info.contactId],
 		 [NSNumber numberWithInteger:info.phoneContactId],
 		 [NSNumber numberWithLongLong:info.modifyDate],
 		 [NSNumber numberWithLongLong:info.phoneModifyDate],
@@ -188,11 +188,11 @@
 
 	return YES;
 }
--(BOOL)deleteContactSyncInfo:(NSInteger)contactId {
+-(BOOL)deleteContactSyncInfo:(int64_t)contactId {
 	NSString* sql = @"DELETE FROM contact_sync where contact_id = ? ";
 	
 	if(![[self db]  executeUpdate:sql, 
-		 [NSNumber numberWithInteger:contactId]]) {
+		 [NSNumber numberWithLongLong:contactId]]) {
 		return NO;
 	}
 	
@@ -211,7 +211,7 @@
 		 info.avatarUrl,
 		 info.avatarPart,
 		 info.avatarMd5,
-         [NSNumber numberWithInteger:info.contactId]]) {
+         [NSNumber numberWithLongLong:info.contactId]]) {
 		return NO;
 	}
 	return YES;
@@ -448,7 +448,7 @@
 	NSMutableArray *idsToAdd = [NSMutableArray array];
 	NSMutableArray *syncInfos = [self getContactSyncInfoList];
 	
-    ABAddressBookRef addressBook = ABAddressBookCreate();
+    ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, NULL);
 
     CFArrayRef peoples = ABAddressBookCopyArrayOfAllPeople(addressBook);
 
@@ -517,7 +517,7 @@
 	NSMutableArray *phoneContactIdsToDel = [NSMutableArray array];
 	
 	for (MMContactSyncInfo *info in syncInfos) {
-		[contactIdsToDel addObject:[NSNumber numberWithInteger:info.contactId]];
+		[contactIdsToDel addObject:[NSNumber numberWithLongLong:info.contactId]];
 		[phoneContactIdsToDel addObject:[NSNumber numberWithInteger:info.phoneContactId]];
 	}
     
@@ -531,7 +531,7 @@
 }
 
 
--(BOOL) deleteContactDown:(NSInteger)contactId {
+-(BOOL) deleteContactDown:(int64_t)contactId {
 	NSInteger cellId = [self getCellIdByContactId:contactId];
 	if (0 == cellId) {
 		return YES;
@@ -550,7 +550,7 @@
 	NSInteger cellId = 0;
 	MMABErrorType ret = [MMAddressBook insertContact:contact withDataList:contact.properties returnCellId:&cellId];
 	if (ret != MM_AB_OK) {
-		MLOG(@"添加联系人失败, contact id:%d", contact.contactId);
+		MLOG(@"添加联系人失败, contact id:%lld", contact.contactId);
 		return NO;
 	}
 	contact.phoneCid = cellId;
@@ -568,7 +568,7 @@
 -(BOOL) updateContactDown:(MMMomoContact*)contact {
     MMContactSyncInfo *info = [self getContactSyncInfo:contact.contactId];
     if (nil == info) {
-        MLOG(@"update contct fail contactid:%d", contact.contactId);
+        MLOG(@"update contct fail contactid:%lld", contact.contactId);
         return NO;
     }
 	[MMAddressBook updateContact:contact withDataList:contact.properties];
@@ -595,11 +595,11 @@
 		}];
 		
 		if (NSNotFound == index) {
-            [idsToAdd addObject:[NSNumber numberWithInteger:c.contactId]];
+            [idsToAdd addObject:[NSNumber numberWithLongLong:c.contactId]];
 		} else {
 			MMContactSyncInfo *info = [contacts objectAtIndex:index];
 			if (c.modifyDate > info.modifyDate ) {
-                [idsToUpdate addObject:[NSNumber numberWithInteger:c.contactId]];
+                [idsToUpdate addObject:[NSNumber numberWithLongLong:c.contactId]];
                 [contactsToUpdate addObject:info];
 			}
 			[contacts removeObjectAtIndex:index];

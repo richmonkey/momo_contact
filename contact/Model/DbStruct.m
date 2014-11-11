@@ -19,7 +19,7 @@
 }
 
 - (NSUInteger)hash {
-    return contactId;
+    return (NSUInteger)contactId;
 }
 
 @end
@@ -38,8 +38,11 @@
 }
 @end
 
-//简单联系人
-@implementation DbContactSimple
+//联系人
+@implementation DbContact
+@synthesize organization,department;
+@synthesize  note,birthday,modifyDate,jobTitle,nickName;
+
 @synthesize firstName,middleName,lastName,avatarUrl,namePhonetic, cellPhoneNums;
 
 - (BOOL)isEnglishName {
@@ -84,36 +87,8 @@
 	contactId = pid;
 }
 -(NSInteger)phoneCid {
-	return contactId;
+	return (NSInteger)contactId;
 }
-
--(id)init{
-	self = [super init];
-	if (self) {
-		firstName = @"";
-		middleName = @"";
-		lastName = @"";
-		avatarUrl = @"";
-		namePhonetic = @"";
-        self.cellPhoneNums = [NSMutableSet set];
-    }
-    return self;
-}
-
-- (void)dealloc {
-	self.avatarUrl = nil;
-	self.firstName = nil;
-	self.middleName = nil;
-	self.lastName = nil;
-	self.namePhonetic = nil;
-    self.cellPhoneNums = nil;
-	[super dealloc];
-}
-@end
-//联系人
-@implementation DbContact
-@synthesize organization,department;
-@synthesize  note,birthday,modifyDate,jobTitle,nickName;
 
 -(id) init{
     self = [super init];
@@ -131,6 +106,13 @@
 -(id)initWithContact:(DbContact*)dbcontact {
     self = [super init];
     if (self) {
+        firstName = @"";
+		middleName = @"";
+		lastName = @"";
+		avatarUrl = @"";
+		namePhonetic = @"";
+        self.cellPhoneNums = [NSMutableSet set];
+        
         self.contactId = dbcontact.contactId;
         self.avatarUrl = dbcontact.avatarUrl;
         self.firstName = dbcontact.firstName;
@@ -151,6 +133,13 @@
 }
 
 - (void)dealloc {
+    self.avatarUrl = nil;
+	self.firstName = nil;
+	self.middleName = nil;
+	self.lastName = nil;
+	self.namePhonetic = nil;
+    self.cellPhoneNums = nil;
+    
 	self.organization = nil;
 	self.department = nil;
 	self.note = nil;

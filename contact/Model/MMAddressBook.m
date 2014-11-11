@@ -271,15 +271,6 @@ NSString* formatTelNumber(NSString* strTel){
     return ret;
 }
 
-NSInteger simpleContactCompare(id id1, id id2, void *context) {
-	DbContactSimple *simpleContact1 = (DbContactSimple*)id1;
-	DbContactSimple *simpleContact2 = (DbContactSimple*)id2;
-	
-	NSString *name1 = [NSString stringWithFormat:@"%@%@", simpleContact1.lastName, simpleContact1.firstName];
-	NSString *name2 = [NSString stringWithFormat:@"%@%@", simpleContact2.lastName, simpleContact2.firstName];
-	return [name1 compare:name2 options:NSCaseInsensitiveSearch range:NSMakeRange(0, [name1 length]) locale:[NSLocale currentLocale]];
-}
-
 +(int)getContactCount {
     ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, NULL);
     CFIndex count = ABAddressBookGetPersonCount(addressBook);
@@ -373,60 +364,7 @@ NSInteger simpleContactCompare(id id1, id id2, void *context) {
  */
 +(ABRecordRef)insertContact:(ABAddressBookRef)abAddressbook contact:(DbContact *)dbcontact
                  withDataList:(NSArray*)listData {
-//    CFErrorRef errorRef = NULL; 
-//    
-//    ABRecordRef newPerson = ABPersonCreate();
-//    
-//	//firstname
-//	if (nil == dbcontact.firstName) {
-//		dbcontact.firstName = @"";
-//	}
-//	ABRecordSetValue(newPerson, kABPersonFirstNameProperty, dbcontact.firstName, &errorRef);
-//	ABRecordSetValue(newPerson, kABPersonFirstNamePhoneticProperty, [MMPhoneticAbbr getPinyin:dbcontact.firstName], &errorRef);
-//    
-//    //中间名字
-//	if(dbcontact.middleName && [dbcontact.middleName caseInsensitiveCompare:@""] != NSOrderedSame) {
-//		ABRecordSetValue(newPerson, kABPersonMiddleNameProperty, dbcontact.middleName, &errorRef);
-//		ABRecordSetValue(newPerson, kABPersonMiddleNamePhoneticProperty, [MMPhoneticAbbr getPinyin:dbcontact.middleName], &errorRef);
-//	}	
-//    
-//	//lastname
-//	if(dbcontact.lastName && [dbcontact.lastName caseInsensitiveCompare:@""] != NSOrderedSame) {
-//		ABRecordSetValue(newPerson, kABPersonLastNameProperty, dbcontact.lastName, &errorRef);
-//		ABRecordSetValue(newPerson, kABPersonLastNamePhoneticProperty, [MMPhoneticAbbr getPinyin:dbcontact.lastName], &errorRef);
-//	}
-//    
-//    //公司
-//    if(dbcontact.organization && [dbcontact.organization caseInsensitiveCompare:@""] != NSOrderedSame)
-//        ABRecordSetValue(newPerson, kABPersonOrganizationProperty, dbcontact.organization, &errorRef);
-//    
-//    //部门
-//    if(dbcontact.department && [dbcontact.department caseInsensitiveCompare:@""] != NSOrderedSame)
-//        ABRecordSetValue(newPerson, kABPersonDepartmentProperty, dbcontact.department, &errorRef);
-//    
-//    //备注
-//    if(dbcontact.note && [dbcontact.note caseInsensitiveCompare:@""] != NSOrderedSame)
-//        ABRecordSetValue(newPerson, kABPersonNoteProperty, dbcontact.note, &errorRef);
-//    
-//    //生日
-//    if(dbcontact.birthday)
-//        ABRecordSetValue(newPerson, kABPersonBirthdayProperty, dbcontact.birthday, &errorRef);
-//    
-//    //职称
-//    if(dbcontact.jobTitle && [dbcontact.jobTitle caseInsensitiveCompare:@""] != NSOrderedSame)
-//        ABRecordSetValue(newPerson, kABPersonJobTitleProperty, dbcontact.jobTitle, &errorRef);
-//    
-//    //昵称
-//    if(dbcontact.nickName &&[dbcontact.nickName caseInsensitiveCompare:@""] != NSOrderedSame)
-//        ABRecordSetValue(newPerson, kABPersonNicknameProperty, dbcontact.nickName, &errorRef);
-//	else 
-//		ABRecordRemoveValue(newPerson, kABPersonNicknameProperty, &errorRef);
-//    
-//	
-//	// 副表数据
-//    if(listData)
-//		[MMAddressBook setRecordData:newPerson andDatalist:listData];
-    
+
     CFErrorRef errorRef = NULL;
     ABRecordRef newPerson = [self ABRecordFromDbStruct:dbcontact withDataList:listData];
     
@@ -1816,90 +1754,3 @@ NSInteger simpleContactCompare(id id1, id id2, void *context) {
 
 @end
 
-
-
-#ifdef MOMO_UNITTEST
-#import "GHTestCase.h"
-#import "MMCommonAPI.h"
-
-#define CFRELEASE_AND_NIL(x) CFRelease(x); x=nil;
-ABRecordRef sourceWithType (ABSourceType mySourceType)
-{
-    ABAddressBookRef addressBook = ABAddressBookCreate();
-    CFArrayRef sources = ABAddressBookCopyArrayOfAllSources(addressBook);
-    CFIndex sourceCount = CFArrayGetCount(sources);
-    ABRecordRef resultSource = NULL;
-    for (CFIndex i = 0 ; i < sourceCount; i++) {
-        ABRecordRef currentSource = CFArrayGetValueAtIndex(sources, i);
-        CFTypeRef sourceType = ABRecordCopyValue(currentSource, kABSourceTypeProperty);
-        
-        BOOL isMatch = mySourceType == [(NSNumber *)sourceType intValue];
-        CFRELEASE_AND_NIL(sourceType);
-        
-        if (isMatch) {
-            resultSource = currentSource;
-            CFRetain(resultSource);
-            break;
-        }
-    }
-    
-    CFRELEASE_AND_NIL(addressBook);    
-    CFRELEASE_AND_NIL(sources);
-
-    return resultSource;
-}
-
-ABRecordRef localSource()
-{
-    return sourceWithType(kABSourceTypeLocal);
-}
-
-ABRecordRef exchangeSource()
-{
-    return sourceWithType(kABSourceTypeExchange);
-}
-
-ABRecordRef mobileMeSource()
-{
-    return sourceWithType(kABSourceTypeMobileMe);
-}
-
-
-@interface MMAddressBookUnitTest : GHTestCase {
-	
-}
-@end
-
-@implementation MMAddressBookUnitTest
-
-
--(void)testBirthday {
-#if 0
-	DbContact *contact = [[[DbContact alloc] init] autorelease];
-	contact.lastName = @"test";
-	contact.birthday = [MMCommonAPI getDateBySting:@"0-0-0"];
-
-    NSInteger cellId = 0;
-    MMABErrorType result = [MMAddressBook insertContact:contact withDataList:nil returnCellId:&cellId];
-    GHAssertEquals(result, MM_AB_OK, @"add contact fail");
-    DbContact *ncontact = [MMAddressBook getContact:cellId withError:nil];
-    GHAssertNotNULL(ncontact, @"read contact fail");   
-    GHAssertEquals(ncontact.birthday, contact.birthday, @"birthday 1900-1-1 can't save");
-#endif
-}
-
--(void)testSource {
-    ABRecordRef source = exchangeSource();
-    ABAddressBookRef addressBook = ABAddressBookCreate();
-    CFArrayRef allPeopleInSource = ABAddressBookCopyArrayOfAllPeopleInSourceWithSortOrdering(addressBook, source, kABPersonSortByFirstName );
-    NSLog(@"Count allPeopleInSource: %d", CFArrayGetCount(allPeopleInSource));
-    if (source) {
-        CFRelease(source);
-    }
-
-    CFRelease(addressBook);
-}
-
-@end
-
-#endif
