@@ -83,11 +83,11 @@
     return [avatarUrl stringByReplacingOccurrencesOfString:@"_130." withString:desireSizeStr];
 }
 
--(void)setPhoneCid:(NSInteger)pid {
+-(void)setPhoneCid:(int32_t)pid {
 	contactId = pid;
 }
--(NSInteger)phoneCid {
-	return (NSInteger)contactId;
+-(int32_t)phoneCid {
+	return (int32_t)contactId;
 }
 
 -(id) init{

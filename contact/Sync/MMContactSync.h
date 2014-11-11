@@ -20,12 +20,6 @@
 	NSInteger uploadAddCount;
 	NSInteger uploadDelCount;
 	NSInteger uploadUpdateCount;
-	
-	NSInteger momoDownloadAddCount;
-	NSInteger momoDownloadDelCount;
-	NSInteger momoDownloadUpdateCount;
-	
-	NSInteger momoCardDownloadCount;
 }
 @property(nonatomic)NSInteger downloadAddCount;
 @property(nonatomic)NSInteger downloadDelCount;
@@ -57,7 +51,6 @@
 
 -(NSInteger)getCellIdByContactId:(int64_t)contactId;
 -(BOOL) deleteContactDown:(int64_t)contactId;
--(NSInteger)getContactIdByCellId:(NSInteger)cellId;
--(BOOL)touchPhoneContact:(NSInteger)contactId;
+-(int64_t)getContactIdByCellId:(int32_t)cellId;
 
 @end

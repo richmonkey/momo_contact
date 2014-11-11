@@ -16,11 +16,11 @@
 
 @implementation MMMomoContact
 
--(void)setPhoneCid:(NSInteger)pid {
+-(void)setPhoneCid:(int32_t)pid {
 	phoneCid = pid;
 }
 
--(NSInteger)phoneCid {
+-(int32_t)phoneCid {
 	return phoneCid;
 }
 
@@ -65,14 +65,14 @@
     return YES;
 }
 
-+(BOOL)getContactCount:(NSInteger*)count {
++(BOOL)getContactCount:(int*)count {
     NSDictionary *response = nil;
 	NSInteger statusCode = [MMUapRequest getSync:@"contact/count.json" jsonValue:&response compress:YES];
 	if (statusCode != 200 || !response) {
 		return NO;
 	}
     if ([response objectForKey:@"all_count"] && count != NULL) {
-        *count = [[response objectForKey:@"all_count"] integerValue];
+        *count = [[response objectForKey:@"all_count"] intValue];
         return YES;
     }
     return NO;
@@ -549,7 +549,7 @@
 	return value;
 }
 
-+ (NSArray*)getContactChangeHistory:(NSInteger)page withErrorString:(NSString**)errorString {
++ (NSArray*)getContactChangeHistory:(int)page withErrorString:(NSString**)errorString {
     NSString* requestUrl = [NSString stringWithFormat:@"contact/get_history.json?page=%d&page_size=100", page];
     
     NSArray *arrayValue = nil;
@@ -568,7 +568,7 @@
     return retArray;
 }
 
-+ (BOOL)recoverContactChangeHistory:(NSInteger)dateLine {
++ (BOOL)recoverContactChangeHistory:(int)dateLine {
     NSDictionary* dict = [NSDictionary dictionaryWithObject:[NSNumber numberWithInt:dateLine] forKey:@"dateline"];
     NSDictionary* retDict = nil;
     NSInteger statusCode = [MMUapRequest postSync:@"contact/recover_history.json" withObject:dict jsonValue:&retDict];

@@ -10,11 +10,11 @@
 #import "DbStruct.h"
 #import "MMModel.h"
 
-typedef MMFullContact MMUserCard;
 @interface MMMomoContact : MMFullContact
 {
-	NSInteger	phoneCid;//手机联系人本身自增ID 
+	int32_t	phoneCid;//手机联系人本身自增ID
 }
+
 @end
 typedef DbContactSyncInfo MMMomoContactSimple;
 
@@ -37,9 +37,9 @@ typedef DbContactSyncInfo MMMomoContactSimple;
 +(NSArray*)addContactStarState:(NSArray*)contactIds;
 +(NSArray*)removeContactStarState:(NSArray*)contactIds;
 
-+ (NSArray*)getContactChangeHistory:(NSInteger)page withErrorString:(NSString**)errorString;
-+ (BOOL)recoverContactChangeHistory:(NSInteger)dateLine;
++ (NSArray*)getContactChangeHistory:(int)page withErrorString:(NSString**)errorString;
++ (BOOL)recoverContactChangeHistory:(int)dateLine;
 
-+(BOOL)getContactCount:(NSInteger*)count;
++(BOOL)getContactCount:(int*)count;
 
 @end

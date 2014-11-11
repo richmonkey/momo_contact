@@ -44,7 +44,8 @@
 	NSString	*jobTitle;//职称
 	NSString	*nickName;//昵称
 }
-@property (nonatomic) NSInteger	phoneCid;
+
+@property (nonatomic) int32_t	phoneCid;
 @property (copy, nonatomic) NSString *firstName;
 @property (copy, nonatomic) NSString *middleName;
 @property (copy, nonatomic) NSString *lastName;

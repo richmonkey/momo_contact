@@ -18,7 +18,7 @@
 
 @interface MMContactSyncInfo : DbContactId
 {
-	NSInteger phoneContactId;
+	int32_t phoneContactId;
 	int64_t modifyDate;
 	int64_t phoneModifyDate;
 	NSString *avatarUrl;
@@ -26,7 +26,7 @@
 	NSString *avatarMd5;
 
 }
-@property(nonatomic)NSInteger phoneContactId;
+@property(nonatomic)int32_t phoneContactId;
 @property(nonatomic)int64_t modifyDate;
 @property(nonatomic)int64_t phoneModifyDate;
 @property(nonatomic, copy)NSString *avatarUrl;
@@ -76,7 +76,7 @@
 
 
 @implementation MMContactSync(Contact)
--(NSInteger)getContactIdByCellId:(NSInteger)cellId {
+-(int64_t)getContactIdByCellId:(int32_t)cellId {
 	NSError *outError = nil;
 	NSString* sql = @"select contact_id from contact_sync where phone_contact_id = ? ";
 	id<PLResultSet> results = [[self db]  executeQueryAndReturnError:&outError statement:sql, [NSNumber numberWithInt:cellId]];
@@ -87,9 +87,9 @@
 	
 	PLResultSetStatus status = [results nextAndReturnError:nil];
 	
-	NSInteger contactId = 0;
+	int64_t contactId = 0;
 	if(status) {
-		contactId = [results intForColumn:@"contact_id"];
+		contactId = [results bigIntForColumn:@"contact_id"];
 	}
 	
 	[results close];
@@ -113,14 +113,6 @@
 	
 	[results close];
 	return cellId;
-}
-
--(BOOL)touchPhoneContact:(NSInteger)contactId {
-	NSString* sql = @"update contact_sync set phone_modify_date = 0 where contact_id = ? ";
-	if(![[self db]  executeUpdate:sql, [NSNumber numberWithInt:contactId]]) {
-		return NO;
-	}
-	return YES;
 }
 
 -(NSMutableArray*)getContactSyncInfoList:(NSArray*)ids {
@@ -253,7 +245,7 @@
 	NSMutableArray *array = [NSMutableArray array];
 	unsigned int index= 0;
 	while (index < [phoneContactIds count]) {
-		unsigned int len = MIN(10, [phoneContactIds count] - index);
+		unsigned int len = (unsigned int)MIN(10, [phoneContactIds count] - index);
         
         for (unsigned int i  = 0; i < len; i++) {
             NSNumber *phoneid = [phoneContactIds objectAtIndex:index + i];
@@ -336,7 +328,7 @@
 	}
     unsigned int index= 0;
 	while (index < [contactIds count]) {
-		unsigned int len = MIN(10, [contactIds count] - index);
+		unsigned int len = (int)MIN(10, [contactIds count] - index);
 
         NSArray *response = nil;
         if (![MMServerContactManager deleteContacts:[contactIds subarrayWithRange:NSMakeRange(index, len)] response:&response] ){

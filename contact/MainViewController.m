@@ -70,7 +70,7 @@ static void ABChangeCallback(ABAddressBookRef addressBook, CFDictionaryRef info,
     }
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSInteger count;
+        int count;
         [MMServerContactManager getContactCount:&count];
         NSLog(@"server count:%d", count);
     });
@@ -97,7 +97,7 @@ static void ABChangeCallback(ABAddressBookRef addressBook, CFDictionaryRef info,
     NSLog(@"contact count:%d", count);
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSInteger count;
+        int count;
         [MMServerContactManager getContactCount:&count];
         NSLog(@"server count:%d", count);
     });
