@@ -95,7 +95,7 @@
 	[results close];
 	return contactId;
 }
--(NSInteger)getCellIdByContactId:(int64_t)contactId {
+-(int32_t)getCellIdByContactId:(int64_t)contactId {
 	NSError *outError = nil;
 	NSString* sql = @"select phone_contact_id from contact_sync where contact_id = ? ";
 	id<PLResultSet> results = [[self db]  executeQueryAndReturnError:&outError statement:sql, [NSNumber numberWithLongLong:contactId]];
@@ -106,7 +106,7 @@
 	
 	PLResultSetStatus status = [results nextAndReturnError:nil];
 	
-	NSInteger cellId = 0;
+	int32_t cellId = 0;
 	if(status) {
 		cellId = [results intForColumn:@"phone_contact_id"];
 	}
@@ -410,7 +410,7 @@
 		NSArray *addResponse = nil;
 		NSInteger statusCode = [MMServerContactManager addContacts:array response:&addResponse];
 		if (statusCode != 200){
-			MLOG(@"向服务器添加联系人失败 status code:%d", statusCode);
+			MLOG(@"向服务器添加联系人失败 status code:%zd", statusCode);
 			return NO;
 		}
 		[self deleteContactSyncInfo:info.contactId];
@@ -430,7 +430,7 @@
             return YES;
         } 
 
-		MLOG(@"修改服务器联系人失败 status code:%d", statusCode);	
+		MLOG(@"修改服务器联系人失败 status code:%zd", statusCode);
 		return NO;
 	}
 	return YES;
@@ -524,22 +524,22 @@
 
 
 -(BOOL) deleteContactDown:(int64_t)contactId {
-	NSInteger cellId = [self getCellIdByContactId:contactId];
+	int32_t cellId = [self getCellIdByContactId:contactId];
 	if (0 == cellId) {
 		return YES;
 	}
 	if ([MMAddressBook deleteContact:cellId] != MM_AB_OK) {
-		MLOG(@"删除联系人失败, phone contact id:%d", cellId);
+		MLOG(@"删除联系人失败, phone contact id:%zd", cellId);
 		return NO;
 	}
 	[self deleteContactSyncInfo:contactId];
-    MLOG(@"delete phone contact:%d contact id:%lld from phone", cellId, (int64_t)contactId);
+    MLOG(@"delete phone contact:%zd contact id:%lld from phone", cellId, (int64_t)contactId);
 	return YES;
 }
 
 
 -(BOOL) addContactDown:(MMMomoContact*)contact {
-	NSInteger cellId = 0;
+	int32_t cellId = 0;
 	MMABErrorType ret = [MMAddressBook insertContact:contact withDataList:contact.properties returnCellId:&cellId];
 	if (ret != MM_AB_OK) {
 		MLOG(@"添加联系人失败, contact id:%lld", contact.contactId);
@@ -628,7 +628,7 @@
         for (unsigned int i = 0; i < [array count]; i++) {
             MMMomoContact *contact = [array objectAtIndex:i];
 
-            NSInteger cellId = [[addedPhoneId objectAtIndex:i] intValue];
+            int32_t cellId = [[addedPhoneId objectAtIndex:i] intValue];
             contact.phoneCid = cellId;
             
             MMContactSyncInfo *info = [[[MMContactSyncInfo alloc] init] autorelease];
@@ -663,7 +663,7 @@
     downloadedContacts = [NSMutableArray array];
     
     for (unsigned int i = 0; i < [idsToUpdate count]; i+= 50) {
-		int len = MIN(50, [idsToUpdate count] - i);
+		int len = (int)MIN(50, [idsToUpdate count] - i);
 		NSArray *array = [MMServerContactManager getContactList:[idsToUpdate subarrayWithRange:NSMakeRange(i, len)]];
         if (nil == array) {
             break;

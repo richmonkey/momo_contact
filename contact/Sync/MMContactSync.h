@@ -49,7 +49,7 @@
 
 -(NSMutableArray*)getContactSyncInfoList;
 
--(NSInteger)getCellIdByContactId:(int64_t)contactId;
+-(int32_t)getCellIdByContactId:(int64_t)contactId;
 -(BOOL) deleteContactDown:(int64_t)contactId;
 -(int64_t)getContactIdByCellId:(int32_t)cellId;
 
