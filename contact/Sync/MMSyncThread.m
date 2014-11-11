@@ -152,14 +152,14 @@ void timerCallback(CFRunLoopTimerRef timer, void *info) {
     history.errorcode = 0;
     
 	MMSyncResult *result = [syncer syncResult];
-    history.detailInfo = [NSString stringWithFormat: @"%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld",
+    history.detailInfo = [NSString stringWithFormat: @"%zd,%zd,%zd,%zd,%zd,%zd,%zd,%zd",
                           result.downloadAddCount + result.downloadUpdateCount + result.downloadDelCount,
                           result.downloadAddCount, result.downloadDelCount, result.downloadUpdateCount,
                           result.uploadAddCount + result.uploadUpdateCount + result.uploadDelCount,
                           result.uploadAddCount,  result.uploadDelCount, result.uploadUpdateCount];
     
-	MLOG(@"downadd:%ld, downup:%ld, downdel:%ld, uploadadd:%ld, "
-         @"uploadup:%ld, uploaddel:%ld",
+	MLOG(@"downadd:%zd, downup:%zd, downdel:%zd, uploadadd:%zd, "
+         @"uploadup:%zd, uploaddel:%zd",
          (long)result.downloadAddCount, (long)result.downloadUpdateCount, (long)result.downloadDelCount,
          result.uploadAddCount, result.uploadUpdateCount, result.uploadDelCount);
          
