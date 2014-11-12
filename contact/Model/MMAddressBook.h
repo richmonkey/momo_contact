@@ -36,7 +36,7 @@ typedef int MMABErrorType;
 
 +(int)getContactCount;
 
-+(MMFullContact*)getContact:(int32_t)phoneContactId;
+
 
 +(NSArray*)insertContacts:(NSArray*)fullContacts;
 
@@ -61,8 +61,6 @@ typedef int MMABErrorType;
 +(MMABErrorType)updateData:(int32_t)cellId withDataList:(NSArray*)listData;
 
 
-+(NSArray*)getContactNumberList:(MMABErrorType*)error;
-
 +(NSDate*) getContactModifyDate:(int32_t)cellId;
 
 +(MMErrorType) updateContactAvatar:(NSData*)avatar byPhoneId:(int32_t)phoneContactId;
@@ -70,9 +68,6 @@ typedef int MMABErrorType;
 +(NSData*)getAvatarData:(int32_t)phonecid;
 +(UIImage *)getAvatar:(int32_t)phonecid;
 
-+(BOOL)isContactExist:(int32_t)cellId;
-
-+ (NSArray*) getDataList:(int32_t)cellId withError:(MMABErrorType*)error; 
 
 @end
 

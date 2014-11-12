@@ -10,13 +10,8 @@
 #import "DbStruct.h"
 #import "MMModel.h"
 
-@interface MMMomoContact : MMFullContact
-{
-	int32_t	phoneCid;//手机联系人本身自增ID
-}
 
-@end
-typedef DbContactSyncInfo MMMomoContactSimple;
+
 
 @interface MMServerContactManager : NSObject {
 

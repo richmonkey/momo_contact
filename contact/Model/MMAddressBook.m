@@ -49,9 +49,7 @@
 
 + (DbContact*)getContact:(int32_t)cellId withError:(MMABErrorType*)error;
 
-+ (NSArray*)getDataList:(int32_t)cellId withType:(NSInteger)cType withError:(MMABErrorType*)error;
-
-+ (NSArray*) getDataList:(int32_t)cellId withError:(MMABErrorType*)error;
++(MMFullContact*)getContact:(int32_t)phoneContactId;
 
 + (BOOL)dbContactFromABRecord:(DbContact*)dbContact abRecord:(ABRecordRef)person;
 
@@ -292,7 +290,7 @@ NSString* formatTelNumber(NSString* strTel){
         return nil;
     }
     contact.properties = datas;
-    contact.contactId = cellId;
+    contact.phoneCid = cellId;
     CFRelease(abAddressbook);
     return contact;
 }
@@ -310,18 +308,15 @@ NSString* formatTelNumber(NSString* strTel){
 		dbcontact.firstName = @"";
 	}
 	ABRecordSetValue(newPerson, kABPersonFirstNameProperty, dbcontact.firstName, &errorRef);
-//	ABRecordSetValue(newPerson, kABPersonFirstNamePhoneticProperty, [MMPhoneticAbbr getPinyin:dbcontact.firstName], &errorRef);
     
         //中间名字
 	if(dbcontact.middleName && [dbcontact.middleName caseInsensitiveCompare:@""] != NSOrderedSame) {
 		ABRecordSetValue(newPerson, kABPersonMiddleNameProperty, dbcontact.middleName, &errorRef);
-//		ABRecordSetValue(newPerson, kABPersonMiddleNamePhoneticProperty, [MMPhoneticAbbr getPinyin:dbcontact.middleName], &errorRef);
-	}	
+	}
     
         //lastname
 	if(dbcontact.lastName && [dbcontact.lastName caseInsensitiveCompare:@""] != NSOrderedSame) {
 		ABRecordSetValue(newPerson, kABPersonLastNameProperty, dbcontact.lastName, &errorRef);
-//		ABRecordSetValue(newPerson, kABPersonLastNamePhoneticProperty, [MMPhoneticAbbr getPinyin:dbcontact.lastName], &errorRef);
 	}
     
         //公司
@@ -491,18 +486,15 @@ NSString* formatTelNumber(NSString* strTel){
         //firstname
         if(dbcontact.firstName && [dbcontact.firstName caseInsensitiveCompare:@""] != NSOrderedSame) {
             ABRecordSetValue(updatePerson, kABPersonFirstNameProperty, dbcontact.firstName, &errorRef);
-//            ABRecordSetValue(updatePerson, kABPersonFirstNamePhoneticProperty, [MMPhoneticAbbr getPinyin:dbcontact.firstName], &errorRef);
         }
         else {
 			ABRecordSetValue(updatePerson, kABPersonFirstNameProperty, @"", &errorRef);
-            //ABRecordRemoveValue(updatePerson, kABPersonFirstNameProperty, &errorRef);
             ABRecordRemoveValue(updatePerson, kABPersonFirstNamePhoneticProperty, &errorRef);
         }
         
         //中间名字
         if(dbcontact.middleName && [dbcontact.middleName caseInsensitiveCompare:@""] != NSOrderedSame) {
             ABRecordSetValue(updatePerson, kABPersonMiddleNameProperty, dbcontact.middleName, &errorRef);
-//            ABRecordSetValue(updatePerson, kABPersonMiddleNamePhoneticProperty, [MMPhoneticAbbr getPinyin:dbcontact.middleName], &errorRef);
         }
         else {
             ABRecordRemoveValue(updatePerson, kABPersonMiddleNameProperty, &errorRef);
@@ -512,7 +504,6 @@ NSString* formatTelNumber(NSString* strTel){
         //lastname
         if(dbcontact.lastName && [dbcontact.lastName caseInsensitiveCompare:@""] != NSOrderedSame) {
             ABRecordSetValue(updatePerson, kABPersonLastNameProperty, dbcontact.lastName, &errorRef);
-//            ABRecordSetValue(updatePerson, kABPersonLastNamePhoneticProperty, [MMPhoneticAbbr getPinyin:dbcontact.lastName], &errorRef);
         }
         else {
             ABRecordRemoveValue(updatePerson, kABPersonLastNameProperty, &errorRef);
@@ -567,15 +558,11 @@ NSString* formatTelNumber(NSString* strTel){
             
             // 副表数据
 			[MMAddressBook setRecordData:updatePerson andDatalist:listData];
-            //setRecordData(updatePerson, listData);
         }
         
         // 保存
         if (!ABAddressBookSave(abAddressbook, &errorRef))
             ret = MM_AB_SAVE_FAILED;
-		
-//		NSDate *modifyDate = [MMAddressBook getContactModifyDate:dbcontact.phoneCid];
-//		dbcontact.modifyDate = modifyDate;		
 		
     }
     while(0);
@@ -613,7 +600,6 @@ NSString* formatTelNumber(NSString* strTel){
             
             // 副表数据
 			[MMAddressBook setRecordData:updatePerson andDatalist:listData];
-            //setRecordData(updatePerson, listData);
 			
         }
         // 保存
@@ -628,94 +614,6 @@ NSString* formatTelNumber(NSString* strTel){
 }
 
 
-+(NSArray*)getContactNumberList:(MMABErrorType*)error{
-	NSMutableArray *numbers = [NSMutableArray array];
-    ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, NULL);
-    NSArray* people = (NSArray*)ABAddressBookCopyArrayOfAllPeople(addressBook);
-    for(NSUInteger i = 0; i < [people count]; ++i) {
-        ABRecordRef person = (ABRecordRef)[people objectAtIndex:i];
-		ABPropertyID aPropertyID = kABPersonPhoneProperty;
-		CFTypeRef typeRef = ABRecordCopyValue(person, aPropertyID);
-		assert(ABPersonGetTypeOfProperty(aPropertyID) == kABMultiStringPropertyType);
-		if (nil == typeRef) {
-			continue;
-		}
-		NSArray* mutistrs = (NSMutableArray*)typeRef;
-		int num = ABMultiValueGetCount(mutistrs);
-		for (int j = 0; j < num; ++j) {
-			NSString* value = (NSString*)ABMultiValueCopyValueAtIndex(mutistrs, j);
-			[numbers addObject:formatTelNumber(value)];
-			[value release];
-		}
-		CFRelease(typeRef);
-	}					
-    [people release];
-    CFRelease(addressBook);
-    return numbers;
-}
-
-
-
-/*
- * 插入分组
- */
-+(MMABErrorType) insertCategory:(NSString*)cateName returnedCateId:(NSInteger*)cateId{
-    MMABErrorType ret = MM_AB_OK;
-    CFErrorRef errorRef = NULL; 
-    NSInteger tmpCateId = 0;
-    
-    ABAddressBookRef abAddressbook = ABAddressBookCreateWithOptions(NULL, NULL);
-    do {
-        ABRecordRef group = ABGroupCreate();
-        ABRecordSetValue(group, kABGroupNameProperty, cateName, &errorRef);
-        
-        ABAddressBookAddRecord(abAddressbook, group, &errorRef);
-        // 保存
-        if (!ABAddressBookSave(abAddressbook, &errorRef))
-            ret = MM_AB_SAVE_FAILED;
-        
-        tmpCateId = ABRecordGetRecordID(group);
-        CFRelease(group);
-    }
-    while(0);
-    
-    if(cateId)
-        *cateId = tmpCateId;
-    
-    CFRelease(abAddressbook);
-    
-    return ret;
-}
-
-/*
- * 更新分组
- */
-+(MMABErrorType) updateCategory:(NSString*)cateName withCateId:(NSInteger)cateId{
-    MMABErrorType ret = MM_AB_OK;
-    CFErrorRef errorRef = NULL; 
-    
-    ABAddressBookRef abAddressbook = ABAddressBookCreateWithOptions(NULL, NULL);
-    do {
-//        CFErrorRef errorRef;
-        ABRecordRef group = ABAddressBookGetGroupWithRecordID(abAddressbook, cateId);
-        
-        if(group == nil) {
-            ret = MM_AB_RECORD_NOT_EXIST;
-            break;
-        }
-        
-        ABRecordSetValue(group, kABGroupNameProperty, cateName, &errorRef);
-        
-        // 保存
-        if (!ABAddressBookSave(abAddressbook, &errorRef))
-            ret = MM_AB_SAVE_FAILED;
-    }
-    while(0);
-    
-    CFRelease(abAddressbook);
-    
-    return ret;
-}
 
 +(NSDate*)getContactModifyDate:(int32_t)cellId {
 	
@@ -780,69 +678,6 @@ NSString* formatTelNumber(NSString* strTel){
 	}
 	
 	return dbContact;
-}
-
-+ (NSArray*)getDataList:(int32_t)cellId withType:(NSInteger)cType withError:(MMABErrorType*)error {
-	ABAddressBookRef abAddressbook = ABAddressBookCreateWithOptions(NULL, NULL);
-    ABRecordRef person = ABAddressBookGetPersonWithRecordID(abAddressbook,cellId);
-	if (person == NULL) {
-		if (error) {
-            CFRelease(abAddressbook);
-			*error = MM_AB_RECORD_NOT_EXIST;
-			return nil;
-		}
-	}
-	
-	NSMutableArray* dbDataList = [[[NSMutableArray alloc] init] autorelease];
-	
-	if (![self dbDataListFromABRecord:dbDataList abRecord:person]) {
-		if (error) {
-			*error = MM_AB_FAILED;
-		} 
-		CFRelease(abAddressbook);
-		return nil;
-	}
-	
-	NSMutableArray* resultList = [NSMutableArray arrayWithCapacity:1];
-	for (DbData *dbData in dbDataList) {
-		if (dbData.property == cType) {
-			[resultList addObject:dbData];
-		}
-	}
-	
-	CFRelease(abAddressbook);
-	if (error) {
-		*error = MM_AB_OK;
-	}
-	return resultList;
-}
-
-+ (NSArray*) getDataList:(int32_t)cellId withError:(MMABErrorType*)error {
-	ABAddressBookRef abAddressbook = ABAddressBookCreateWithOptions(NULL, NULL);
-    ABRecordRef person = ABAddressBookGetPersonWithRecordID(abAddressbook,cellId);
-	if (person == NULL) {
-		if (error) {
-            CFRelease(abAddressbook);
-			*error = MM_AB_RECORD_NOT_EXIST;
-			return nil;
-		}
-	}
-	
-	NSMutableArray* dbDataList = [[[NSMutableArray alloc] init] autorelease];
-	
-	if (![self dbDataListFromABRecord:dbDataList abRecord:person]) {
-		if (error) {
-			*error = MM_AB_FAILED;
-		} 
-		CFRelease(abAddressbook);
-		return nil;
-	}
-	CFRelease(abAddressbook);
-	
-	if (error) {
-		*error = MM_AB_OK;
-	}
-	return dbDataList;
 }
 
 
@@ -1170,17 +1005,7 @@ NSString* formatTelNumber(NSString* strTel){
     return YES;
 }
 
-+ (BOOL)isContactExist:(int32_t)cellId {
-	ABAddressBookRef abAddressbook = ABAddressBookCreateWithOptions(NULL, NULL);
-    ABRecordRef person = ABAddressBookGetPersonWithRecordID(abAddressbook,cellId);
-	if (person == NULL) {
-		CFRelease(abAddressbook);
-		return NO;
-	}
-	
-	CFRelease(abAddressbook);
-	return YES;
-}
+
 
 + (NSData*)getAvatarData:(int32_t)phonecid {
 	ABAddressBookRef abAddressbook = ABAddressBookCreateWithOptions(NULL, NULL);

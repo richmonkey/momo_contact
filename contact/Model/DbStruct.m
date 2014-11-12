@@ -40,6 +40,7 @@
 
 //联系人
 @implementation DbContact
+@synthesize phoneCid;
 @synthesize organization,department;
 @synthesize  note,birthday,modifyDate,jobTitle,nickName;
 
@@ -81,13 +82,6 @@
     }
     NSString* desireSizeStr = [NSString stringWithFormat:@"_%d.", BIG_AVATAR_SIZE];
     return [avatarUrl stringByReplacingOccurrencesOfString:@"_130." withString:desireSizeStr];
-}
-
--(void)setPhoneCid:(int32_t)pid {
-	contactId = pid;
-}
--(int32_t)phoneCid {
-	return (int32_t)contactId;
 }
 
 -(id) init{

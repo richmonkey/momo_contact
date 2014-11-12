@@ -14,17 +14,6 @@
 #import "oauth.h"
 #import "MMGlobalData.h"
 
-@implementation MMMomoContact
-
--(void)setPhoneCid:(int32_t)pid {
-	phoneCid = pid;
-}
-
--(int32_t)phoneCid {
-	return phoneCid;
-}
-
-@end
 
 @implementation MMServerContactManager
 

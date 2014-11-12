@@ -27,6 +27,8 @@
 
 //联系人
 @interface DbContact : DbContactId {
+  	int32_t	phoneCid;//手机联系人本身自增ID
+    
     NSString    *avatarUrl;
 	NSString	*firstName;	//姓名
 	NSString	*middleName;//(姓)名
@@ -190,5 +192,7 @@
 
 @end
 
+typedef MMFullContact MMMomoContact;
 
+typedef DbContactSyncInfo MMMomoContactSimple;
 
