@@ -8,8 +8,8 @@
 
 
 
-#define ALBUM_URL @"http://172.25.1.155/"
-#define API_URL @"http://172.25.1.155"
+#define ALBUM_URL @"http://api.contacts.momo.im/"
+#define API_URL @"http://api.contacts.momo.im"
 
 
 
