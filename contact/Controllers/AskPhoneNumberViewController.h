@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "NGViewController.h"
 
-@interface AskPhoneNumberViewController : UIViewController <UITextFieldDelegate>
+@interface AskPhoneNumberViewController : NGViewController <UITextFieldDelegate>
 
 @end

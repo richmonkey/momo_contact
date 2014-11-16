@@ -24,8 +24,8 @@
                         <action selector="sync:" destination="-1" eventType="touchUpInside" id="hmg-c0-Lj3"/>
                     </connections>
                 </button>
-                <imageView appearanceType="aqua" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="syn.png" translatesAutoresizingMaskIntoConstraints="NO" id="hvC-rk-Yep">
-                    <rect key="frame" x="87" y="203" width="112" height="103"/>
+                <imageView appearanceType="aqua" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="syn.png" translatesAutoresizingMaskIntoConstraints="NO" id="hvC-rk-Yep">
+                    <rect key="frame" x="87" y="203" width="112" height="112"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
             </subviews>
@@ -35,6 +35,6 @@
         </view>
     </objects>
     <resources>
-        <image name="syn.png" width="44" height="44"/>
+        <image name="syn.png" width="117" height="117"/>
     </resources>
 </document>

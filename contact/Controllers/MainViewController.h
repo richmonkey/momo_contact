@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "NGViewController.h"
 
-@interface MainViewController : UIViewController
+@interface MainViewController : NGViewController
 
 @end

@@ -21,21 +21,6 @@
 
 @end
 
-@implementation UIButton (Tag)
-
-+ (UIButton*)ng_buttonWithTag:(NSString*)tag {
-    UIButton* button = [UIButton buttonWithType:UIButtonTypeCustom];
-//    [button setBackgroundImage:[UIImage imageWithColor:[UIColor whiteColor]] forState:UIControlStateHighlighted];
-
-    [button setBackgroundImage:[UIImage imageWithColor:HEXCOLOR(0x74a7e0)] forState:UIControlStateNormal];
-    button.titleLabel.textColor = [UIColor whiteColor];
-    button.titleLabel.font = [UIFont systemFontOfSize:13];
-    button.size = CGSizeMake(70, 25);
-
-    return  button;
-}
-
-@end
 
 @implementation UIButton (Icon)
 

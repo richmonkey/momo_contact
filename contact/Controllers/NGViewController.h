@@ -11,5 +11,7 @@
 @interface NGViewController : UIViewController
 
 @property(nonatomic,retain)UIButton* leftButton;
+@property(nonatomic,retain)UIButton* rightButton;
 -(void)actionLeft;
+-(void)actionRight;
 @end

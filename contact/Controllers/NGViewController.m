@@ -7,6 +7,7 @@
 //
 
 #import "NGViewController.h"
+#import "UIButton+NGAdditions.h"
 
 @interface NGViewController ()
 
@@ -21,6 +22,14 @@
     [_leftButton addTarget:self action:@selector(actionLeft) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:_leftButton];
 
+    _rightButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_rightButton setTitleColor:[UIColor colorWithRed:0.529f green:0.808f blue:0.749f alpha:1.00f] forState:UIControlStateDisabled];
+    [_rightButton setTitleColor:[UIColor whiteColor] forState:UIControlStateDisabled];
+    _rightButton.titleLabel.font = [UIFont systemFontOfSize:13];
+    [_rightButton setFrame:CGRectMake(0, 5, 50, 44)];
+    [_rightButton addTarget:self action:@selector(actionRight) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:_rightButton];
+
     if ([self respondsToSelector:@selector(setEdgesForExtendedLayout:)]) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
@@ -31,62 +40,23 @@
     [navigationBar setBackgroundImage:[UIImage new] forBarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
     [navigationBar setShadowImage:[UIImage new]];
     [self.navigationController.navigationBar setTranslucent:NO];
-    [self.view setBackgroundColor:VIEWCONTROLLER_BACK_COLOR];
+    [self.view setBackgroundColor:[UIColor colorWithRed:0.894f green:0.910f blue:0.918f alpha:1.00f]];
 }
 
-//- (void)viewDidAppear:(BOOL)animated
-//{
-//    [super viewDidAppear:animated];
-//
-//    // Disable iOS 7 back gesture
-//    __weak typeof(self) weakSelf = self;
-//    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {
-//        self.navigationController.interactivePopGestureRecognizer.enabled = NO;
-//    }
-//}
-//-(NSUInteger)supportedInterfaceOrientations
-//{
-//    return UIInterfaceOrientationMaskPortrait;
-//}
+
 - (BOOL)shouldAutorotate {
     return NO;
 }
-//
-//-(NSUInteger)supportedInterfaceOrientations
-//{
-//    return UIInterfaceOrientationMaskLandscapeLeft;
-//}
-//
-//- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
-//{
-//    NSLog(@"preferredInterfaceOrientationForPresentation");
-//    return UIInterfaceOrientationPortrait;
-//}
-
-//- (void)setSwipeBack:(BOOL)swipeBack {
-//    _swipeBack = swipeBack;
-//
-//    __weak typeof(self) weakSelf = self;
-//    if (swipeBack) {
-//        if (!_swipeBackGesture) {
-//            _swipeBackGesture = [[UISwipeGestureRecognizer alloc] bk_initWithHandler:^(UIGestureRecognizer *sender, UIGestureRecognizerState state, CGPoint location) {
-//                [weakSelf actionLeft];
-//            }];
-//            _swipeBackGesture.direction = UISwipeGestureRecognizerDirectionRight;
-//            [self.view addGestureRecognizer:_swipeBackGesture];
-//        }
-//    } else {
-//        [self.view removeGestureRecognizer:_swipeBackGesture];
-//    }
-//}
 
 #pragma mark - Public
 
 -(void)actionLeft {
-    [SVProgressHUD dismiss];
 	[self.navigationController popViewControllerAnimated:YES];
 }
 
+- (void)actionRight {
+
+}
 #pragma mark - Private
 
 @end

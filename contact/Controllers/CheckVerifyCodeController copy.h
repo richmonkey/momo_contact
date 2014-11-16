@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import <MessageUI/MessageUI.h>
-
-@interface CheckVerifyCodeController : UIViewController <UITextFieldDelegate>
+#import "NGViewController.h"
+@interface CheckVerifyCodeController : NGViewController <UITextFieldDelegate>
 
 @property (nonatomic) NSString *phoneNumberStr;
 

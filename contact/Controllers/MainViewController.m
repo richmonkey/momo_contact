@@ -36,6 +36,10 @@ static void ABChangeCallback(ABAddressBookRef addressBook, CFDictionaryRef info,
 {
     [super viewDidLoad];
 
+    self.title = @"MoMo同步助手";
+    self.leftButton.hidden = YES;
+    [self.rightButton setTitle:@"退出" forState:UIControlStateNormal];
+
     [[MMSyncThread shareInstance] start];
     
     dispatch_queue_t queue = dispatch_get_main_queue();
@@ -156,5 +160,8 @@ static void ABChangeCallback(ABAddressBookRef addressBook, CFDictionaryRef info,
                               }];
 }
 
+- (void)actionRight {
+    [self.navigationController popToRootViewControllerAnimated:YES];
+}
 
 @end

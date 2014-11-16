@@ -9,7 +9,6 @@
 #import "AskPhoneNumberViewController.h"
 #import "APIRequest.h"
 #import "MBProgressHUD.h"
-#import "CheckVerifyCodeController.h"
 
 #if ! __has_feature(objc_arc)
 #error This file must be compiled with ARC. Either turn on ARC for the project or use -fobjc-arc flag
@@ -37,14 +36,8 @@
 {
     [super viewDidLoad];
     
-    [self setTitle:@"您的电话号码"];
-    self.nextButton = [[UIBarButtonItem alloc]
-                                   initWithTitle:@"获取验证码"
-                                   style:UIBarButtonItemStylePlain
-                                   target:self
-                                   action:@selector(nextAction)];
-    [self.navigationItem setRightBarButtonItem:self.nextButton];
-    [self.nextButton setEnabled:NO];
+    [self setTitle:@"注册"];
+    [self.rightButton setTitle:@"下一步" forState:UIControlStateNormal];
     
     [self.phoneTextField becomeFirstResponder];
     [self.phoneTextField addTarget:self action:@selector(textFieldDidChange:) forControlEvents:UIControlEventEditingChanged];
@@ -62,7 +55,7 @@
 }
 
 
--(void) nextAction {
+-(void) actionRight {
     NSString *number = self.phoneTextField.text;
     
     if (number.length != 11) return;
@@ -72,9 +65,9 @@
         [APIRequest requestVerifyCode:@"86" number:number success:^(NSString *code){
             NSLog(@"code:%@", code);
             [hud hide:YES];
-            CheckVerifyCodeController * ctrl = [[CheckVerifyCodeController alloc] init];
-            ctrl.phoneNumberStr = number;
-            [self.navigationController pushViewController:ctrl animated: YES];
+//            CheckVerifyCodeController * ctrl = [[CheckVerifyCodeController alloc] init];
+//            ctrl.phoneNumberStr = number;
+//            [self.navigationController pushViewController:ctrl animated: YES];
         } fail:^{
             NSLog(@"获取验证码失败");
             [hud hide:NO];

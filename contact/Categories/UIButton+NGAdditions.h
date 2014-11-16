@@ -22,9 +22,3 @@
 + (UIButton*)buttonWithImageName:(NSString*)imageName;
 + (UIButton*)buttonWithStrengImageName:(NSString*)imageName;
 @end
-
-@interface UIButton (Tag)
-
-+ (UIButton*)ng_buttonWithTag:(NSString*)tag;
-
-@end

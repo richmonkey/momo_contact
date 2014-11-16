@@ -8,10 +8,22 @@
 
 
 
+
+
+//----------------------------------内外网设置--------------------------------------
+#define SIMULATE_SERVER 1
+#define OUTER_SERVER 2
+#define SERVER SIMULATE_SERVER
+
+#if (SERVER == SIMULATE_SERVER)
+//外网
 #define ALBUM_URL @"http://api.contacts.momo.im/"
 #define API_URL @"http://api.contacts.momo.im"
-
-
+#elif (SERVER == SIMULATE_SERVER)
+//内网
+#define ALBUM_URL @"http://172.25.1.155/"
+#define API_URL @"http://172.25.1.155"
+#endif
 
 //ProgressHud显示时间
 #define HUB_AUTO_HIDE_DELAY_TIME 2.0f
@@ -84,6 +96,8 @@ return; \
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
 #define SYSTEM_VERSION_LESS_THAN(v)                 ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
 #define SYSTEM_VERSION_LESS_THAN_OR_EQUAL_TO(v)     ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedDescending)
+
+#define IOS7_OR_LATER ([[[UIDevice currentDevice] systemVersion] compare:@"7.0"] != NSOrderedAscending)
 
 
 

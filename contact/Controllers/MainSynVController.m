@@ -1,50 +1,56 @@
 //
-//  ViewController.m
+//  MainSynVController.m
 //  contact
 //
-//  Created by houxh on 14-11-4.
+//  Created by Coffee on 14/11/16.
 //  Copyright (c) 2014年 momo. All rights reserved.
 //
 
-#import "MainViewController.h"
+#import "MainSynVController.h"
 #import "MMSyncThread.h"
 #import "Token.h"
 #import "APIRequest.h"
 #import "MMAddressBook.h"
 #import "MMServerContactManager.h"
-
-#if ! __has_feature(objc_arc)
-#error This file must be compiled with ARC. Either turn on ARC for the project or use -fobjc-arc flag
-#endif
-
-@interface MainViewController ()
+#import "UIView+NGAdditions.h"
+#import "UIImage+NGAdditions.h"
+@interface MainSynVController ()
 @property(nonatomic)dispatch_source_t refreshTimer;
 @property(nonatomic)int refreshFailCount;
 @property(nonatomic, assign)ABAddressBookRef addressBook;
-
+@property(strong, nonatomic)UILabel *localNumLabel;
+@property(strong, nonatomic)UILabel *serviceNumLabel;
+@property(strong, nonatomic)UIImageView *synImageView;
+@property(strong, nonatomic)UIImageView *topBackImageView;
+@property(strong, nonatomic)UIButton *synBtn;
 - (void)onAddressBookChanged;
 @end
 
+
 static void ABChangeCallback(ABAddressBookRef addressBook, CFDictionaryRef info, void *context) {
-    MainViewController *controller = (__bridge MainViewController *)(context);
+    MainSynVController *controller = (__bridge MainSynVController *)(context);
     [controller onAddressBookChanged];
 }
 
-@implementation MainViewController
-
+@implementation MainSynVController
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
+    self.navigationItem.title = @"MoMo同步助手";
+    self.leftButton.hidden = YES;
+    [self.rightButton setTitle:@"退出" forState:UIControlStateNormal];
+
+    [self initCustomView];
     [[MMSyncThread shareInstance] start];
-    
+
     dispatch_queue_t queue = dispatch_get_main_queue();
     self.refreshTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0,queue);
     dispatch_source_set_event_handler(self.refreshTimer, ^{
         [self refreshAccessToken];
     });
     [self startRefreshTimer];
-    
+
     CFErrorRef err = nil;
     self.addressBook = ABAddressBookCreateWithOptions(NULL, &err);
     if (err) {
@@ -59,7 +65,7 @@ static void ABChangeCallback(ABAddressBookRef addressBook, CFDictionaryRef info,
         ABAddressBookRequestAccessWithCompletion(self.addressBook, ^(bool granted, CFErrorRef error) {
             NSLog(@"grant:%d", granted);
             if (granted) {
-               ABAddressBookRegisterExternalChangeCallback(self.addressBook, ABChangeCallback, (__bridge void *)(self));
+                ABAddressBookRegisterExternalChangeCallback(self.addressBook, ABChangeCallback, (__bridge void *)(self));
             }
         });
     } else if (status == kABAuthorizationStatusAuthorized){
@@ -68,16 +74,44 @@ static void ABChangeCallback(ABAddressBookRef addressBook, CFDictionaryRef info,
     } else {
         NSLog(@"no addressbook authorization");
     }
-    
+
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         int count;
         [MMServerContactManager getContactCount:&count];
         NSLog(@"server count:%d", count);
     });
-    
+
     NSNotificationCenter * center = [NSNotificationCenter defaultCenter];
     [center addObserver:self selector:@selector(onBeginSync:) name:kMMBeginSync object:nil];
     [center addObserver:self selector:@selector(onEndSync:) name:kMMEndSync object:nil];
+}
+
+- (void)initCustomView {
+    self.synBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.synBtn.frame = CGRectMake(15, 138, 290, 48);
+	[self.synBtn setBackgroundImage: [UIImage imageWithStretchName:@"btn_green" top:20 left:5] forState:UIControlStateNormal];
+    [self.synBtn setBackgroundImage: [UIImage imageWithStretchName:@"btn_green_press" top:20 left:5] forState:UIControlStateHighlighted];
+	[self.synBtn setTitle:@"同步" forState:UIControlStateNormal];
+    [self.synBtn addTarget:self action:@selector(actionSyn) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview: self.synBtn];
+
+    UIImageView *localImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 36, 36)];
+    localImage.centerX= 157/2;
+    localImage.centerY = self.view.height - 60;
+    localImage.image = [UIImage imageNamed:@"local"];
+    [self.view addSubview:localImage];
+
+    UIImageView *serviceImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 36, 36)];
+    serviceImageView.centerX=  240;
+    serviceImageView.centerY = self.view.height - 60;
+    serviceImageView.image = [UIImage imageNamed:@"service"];
+    [self.view addSubview:serviceImageView];
+
+
+    self.synImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 112, 112)];
+    self.synImageView.center = CGPointMake(225, self.view.height*2/3);
+    self.synImageView.image = [UIImage imageNamed:@"syn"];
+    [self.view addSubview:self.synImageView];
 }
 
 - (void)onAddressBookChanged {
@@ -94,7 +128,7 @@ static void ABChangeCallback(ABAddressBookRef addressBook, CFDictionaryRef info,
     NSLog(@"onEndSync");
     int count = [MMAddressBook getContactCount];
     NSLog(@"contact count:%zd", count);
-    
+
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         int count;
         [MMServerContactManager getContactCount:&count];
@@ -138,7 +172,7 @@ static void ABChangeCallback(ABAddressBookRef addressBook, CFDictionaryRef info,
                                token.expireTimestamp = expireTimestamp;
                                [token save];
                                [self prepareTimer];
-                               
+
                            }
                               fail:^{
                                   self.refreshFailCount = self.refreshFailCount + 1;
@@ -148,13 +182,19 @@ static void ABChangeCallback(ABAddressBookRef addressBook, CFDictionaryRef info,
                                   } else {
                                       timeout = (int64_t)self.refreshFailCount*NSEC_PER_SEC;
                                   }
-                                  
+
                                   dispatch_after(dispatch_time(DISPATCH_TIME_NOW, timeout), dispatch_get_main_queue(), ^{
                                       [self prepareTimer];
                                   });
-                                  
+
                               }];
 }
 
+- (void)actionRight {
+    [self.navigationController popToRootViewControllerAnimated:YES];
+}
 
+- (void)actionSyn {
+       [[MMSyncThread shareInstance] beginSync];
+}
 @end
