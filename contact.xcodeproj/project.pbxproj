@@ -40,6 +40,7 @@
 		1D3673AD1A159EDD006D0E96 /* AskPhoneNumberViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1D3673A51A159EDD006D0E96 /* AskPhoneNumberViewController.xib */; };
 		1D3673B01A159EDD006D0E96 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3673AA1A159EDD006D0E96 /* MainViewController.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
 		1D3673B11A159EDD006D0E96 /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1D3673AB1A159EDD006D0E96 /* MainViewController.xib */; };
+		1D419BF61A198DE6002A1CAE /* xingji.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D419BF51A198DE6002A1CAE /* xingji.png */; };
 		1D6E8B681A1248DB009664CE /* syn@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1D6E8B671A1248DB009664CE /* syn@2x.png */; };
 		1D6E8B741A124CCF009664CE /* Images-2.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1D6E8B731A124CCF009664CE /* Images-2.xcassets */; };
 		6D16D5F11A08A36A001D0939 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D16D5F01A08A36A001D0939 /* Foundation.framework */; };
@@ -141,6 +142,7 @@
 		1D2520801A18E71D0056B8A2 /* service.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = service.png; sourceTree = "<group>"; };
 		1D2520811A18E71D0056B8A2 /* service@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "service@2x.png"; sourceTree = "<group>"; };
 		1D2520821A18E71D0056B8A2 /* service@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "service@3x.png"; sourceTree = "<group>"; };
+		1D2520891A1986980056B8A2 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "contact/Resource/NGImage/Default-568h@2x.png"; sourceTree = "<group>"; };
 		1D3673791A159CC0006D0E96 /* NGViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NGViewController.h; sourceTree = "<group>"; };
 		1D36737A1A159CC0006D0E96 /* NGViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NGViewController.m; sourceTree = "<group>"; };
 		1D36737C1A159D16006D0E96 /* nav_back_press@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nav_back_press@2x.png"; sourceTree = "<group>"; };
@@ -174,6 +176,7 @@
 		1D3673A91A159EDD006D0E96 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		1D3673AA1A159EDD006D0E96 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		1D3673AB1A159EDD006D0E96 /* MainViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainViewController.xib; sourceTree = "<group>"; };
+		1D419BF51A198DE6002A1CAE /* xingji.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = xingji.png; sourceTree = "<group>"; };
 		1D6E8B671A1248DB009664CE /* syn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "syn@2x.png"; sourceTree = "<group>"; };
 		1D6E8B731A124CCF009664CE /* Images-2.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Images-2.xcassets"; sourceTree = "<group>"; };
 		1DF778221A12346B007059F5 /* icon_120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_120.png; sourceTree = "<group>"; };
@@ -420,6 +423,7 @@
 		1D6E8B661A1248DB009664CE /* NGImage */ = {
 			isa = PBXGroup;
 			children = (
+				1D419BF51A198DE6002A1CAE /* xingji.png */,
 				1D25207D1A18E71D0056B8A2 /* local.png */,
 				1D25207E1A18E71D0056B8A2 /* local@2x.png */,
 				1D25207F1A18E71D0056B8A2 /* local@3x.png */,
@@ -440,6 +444,7 @@
 		6D16D5E41A08A36A001D0939 = {
 			isa = PBXGroup;
 			children = (
+				1D2520891A1986980056B8A2 /* Default-568h@2x.png */,
 				1DF778251A1235E7007059F5 /* icon_58.png */,
 				1DF778231A123545007059F5 /* icon_80.png */,
 				1DF778221A12346B007059F5 /* icon_120.png */,
@@ -800,6 +805,7 @@
 			files = (
 				1D2520871A18E71D0056B8A2 /* service@2x.png in Resources */,
 				1D2520881A18E71D0056B8A2 /* service@3x.png in Resources */,
+				1D419BF61A198DE6002A1CAE /* xingji.png in Resources */,
 				1D2520751A18D3D50056B8A2 /* btn_green@2x.png in Resources */,
 				1D3673AD1A159EDD006D0E96 /* AskPhoneNumberViewController.xib in Resources */,
 				1D6E8B681A1248DB009664CE /* syn@2x.png in Resources */,

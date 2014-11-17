@@ -14,15 +14,19 @@
 #import "MMServerContactManager.h"
 #import "UIView+NGAdditions.h"
 #import "UIImage+NGAdditions.h"
+#import "MMCommonAPI.h"
+
+
 @interface MainSynVController ()
 @property(nonatomic)dispatch_source_t refreshTimer;
 @property(nonatomic)int refreshFailCount;
 @property(nonatomic, assign)ABAddressBookRef addressBook;
 @property(strong, nonatomic)UILabel *localNumLabel;
 @property(strong, nonatomic)UILabel *serviceNumLabel;
-@property(strong, nonatomic)UIImageView *synImageView;
+@property(strong, nonatomic)UILabel *fistTipLabel;
 @property(strong, nonatomic)UIImageView *topBackImageView;
 @property(strong, nonatomic)UIButton *synBtn;
+@property(nonatomic) BOOL bAnimating;
 - (void)onAddressBookChanged;
 @end
 
@@ -39,7 +43,8 @@ static void ABChangeCallback(ABAddressBookRef addressBook, CFDictionaryRef info,
 
     self.navigationItem.title = @"MoMo同步助手";
     self.leftButton.hidden = YES;
-    [self.rightButton setTitle:@"退出" forState:UIControlStateNormal];
+    self.rightButton.hidden = YES;
+//    [self.rightButton setTitle:@"退出" forState:UIControlStateNormal];
 
     [self initCustomView];
     [[MMSyncThread shareInstance] start];
@@ -87,52 +92,95 @@ static void ABChangeCallback(ABAddressBookRef addressBook, CFDictionaryRef info,
 }
 
 - (void)initCustomView {
+    self.topBackImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height*2/3-44)];
+    self.topBackImageView.contentMode =UIViewContentModeScaleAspectFill ;
+    self.topBackImageView.image = [UIImage imageNamed:@"xingji"];
+    [self.view addSubview:self.topBackImageView];
+
+    self.fistTipLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 150, 30)];
+    self.fistTipLabel.bottom = self.topBackImageView.bottom - 10;
+    self.fistTipLabel.textAlignment = NSTextAlignmentCenter;
+    self.fistTipLabel.textColor = [UIColor whiteColor];
+    self.fistTipLabel.font = [UIFont systemFontOfSize:18];
+    self.fistTipLabel.text = @"点击按钮同步";
+    [self.view addSubview:self.fistTipLabel];
+
+
     self.synBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.synBtn.frame = CGRectMake(15, 138, 290, 48);
-	[self.synBtn setBackgroundImage: [UIImage imageWithStretchName:@"btn_green" top:20 left:5] forState:UIControlStateNormal];
-    [self.synBtn setBackgroundImage: [UIImage imageWithStretchName:@"btn_green_press" top:20 left:5] forState:UIControlStateHighlighted];
-	[self.synBtn setTitle:@"同步" forState:UIControlStateNormal];
+    self.synBtn.frame = CGRectMake(0, 0, 112, 112);
+    self.synBtn.center = CGPointMake(225, self.view.height*2/3-44);
+	[self.synBtn setImage: [UIImage imageNamed:@"syn"] forState:UIControlStateNormal];
     [self.synBtn addTarget:self action:@selector(actionSyn) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview: self.synBtn];
 
     UIImageView *localImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 36, 36)];
     localImage.centerX= 157/2;
-    localImage.centerY = self.view.height - 60;
+    localImage.centerY = self.view.height - 140;
     localImage.image = [UIImage imageNamed:@"local"];
     [self.view addSubview:localImage];
 
+    self.localNumLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 65, 30)];
+    self.localNumLabel.center = CGPointMake(157/2, self.view.height - 100);
+    self.localNumLabel.textAlignment = NSTextAlignmentCenter;
+    self.localNumLabel.textColor = [UIColor colorWithRed:0.255f green:0.804f blue:0.412f alpha:1.00f];
+    self.localNumLabel.font = [UIFont systemFontOfSize:20];
+    int count = [MMAddressBook getContactCount];
+    self.localNumLabel.text = [NSString stringWithFormat:@"%d", count];
+    [self.view addSubview:self.localNumLabel];
+
+
     UIImageView *serviceImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 36, 36)];
     serviceImageView.centerX=  240;
-    serviceImageView.centerY = self.view.height - 60;
+    serviceImageView.centerY = self.view.height - 140;
     serviceImageView.image = [UIImage imageNamed:@"service"];
     [self.view addSubview:serviceImageView];
 
+    self.serviceNumLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 65, 30)];
+    self.serviceNumLabel.center = CGPointMake(240, self.view.height - 100);
+    self.serviceNumLabel.textAlignment = NSTextAlignmentCenter;
+    self.serviceNumLabel .textColor = [UIColor colorWithRed:0.255f green:0.804f blue:0.412f alpha:1.00f];
+    self.serviceNumLabel.font = [UIFont systemFontOfSize:20];
+    count = 0;
+    BOOL sucuess = [MMServerContactManager getContactCount:&count];
+    if (sucuess) {
+        self.serviceNumLabel.text = [NSString stringWithFormat:@"%d", count];
+    }else {
+        self.serviceNumLabel.text = [NSString stringWithFormat:@"%d", 0];
+    }
 
-    self.synImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 112, 112)];
-    self.synImageView.center = CGPointMake(225, self.view.height*2/3);
-    self.synImageView.image = [UIImage imageNamed:@"syn"];
-    [self.view addSubview:self.synImageView];
+    [self.view addSubview:self.serviceNumLabel];
 }
 
 - (void)onAddressBookChanged {
     ABAddressBookRevert(self.addressBook);
     int count = [MMAddressBook getContactCount];
+    self.localNumLabel.text = [NSString stringWithFormat:@"%d", count];
     NSLog(@"contact count:%d", count);
 }
 
 - (void)onBeginSync:(NSNotification*)notification {
+    [self startSpin];
     NSLog(@"onBeginSync");
 }
 
 - (void)onEndSync:(NSNotification*)notification {
+    [MMCommonAPI alert:@"同步成功"];
+
+    [self stopSpin];
+
     NSLog(@"onEndSync");
     int count = [MMAddressBook getContactCount];
     NSLog(@"contact count:%zd", count);
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        int count;
-        [MMServerContactManager getContactCount:&count];
-        NSLog(@"server count:%d", count);
+        int count = 0;
+        BOOL sucuess = [MMServerContactManager getContactCount:&count];
+        if (sucuess) {
+//            self.fistTipLabel.text = [MMCommonAPI getStingByDate:[NSDate date]];
+            self.serviceNumLabel.text = [NSString stringWithFormat:@"%d", count];
+            NSLog(@"server count:%d", count);
+
+        }
     });
 }
 
@@ -196,5 +244,38 @@ static void ABChangeCallback(ABAddressBookRef addressBook, CFDictionaryRef info,
 
 - (void)actionSyn {
        [[MMSyncThread shareInstance] beginSync];
+}
+
+//旋转
+- (void) spinWithOptions: (UIViewAnimationOptions) options {
+    // this spin completes 360 degrees every 2 seconds
+    [UIView animateWithDuration: 0.5f
+                          delay: 0.0f
+                        options: options
+                     animations: ^{
+                         self.synBtn.transform = CGAffineTransformRotate(self.synBtn.transform, M_PI / 2);
+                     }
+                     completion: ^(BOOL finished) {
+                         if (finished) {
+                             if (self.bAnimating) {
+                                 // if flag still set, keep spinning with constant speed
+                                 [self spinWithOptions: UIViewAnimationOptionCurveLinear];
+                             } else if (options != UIViewAnimationOptionCurveEaseOut) {
+                                 // one last spin, with deceleration
+                                 [self spinWithOptions: UIViewAnimationOptionCurveEaseOut];
+                             }
+                         }
+                     }];
+}
+
+- (void) startSpin {
+    if (!self.bAnimating) {
+        self.bAnimating = YES;
+        [self spinWithOptions: UIViewAnimationOptionCurveEaseIn];
+    }
+}
+
+- (void) stopSpin {
+    self.bAnimating = NO;
 }
 @end

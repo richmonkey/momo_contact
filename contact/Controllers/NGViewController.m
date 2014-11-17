@@ -18,6 +18,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _leftButton = [UIButton buttonWithImageName:@"nav_back"];
     [_leftButton addTarget:self action:@selector(actionLeft) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:_leftButton];
@@ -41,6 +42,9 @@
     [navigationBar setShadowImage:[UIImage new]];
     [self.navigationController.navigationBar setTranslucent:NO];
     [self.view setBackgroundColor:[UIColor colorWithRed:0.894f green:0.910f blue:0.918f alpha:1.00f]];
+
+    CGSize viewSize = [[UIScreen mainScreen] bounds].size;
+    self.view.frame = CGRectMake(0, 0, viewSize.width, viewSize.height);
 }
 
 

@@ -52,7 +52,7 @@
 	[self.registBtn setBackgroundImage: [UIImage imageWithStretchName:@"btn_green" top:20 left:5] forState:UIControlStateNormal];
     [self.registBtn setBackgroundImage: [UIImage imageWithStretchName:@"btn_grey@" top:20 left:5] forState:UIControlStateDisabled];
     [self.registBtn setBackgroundImage: [UIImage imageWithStretchName:@"btn_green_press" top:20 left:5] forState:UIControlStateHighlighted];
-	[self.registBtn setTitle:@"注册" forState:UIControlStateNormal];
+	[self.registBtn setTitle:@"确认" forState:UIControlStateNormal];
     [self.registBtn addTarget:self action:@selector(actionRegist) forControlEvents:UIControlEventTouchUpInside];
     [self.registBtn setEnabled:NO];
     [self.view addSubview: self.registBtn];

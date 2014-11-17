@@ -138,20 +138,20 @@
 	return date;
 }
 
-+ (NSString*) getStingByDate:(NSDate*)date {	
-	if (nil == date) {
-		return nil;
-	}
-	
-	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-	dateFormatter.dateStyle = NSDateFormatterMediumStyle;
-	[dateFormatter setLocale:[NSLocale currentLocale]];	 
-	[dateFormatter setDateFormat:@"yyyy-MM-dd"];	
-	
-	NSString *stringDate = [dateFormatter stringFromDate:date];
-	[dateFormatter release];
-	return stringDate;
-}
+//+ (NSString*) getStingByDate:(NSDate*)date {	
+//	if (nil == date) {
+//		return nil;
+//	}
+//	
+//	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+//	dateFormatter.dateStyle = NSDateFormatterMediumStyle;
+//	[dateFormatter setLocale:[NSLocale currentLocale]];	 
+//	[dateFormatter setDateFormat:@"yyyy-MM-dd"];	
+//	
+//	NSString *stringDate = [dateFormatter stringFromDate:date];
+//	[dateFormatter release];
+//	return stringDate;
+//}
 
 + (NSString*)getDateString:(NSDate*)date {
 	if (nil == date) {
@@ -701,6 +701,53 @@
             return NSOrderedDescending;
         }
     }];
+}
+
++ (NSString *)getStingByDate:(NSDate*)date
+{
+    //    //Tue May 21 10:56:45 +0800 2013
+    //    NSString *timeStr = [dic objectForKey:@"created_at"];
+    //
+    //    NSDateFormatter *date=[[NSDateFormatter alloc] init];
+    //    [date setDateFormat:@"E MMM d HH:mm:SS Z y"];
+    //    NSDate *d=[date dateFromString:timeStr];
+
+    NSTimeInterval late=[date timeIntervalSince1970]*1;
+
+
+    NSDate* dat = [NSDate dateWithTimeIntervalSinceNow:0];
+    NSTimeInterval now=[dat timeIntervalSince1970]*1;
+    NSString *timeString=@"";
+
+    NSTimeInterval betweenTime =now-late;
+
+    if (betweenTime<60) {
+        timeString = @"刚刚";
+    }
+    if (betweenTime>=60 && betweenTime/3600<1) {
+        timeString = [NSString stringWithFormat:@"%f", betweenTime/60];
+        timeString = [timeString substringToIndex:timeString.length-7];
+        timeString=[NSString stringWithFormat:@"%@分钟前", timeString];
+    }
+    if (betweenTime/3600>=1 && betweenTime/86400<1) {
+        //        timeString = [NSString stringWithFormat:@"%f", cha/3600];
+        //        timeString = [timeString substringToIndex:timeString.length-7];
+        //        timeString=[NSString stringWithFormat:@"%@小时前", timeString];
+        NSDateFormatter *dateformatter=[[NSDateFormatter alloc] init];
+        [dateformatter setDateFormat:@"HH:mm"];
+        timeString = [NSString stringWithFormat:@"今天 %@",[dateformatter stringFromDate:date]];
+    }
+    if (betweenTime/86400>=1)
+    {
+        //        timeString = [NSString stringWithFormat:@"%f", cha/86400];
+        //        timeString = [timeString substringToIndex:timeString.length-7];
+        //        timeString=[NSString stringWithFormat:@"%@天前", timeString];
+        NSDateFormatter *dateformatter=[[NSDateFormatter alloc] init];
+        [dateformatter setDateFormat:@"MM月dd日 HH:mm"];
+        timeString = [NSString stringWithFormat:@"%@",[dateformatter stringFromDate:date]];
+    }
+    
+    return timeString;
 }
 
 @end

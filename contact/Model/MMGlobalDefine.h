@@ -13,9 +13,9 @@
 //----------------------------------内外网设置--------------------------------------
 #define SIMULATE_SERVER 1
 #define OUTER_SERVER 2
-#define SERVER SIMULATE_SERVER
+#define SERVER OUTER_SERVER
 
-#if (SERVER == SIMULATE_SERVER)
+#if (SERVER == OUTER_SERVER)
 //外网
 #define ALBUM_URL @"http://api.contacts.momo.im/"
 #define API_URL @"http://api.contacts.momo.im"
