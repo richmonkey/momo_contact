@@ -7,8 +7,6 @@
 //
 
 #import "AppDelegate.h"
-#import "AskPhoneNumberViewController.h"
-#import "MainViewController.h"
 #import "Token.h"
 #import "MMGlobalDefine.h"
 #import "UIImage+NGAdditions.h"

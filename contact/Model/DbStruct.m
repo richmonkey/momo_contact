@@ -15,7 +15,12 @@
 @synthesize contactId;
 
 - (BOOL)isEqual:(id)object {
-    return self.contactId == [object contactId];
+    if ([[object class] isSubclassOfClass:[DbContactId class]]) {
+        DbContactId *other = (DbContactId*)object;
+        return self.contactId == [other contactId];
+    } else {
+        return NO;
+    }
 }
 
 - (NSUInteger)hash {

@@ -11,13 +11,16 @@
 #import "MBProgressHUD.h"
 #import "TAHttpOperation.h"
 #import "AppDelegate.h"
-#import "MainViewController.h"
 #import "Token.h"
 #import "MMCommonAPI.h"
 #import "SVProgressHUD.h"
 #import "UIImage+NGAdditions.h"
 #import "LoginCheckVController.h"
 #import "MainSynVController.h"
+
+#if ! __has_feature(objc_arc)
+#error This file must be compiled with ARC. Either turn on ARC for the project or use -fobjc-arc flag
+#endif
 
 @interface LoginViewController () <UITextFieldDelegate>
 @property (strong, nonatomic) UITextField *phoneField;
@@ -29,7 +32,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.navigationItem.title = @"注册";
+    self.navigationItem.title = @"获取验证码";
     self.leftButton.hidden = YES;
 
     //手机号码
@@ -127,7 +130,7 @@
 	}
 
     __weak typeof(self) weakSelf = self;
-    [SVProgressHUD showWithStatus:@"正在登录中" maskType:SVProgressHUDMaskTypeBlack];
+    [SVProgressHUD showWithStatus:@"获取中" maskType:SVProgressHUDMaskTypeBlack];
     [APIRequest requestVerifyCode:@"86" number:phone success:^(NSString *code){
         NSLog(@"code:%@", code);
         [SVProgressHUD dismiss];
