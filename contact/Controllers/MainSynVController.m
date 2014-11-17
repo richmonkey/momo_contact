@@ -44,7 +44,6 @@ static void ABChangeCallback(ABAddressBookRef addressBook, CFDictionaryRef info,
     self.navigationItem.title = @"MoMo同步助手";
     self.leftButton.hidden = YES;
     self.rightButton.hidden = YES;
-//    [self.rightButton setTitle:@"退出" forState:UIControlStateNormal];
 
     [self initCustomView];
     [[MMSyncThread shareInstance] start];
@@ -82,8 +81,13 @@ static void ABChangeCallback(ABAddressBookRef addressBook, CFDictionaryRef info,
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         int count;
-        [MMServerContactManager getContactCount:&count];
-        NSLog(@"server count:%d", count);
+        BOOL r = [MMServerContactManager getContactCount:&count];
+        if (r) {
+            NSLog(@"server count:%d", count);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.serviceNumLabel.text = [NSString stringWithFormat:@"%d", count];
+            });
+        }
     });
 
     NSNotificationCenter * center = [NSNotificationCenter defaultCenter];
@@ -140,13 +144,8 @@ static void ABChangeCallback(ABAddressBookRef addressBook, CFDictionaryRef info,
     self.serviceNumLabel.textAlignment = NSTextAlignmentCenter;
     self.serviceNumLabel .textColor = [UIColor colorWithRed:0.255f green:0.804f blue:0.412f alpha:1.00f];
     self.serviceNumLabel.font = [UIFont systemFontOfSize:20];
-    count = 0;
-    BOOL sucuess = [MMServerContactManager getContactCount:&count];
-    if (sucuess) {
-        self.serviceNumLabel.text = [NSString stringWithFormat:@"%d", count];
-    }else {
-        self.serviceNumLabel.text = [NSString stringWithFormat:@"%d", 0];
-    }
+    
+
 
     [self.view addSubview:self.serviceNumLabel];
 }
@@ -164,23 +163,32 @@ static void ABChangeCallback(ABAddressBookRef addressBook, CFDictionaryRef info,
 }
 
 - (void)onEndSync:(NSNotification*)notification {
-    [MMCommonAPI alert:@"同步成功"];
-
-    [self stopSpin];
-
+    BOOL r = [[notification.object objectForKey:@"result"] boolValue];
+    if (!r) {
+        [MMCommonAPI alert:@"同步失败"];
+        return;
+    }
+    
     NSLog(@"onEndSync");
     int count = [MMAddressBook getContactCount];
     NSLog(@"contact count:%zd", count);
-
+    self.localNumLabel.text = [NSString stringWithFormat:@"%d", count];
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         int count = 0;
         BOOL sucuess = [MMServerContactManager getContactCount:&count];
-        if (sucuess) {
-//            self.fistTipLabel.text = [MMCommonAPI getStingByDate:[NSDate date]];
-            self.serviceNumLabel.text = [NSString stringWithFormat:@"%d", count];
-            NSLog(@"server count:%d", count);
-
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self stopSpin];
+            if (sucuess) {
+                self.serviceNumLabel.text = [NSString stringWithFormat:@"%d", count];
+                NSLog(@"server count:%d", count);
+                [self stopSpin];
+                [MMCommonAPI alert:@"同步完成"];
+            } else {
+                [self stopSpin];
+                [MMCommonAPI alert:@"同步失败"];
+            }
+        });
     });
 }
 
