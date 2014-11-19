@@ -245,7 +245,7 @@
 	NSMutableArray *array = [NSMutableArray array];
 	unsigned int index= 0;
 	while (index < [phoneContactIds count]) {
-		unsigned int len = (unsigned int)MIN(10, [phoneContactIds count] - index);
+		unsigned int len = (unsigned int)MIN(50, [phoneContactIds count] - index);
         
         for (unsigned int i  = 0; i < len; i++) {
             NSNumber *phoneid = [phoneContactIds objectAtIndex:index + i];

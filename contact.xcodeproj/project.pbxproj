@@ -138,6 +138,12 @@
 		1D419BF51A198DE6002A1CAE /* xingji.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = xingji.png; sourceTree = "<group>"; };
 		1D6E8B671A1248DB009664CE /* syn@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "syn@2x.png"; sourceTree = "<group>"; };
 		1D6E8B731A124CCF009664CE /* Images-2.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Images-2.xcassets"; sourceTree = "<group>"; };
+		1D9D74361A1C347600D934F6 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = contact/Resource/NGImage/Default.png; sourceTree = "<group>"; };
+		1D9D74371A1C348E00D934F6 /* Default~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default~iphone.png"; path = "contact/Resource/NGImage/Default~iphone.png"; sourceTree = "<group>"; };
+		1D9D74381A1C34AA00D934F6 /* Default-568h@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x~iphone.png"; path = "contact/Resource/NGImage/Default-568h@2x~iphone.png"; sourceTree = "<group>"; };
+		1D9D74391A1C34C800D934F6 /* Default~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default~iphone.png"; path = "contact/Resource/NGImage/Default~iphone.png"; sourceTree = "<group>"; };
+		1D9D743A1A1C351100D934F6 /* Default-568h@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x~iphone.png"; path = "contact/Resource/NGImage/Default-568h@2x~iphone.png"; sourceTree = "<group>"; };
+		1D9D743B1A1C355000D934F6 /* Default~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default~iphone.png"; path = "contact/Resource/NGImage/Default~iphone.png"; sourceTree = "<group>"; };
 		1DF778221A12346B007059F5 /* icon_120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_120.png; sourceTree = "<group>"; };
 		1DF778231A123545007059F5 /* icon_80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_80.png; sourceTree = "<group>"; };
 		1DF778251A1235E7007059F5 /* icon_58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_58.png; sourceTree = "<group>"; };
@@ -386,6 +392,12 @@
 		6D16D5E41A08A36A001D0939 = {
 			isa = PBXGroup;
 			children = (
+				1D9D743B1A1C355000D934F6 /* Default~iphone.png */,
+				1D9D743A1A1C351100D934F6 /* Default-568h@2x~iphone.png */,
+				1D9D74391A1C34C800D934F6 /* Default~iphone.png */,
+				1D9D74381A1C34AA00D934F6 /* Default-568h@2x~iphone.png */,
+				1D9D74371A1C348E00D934F6 /* Default~iphone.png */,
+				1D9D74361A1C347600D934F6 /* Default.png */,
 				1D2520891A1986980056B8A2 /* Default-568h@2x.png */,
 				1DF778251A1235E7007059F5 /* icon_58.png */,
 				1DF778231A123545007059F5 /* icon_80.png */,
@@ -713,9 +725,6 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = momo;
 				TargetAttributes = {
-					6D16D5EC1A08A36A001D0939 = {
-						DevelopmentTeam = M967NHPY8J;
-					};
 					6D16D60D1A08A36A001D0939 = {
 						TestTargetID = 6D16D5EC1A08A36A001D0939;
 					};
@@ -958,7 +967,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -970,10 +979,10 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "contact/contact-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_LDFLAGS = "-licucore";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "99137e09-5fce-41b7-9a43-caf110e71fe2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -982,18 +991,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = NO;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: shengzhi lin (4RKG6KHW6X)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: shengzhi lin (4RKG6KHW6X)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "contact/contact-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = PL_DB_PRIVATE;
 				INFOPLIST_FILE = "contact/contact-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_LDFLAGS = "-licucore";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "c65a0ad2-0fb6-47a9-924c-227f9c7bbb4b";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

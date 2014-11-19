@@ -26,7 +26,6 @@
 @property(nonatomic, assign)ABAddressBookRef addressBook;
 @property(strong, nonatomic)UILabel *localNumLabel;
 @property(strong, nonatomic)UILabel *serviceNumLabel;
-@property(strong, nonatomic)UILabel *fistTipLabel;
 @property(strong, nonatomic)UIImageView *topBackImageView;
 @property(strong, nonatomic)UIButton *synBtn;
 @property(nonatomic) BOOL bAnimating;
@@ -99,23 +98,16 @@ static void ABChangeCallback(ABAddressBookRef addressBook, CFDictionaryRef info,
 }
 
 - (void)initCustomView {
-    self.topBackImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height*2/3-44)];
+    self.topBackImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height - 160 - 64)];
     self.topBackImageView.contentMode =UIViewContentModeScaleAspectFill ;
+    self.topBackImageView.clipsToBounds = YES;
     self.topBackImageView.image = [UIImage imageNamed:@"xingji"];
     [self.view addSubview:self.topBackImageView];
-
-    self.fistTipLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 150, 30)];
-    self.fistTipLabel.bottom = self.topBackImageView.bottom - 10;
-    self.fistTipLabel.textAlignment = NSTextAlignmentCenter;
-    self.fistTipLabel.textColor = [UIColor whiteColor];
-    self.fistTipLabel.font = [UIFont systemFontOfSize:18];
-    self.fistTipLabel.text = @"点击按钮同步";
-    [self.view addSubview:self.fistTipLabel];
 
 
     self.synBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     self.synBtn.frame = CGRectMake(0, 0, 112, 112);
-    self.synBtn.center = CGPointMake(225, self.view.height*2/3-44);
+    self.synBtn.center = CGPointMake(225, self.view.height - 160 - 64);
 	[self.synBtn setImage: [UIImage imageNamed:@"syn"] forState:UIControlStateNormal];
     [self.synBtn addTarget:self action:@selector(actionSyn) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview: self.synBtn];
