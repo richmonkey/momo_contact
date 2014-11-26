@@ -20,7 +20,7 @@
 #error This file must be compiled with ARC. Either turn on ARC for the project or use -fobjc-arc flag
 #endif
 
-@interface MainSynVController ()
+@interface MainSynVController ()<UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 @property(nonatomic)dispatch_source_t refreshTimer;
 @property(nonatomic)int refreshFailCount;
 @property(nonatomic, assign)ABAddressBookRef addressBook;
@@ -98,6 +98,7 @@ static void ABChangeCallback(ABAddressBookRef addressBook, CFDictionaryRef info,
 }
 
 - (void)initCustomView {
+
     self.topBackImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height - 160 - 64)];
     self.topBackImageView.contentMode =UIViewContentModeScaleAspectFill ;
     self.topBackImageView.clipsToBounds = YES;
@@ -187,11 +188,6 @@ static void ABChangeCallback(ABAddressBookRef addressBook, CFDictionaryRef info,
     });
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
 - (IBAction)sync:(id)sender {
     [[MMSyncThread shareInstance] beginSync];
@@ -246,7 +242,7 @@ static void ABChangeCallback(ABAddressBookRef addressBook, CFDictionaryRef info,
 }
 
 - (void)actionSyn {
-       [[MMSyncThread shareInstance] beginSync];
+    [[MMSyncThread shareInstance] beginSync];
 }
 
 //旋转
@@ -282,3 +278,4 @@ static void ABChangeCallback(ABAddressBookRef addressBook, CFDictionaryRef info,
     self.bAnimating = NO;
 }
 @end
+

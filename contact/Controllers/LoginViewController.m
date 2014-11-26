@@ -67,44 +67,30 @@
 
 
 - (void) textFieldDidChange:(id) sender {
-    UITextField *tfPhone = (UITextField *)sender;
-    if ([tfPhone isEqual:_phoneField]) {
-        //将号码的分割成 3 4 4的带空格间隔格式
-        if (tfPhone.text.length == 3) {
-            tfPhone.text = [NSString stringWithFormat:@"%@ ", tfPhone.text];
-
-        }
-        if (tfPhone.text.length == 8) {
-            tfPhone.text = [NSString stringWithFormat:@"%@ ", tfPhone.text];
-
-        }
-    }
-
-    if ([tfPhone text].length == 13) {
+    if ([_phoneField text].length == 11) {
         [self.nextBtn setEnabled:YES];
     }else {
         [self.nextBtn setEnabled:NO];
     }
 }
 
-
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    if ([textField isEqual:_phoneField] && range.length == 1 && string.length == 0) {
-        //将号码的分割成 3 4 4的带空格间隔格式 当删除到空格的时候 不出发字符变化通知
-        if (textField.text.length == 4) {
-            textField.text = [textField.text substringWithRange:NSMakeRange(0, textField.text.length - 1)];
-
-            return NO;
-        }
-        if (textField.text.length == 9) {
-            textField.text = [textField.text substringWithRange:NSMakeRange(0, textField.text.length - 1)];
-            return NO;
-        }
-    }
+//    if ([textField isEqual:_phoneField] && range.length == 1 && string.length == 0) {
+//        //将号码的分割成 3 4 4的带空格间隔格式 当删除到空格的时候 不出发字符变化通知
+//        if (textField.text.length == 4) {
+//            textField.text = [textField.text substringWithRange:NSMakeRange(0, textField.text.length - 1)];
+//
+//            return NO;
+//        }
+//        if (textField.text.length == 9) {
+//            textField.text = [textField.text substringWithRange:NSMakeRange(0, textField.text.length - 1)];
+//            return NO;
+//        }
+//    }
 
     //增加char
     if ([textField isEqual:_phoneField] && range.length == 0 && string.length == 1) {
-        if (textField.text.length >= 13) {
+        if (textField.text.length >= 11) {
             return NO;
         }
     }

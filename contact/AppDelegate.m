@@ -13,6 +13,7 @@
 #import "LoginViewController.h"
 #import "LoginCheckVController.h"
 #import "MainSynVController.h"
+#import "MMContactSync.h"
 
 #if ! __has_feature(objc_arc)
 #error This file must be compiled with ARC. Either turn on ARC for the project or use -fobjc-arc flag
@@ -24,7 +25,6 @@
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     application.statusBarHidden = NO;
-    
     
     Token *token = [Token instance];
     if (token.accessToken) {
@@ -41,6 +41,7 @@
     }
 
     [self initAppAppearance];
+    
 
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];

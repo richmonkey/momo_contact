@@ -144,9 +144,6 @@
 		1D9D74391A1C34C800D934F6 /* Default~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default~iphone.png"; path = "contact/Resource/NGImage/Default~iphone.png"; sourceTree = "<group>"; };
 		1D9D743A1A1C351100D934F6 /* Default-568h@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x~iphone.png"; path = "contact/Resource/NGImage/Default-568h@2x~iphone.png"; sourceTree = "<group>"; };
 		1D9D743B1A1C355000D934F6 /* Default~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default~iphone.png"; path = "contact/Resource/NGImage/Default~iphone.png"; sourceTree = "<group>"; };
-		1DF778221A12346B007059F5 /* icon_120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_120.png; sourceTree = "<group>"; };
-		1DF778231A123545007059F5 /* icon_80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_80.png; sourceTree = "<group>"; };
-		1DF778251A1235E7007059F5 /* icon_58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_58.png; sourceTree = "<group>"; };
 		6D16D5ED1A08A36A001D0939 /* contact.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = contact.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D16D5F01A08A36A001D0939 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6D16D5F21A08A36A001D0939 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -399,9 +396,6 @@
 				1D9D74371A1C348E00D934F6 /* Default~iphone.png */,
 				1D9D74361A1C347600D934F6 /* Default.png */,
 				1D2520891A1986980056B8A2 /* Default-568h@2x.png */,
-				1DF778251A1235E7007059F5 /* icon_58.png */,
-				1DF778231A123545007059F5 /* icon_80.png */,
-				1DF778221A12346B007059F5 /* icon_120.png */,
 				6D16D5F61A08A36A001D0939 /* contact */,
 				6D16D6151A08A36A001D0939 /* contactTests */,
 				6D16D5EF1A08A36A001D0939 /* Frameworks */,
@@ -725,6 +719,9 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = momo;
 				TargetAttributes = {
+					6D16D5EC1A08A36A001D0939 = {
+						DevelopmentTeam = 4RKG6KHW6X;
+					};
 					6D16D60D1A08A36A001D0939 = {
 						TestTargetID = 6D16D5EC1A08A36A001D0939;
 					};
@@ -982,7 +979,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_LDFLAGS = "-licucore";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "99137e09-5fce-41b7-9a43-caf110e71fe2";
+				PROVISIONING_PROFILE = "c65a0ad2-0fb6-47a9-924c-227f9c7bbb4b";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;

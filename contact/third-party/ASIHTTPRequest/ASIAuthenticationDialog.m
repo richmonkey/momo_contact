@@ -9,7 +9,6 @@
 #import "ASIAuthenticationDialog.h"
 #import "ASIHTTPRequest.h"
 #import <QuartzCore/QuartzCore.h>
-
 static ASIAuthenticationDialog *sharedDialog = nil;
 BOOL isDismissing = NO;
 static NSMutableArray *requestsNeedingAuthentication = nil;
