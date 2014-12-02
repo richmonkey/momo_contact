@@ -72,11 +72,15 @@ static void ABChangeCallback(ABAddressBookRef addressBook, CFDictionaryRef info,
             NSLog(@"grant:%d", granted);
             if (granted) {
                 ABAddressBookRegisterExternalChangeCallback(self.addressBook, ABChangeCallback, (__bridge void *)(self));
+                int count = [MMAddressBook getContactCount];
+                self.localNumLabel.text = [NSString stringWithFormat:@"%d", count];
             }
         });
     } else if (status == kABAuthorizationStatusAuthorized){
         ABAddressBookRegisterExternalChangeCallback(self.addressBook, ABChangeCallback, (__bridge void *)(self));
         NSLog(@"addressbook authorized");
+        int count = [MMAddressBook getContactCount];
+        self.localNumLabel.text = [NSString stringWithFormat:@"%d", count];
     } else {
         NSLog(@"no addressbook authorization");
     }
@@ -124,8 +128,6 @@ static void ABChangeCallback(ABAddressBookRef addressBook, CFDictionaryRef info,
     self.localNumLabel.textAlignment = NSTextAlignmentCenter;
     self.localNumLabel.textColor = [UIColor colorWithRed:0.255f green:0.804f blue:0.412f alpha:1.00f];
     self.localNumLabel.font = [UIFont systemFontOfSize:20];
-    int count = [MMAddressBook getContactCount];
-    self.localNumLabel.text = [NSString stringWithFormat:@"%d", count];
     [self.view addSubview:self.localNumLabel];
 
 
