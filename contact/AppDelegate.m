@@ -53,10 +53,14 @@
     //UINavigation Bar
 
     //标题白色
+    NSShadow *shadow = [[NSShadow alloc] init];
+    shadow.shadowColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.8];
+    shadow.shadowOffset = CGSizeMake(0, 1);
+
     [[UINavigationBar appearance] setTitleTextAttributes:
      @{ NSForegroundColorAttributeName: [UIColor whiteColor],
         NSFontAttributeName: [UIFont boldSystemFontOfSize:16],
-        UITextAttributeTextShadowOffset: [NSValue valueWithUIOffset:UIOffsetZero]}];
+        NSShadowAttributeName: shadow}];
 
     //状态栏设置为白色
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];

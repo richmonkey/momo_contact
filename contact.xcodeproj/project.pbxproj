@@ -979,7 +979,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_LDFLAGS = "-licucore";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "c65a0ad2-0fb6-47a9-924c-227f9c7bbb4b";
+				PROVISIONING_PROFILE = "99137e09-5fce-41b7-9a43-caf110e71fe2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
