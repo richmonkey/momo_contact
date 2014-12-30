@@ -990,8 +990,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = NO;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: shengzhi lin (4RKG6KHW6X)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: shengzhi lin (4RKG6KHW6X)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Fuzhou Yewen Advertising Co., Ltd.";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Fuzhou Yewen Advertising Co., Ltd.";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "contact/contact-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = PL_DB_PRIVATE;
@@ -999,7 +999,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_LDFLAGS = "-licucore";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "c65a0ad2-0fb6-47a9-924c-227f9c7bbb4b";
+				PROVISIONING_PROFILE = "faba0db5-a9b2-4313-b34e-b5fa5c384d15";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
