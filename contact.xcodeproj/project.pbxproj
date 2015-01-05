@@ -86,7 +86,6 @@
 		6D16D7AB1A08AFFB001D0939 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D16D7AA1A08AFFB001D0939 /* libz.dylib */; };
 		6D16D7AD1A08B003001D0939 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D16D7AC1A08B003001D0939 /* libsqlite3.dylib */; };
 		6D16D7B31A08B287001D0939 /* MMContactSync.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D7AF1A08B287001D0939 /* MMContactSync.m */; };
-		6D16D7B41A08B287001D0939 /* MMSyncContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D7B01A08B287001D0939 /* MMSyncContact.m */; };
 		6D16D7B51A08B287001D0939 /* MMSyncThread.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D7B21A08B287001D0939 /* MMSyncThread.m */; };
 		6D16D7B71A08C3FF001D0939 /* momo.db in Resources */ = {isa = PBXBuildFile; fileRef = 6D16D7B61A08C228001D0939 /* momo.db */; };
 		6D16D7BC1A08EFA0001D0939 /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D16D7BA1A08EFA0001D0939 /* GTMBase64.m */; };
@@ -269,7 +268,6 @@
 		6D16D7AC1A08B003001D0939 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		6D16D7AE1A08B287001D0939 /* MMContactSync.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMContactSync.h; sourceTree = "<group>"; };
 		6D16D7AF1A08B287001D0939 /* MMContactSync.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMContactSync.m; sourceTree = "<group>"; };
-		6D16D7B01A08B287001D0939 /* MMSyncContact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMSyncContact.m; sourceTree = "<group>"; };
 		6D16D7B11A08B287001D0939 /* MMSyncThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMSyncThread.h; sourceTree = "<group>"; };
 		6D16D7B21A08B287001D0939 /* MMSyncThread.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMSyncThread.m; sourceTree = "<group>"; };
 		6D16D7B61A08C228001D0939 /* momo.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = momo.db; sourceTree = "<group>"; };
@@ -479,7 +477,6 @@
 			children = (
 				6D16D7AE1A08B287001D0939 /* MMContactSync.h */,
 				6D16D7AF1A08B287001D0939 /* MMContactSync.m */,
-				6D16D7B01A08B287001D0939 /* MMSyncContact.m */,
 				6D16D7B11A08B287001D0939 /* MMSyncThread.h */,
 				6D16D7B21A08B287001D0939 /* MMSyncThread.m */,
 			);
@@ -810,7 +807,6 @@
 				6D41B2D31A19C88800DC79FF /* UIImage+NGAdditions.m in Sources */,
 				6D16D6C01A08A921001D0939 /* SBJsonStreamWriter.m in Sources */,
 				6D16D6C21A08A921001D0939 /* SBJsonStreamWriterState.m in Sources */,
-				6D16D7B41A08B287001D0939 /* MMSyncContact.m in Sources */,
 				1D25207C1A18E50A0056B8A2 /* MainSynVController.m in Sources */,
 				6D16D6FC1A08AB31001D0939 /* MMUapRequest.m in Sources */,
 				6D16D6BB1A08A921001D0939 /* SBJsonParser.m in Sources */,
