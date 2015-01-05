@@ -8,6 +8,7 @@
 #import "MMAddressBook.h"
 #import <AddressBook/AddressBook.h>
 #import "JSON.h"
+#import "GTMBase64.h"
 
 #define PARSE_NULL_STR(nsstr) nsstr ? nsstr : @""
 
@@ -276,6 +277,45 @@ NSString* formatTelNumber(NSString* strTel){
     return (int)count;
 }
 
++(NSArray*) getContactSyncInfoList {
+    ABAddressBookRef addressBook = ABAddressBookCreate();
+    CFArrayRef peoples = ABAddressBookCopyArrayOfAllPeople(addressBook);
+    {
+        CFMutableArrayRef peopleMutable = CFArrayCreateMutableCopy(kCFAllocatorDefault,
+                                                                   CFArrayGetCount(peoples),
+                                                                   peoples
+                                                                   );
+        
+        CFArraySortValues(peopleMutable,
+                          CFRangeMake(0, CFArrayGetCount(peopleMutable)),
+                          (CFComparatorFunction) ABPersonComparePeopleByName,
+                          (void*)ABPersonGetSortOrdering()
+                          );
+        CFRelease(peoples);
+        peoples = peopleMutable;
+    }
+    
+    NSMutableArray* contactSimplelist = [NSMutableArray array];
+    CFIndex count = CFArrayGetCount(peoples);
+    for(NSUInteger i = 0; i < count; ++i) {
+        ABRecordRef person = (ABRecordRef) CFArrayGetValueAtIndex(peoples, i);
+        
+        
+        DbContactSyncInfo* contact = [DbContactSyncInfo new];
+        NSInteger cellId = ABRecordGetRecordID(person);
+        contact.contactId = cellId;
+        CFTypeRef modifydateRef = ABRecordCopyValue(person, kABPersonModificationDateProperty);
+        NSDate* modifydate = (NSDate*)modifydateRef;
+        contact.modifyDate = [modifydate timeIntervalSince1970];
+        CFRelease(modifydateRef);
+        [contactSimplelist addObject:contact];
+        [contact release];
+    }
+    CFRelease(peoples);
+    CFRelease(addressBook);
+    return contactSimplelist;
+}
+
 +(MMFullContact*)getContact:(int32_t)cellId {
     ABAddressBookRef abAddressbook = ABAddressBookCreateWithOptions(NULL, NULL);
     ABRecordRef person = ABAddressBookGetPersonWithRecordID(abAddressbook, cellId);
@@ -345,8 +385,14 @@ NSString* formatTelNumber(NSString* strTel){
 	else 
 		ABRecordRemoveValue(newPerson, kABPersonNicknameProperty, &errorRef);
     
+    if (dbcontact.avatarB64.length > 0) {
+        NSData *newData = [GTMBase64 decodeString:dbcontact.avatarB64];
+        ABPersonSetImageData(newPerson, (CFDataRef)newData, &errorRef);
+    } else {
+        //不清空本地头像
+    }
 	
-        // 副表数据
+    // 副表数据
     if(listData)
 		[MMAddressBook setRecordData:newPerson andDatalist:listData];
     
@@ -545,6 +591,13 @@ NSString* formatTelNumber(NSString* strTel){
             ABRecordSetValue(updatePerson, kABPersonNicknameProperty, dbcontact.nickName, &errorRef);
         else
             ABRecordRemoveValue(updatePerson, kABPersonNicknameProperty, &errorRef);
+        
+        if (dbcontact.avatarB64.length > 0) {
+            NSData *newData = [GTMBase64 decodeString:dbcontact.avatarB64];
+            ABPersonSetImageData(updatePerson, (CFDataRef)newData, &errorRef);
+        } else {
+            //不清空本地头像
+        }
         
         if(listData) {
             // delete multiple data 删除副表数据
@@ -771,6 +824,12 @@ NSString* formatTelNumber(NSString* strTel){
 			CFRelease(typeRef);
 		}
     }
+
+    CFDataRef data = ABPersonCopyImageDataWithFormat(person, kABPersonImageFormatThumbnail);
+    NSData *imageData = (NSData*)data;
+    if (imageData != nil) {
+         dbContact.avatarB64 = [GTMBase64 stringByEncodingData:imageData];
+     }
     return YES;
 }
 

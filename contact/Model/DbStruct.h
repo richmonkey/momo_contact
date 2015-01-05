@@ -29,7 +29,7 @@
 @interface DbContact : DbContactId {
   	int32_t	phoneCid;//手机联系人本身自增ID
     
-    NSString    *avatarUrl;
+    NSString   *avatarB64;
 	NSString	*firstName;	//姓名
 	NSString	*middleName;//(姓)名
 	NSString	*lastName;	//姓
@@ -52,9 +52,10 @@
 @property (copy, nonatomic) NSString *middleName;
 @property (copy, nonatomic) NSString *lastName;
 @property (nonatomic, readonly)NSString *fullName;
-@property (copy, nonatomic) NSString *avatarUrl;
-@property (nonatomic, readonly) NSString *avatarPlatformUrl;
-@property (nonatomic, readonly) NSString *avatarBigUrl;
+
+//KB size
+@property (nonatomic, copy) NSString *avatarB64;
+
 @property (copy, nonatomic) NSString *namePhonetic;
 @property (nonatomic, retain) NSMutableSet    *cellPhoneNums;
 
@@ -80,7 +81,6 @@
 }
 
 @property(nonatomic, retain)NSArray *properties;
-@property(nonatomic, readonly)DbData *mainTelephone;
 
 @end
 

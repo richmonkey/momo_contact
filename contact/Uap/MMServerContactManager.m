@@ -181,8 +181,7 @@
 	[dic setObject:PARSE_NULL_STR(contact.note) forKey:@"note"];
     
 	[dic setObject:[NSNumber numberWithLongLong:contact.modifyDate] forKey:@"modified_at"];
-	[dic setObject:PARSE_NULL_STR(contact.avatarUrl) forKey:@"avatar"];
-    
+    [dic setObject:PARSE_NULL_STR(contact.avatarB64) forKey:@"avatar_b64"];
     
 	NSMutableArray *addressArray = [NSMutableArray array];
 	NSMutableArray *imArray = [NSMutableArray array];
@@ -329,7 +328,7 @@
 	contact.note = [dic objectForKey:@"note"];
 
 	contact.modifyDate = [[dic objectForKey:@"modified_at"] longLongValue];
-   	contact.avatarUrl = [dic objectForKey:@"avatar"];
+    contact.avatarB64 = [dic objectForKey:@"avatar_b64"];
         
 	NSMutableArray *properties = [NSMutableArray array];
 	for (NSDictionary *propertyDic in [dic objectForKey:@"tels"]) {

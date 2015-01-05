@@ -49,7 +49,65 @@
 @synthesize organization,department;
 @synthesize  note,birthday,modifyDate,jobTitle,nickName;
 
-@synthesize firstName,middleName,lastName,avatarUrl,namePhonetic, cellPhoneNums;
+@synthesize firstName,middleName,lastName,namePhonetic, avatarB64, cellPhoneNums;
+
+
+
+-(id) init{
+    self = [super init];
+    if (self) {
+		organization = @"";
+		department = @"";
+		note = @"";
+		jobTitle = @"";
+		nickName = @"";
+        avatarB64 = @"";
+		birthday = nil;
+	}
+    return self;
+}
+
+-(id)initWithContact:(DbContact*)dbcontact {
+    self = [super init];
+    if (self) {
+        self.cellPhoneNums = [NSMutableSet set];
+        self.contactId = dbcontact.contactId;
+        self.firstName = dbcontact.firstName;
+        self.lastName = dbcontact.lastName;
+        self.namePhonetic = dbcontact.namePhonetic;
+        self.middleName = dbcontact.middleName;
+        self.organization = dbcontact.organization;
+        self.avatarB64 = dbcontact.avatarB64;
+        
+        self.department = dbcontact.department;
+        self.note = dbcontact.note;
+        self.jobTitle = dbcontact.jobTitle;
+        self.nickName = dbcontact.nickName;
+        self.birthday = dbcontact.birthday;
+        self.modifyDate = dbcontact.modifyDate;
+        
+    }
+    return self;
+}
+
+- (void)dealloc {
+    self.avatarB64 = nil;
+	self.firstName = nil;
+	self.middleName = nil;
+	self.lastName = nil;
+	self.namePhonetic = nil;
+    self.cellPhoneNums = nil;
+    
+	self.organization = nil;
+	self.department = nil;
+	self.note = nil;
+	self.jobTitle = nil;
+	self.nickName = nil;
+	self.birthday = nil;
+    
+	[super dealloc];
+}
+
 
 - (BOOL)isEnglishName {
     NSString* tmpString = [NSString stringWithFormat:@"%@%@%@", PARSE_NULL_STR(lastName), PARSE_NULL_STR(middleName), PARSE_NULL_STR(firstName)];
@@ -77,77 +135,6 @@
         return [NSString stringWithFormat:@"%@%@%@", PARSE_NULL_STR(lastName), PARSE_NULL_STR(middleName), PARSE_NULL_STR(firstName)];
     }
 }
--(NSString*) avatarPlatformUrl {
-	return avatarUrl;
-}
-
--(NSString*)avatarBigUrl {
-    if (!avatarUrl) {
-        return nil;
-    }
-    NSString* desireSizeStr = [NSString stringWithFormat:@"_%d.", BIG_AVATAR_SIZE];
-    return [avatarUrl stringByReplacingOccurrencesOfString:@"_130." withString:desireSizeStr];
-}
-
--(id) init{
-    self = [super init];
-    if (self) {
-		organization = @"";
-		department = @"";
-		note = @"";
-		jobTitle = @"";
-		nickName = @"";
-		birthday = nil;
-	}
-    return self;
-}
-
--(id)initWithContact:(DbContact*)dbcontact {
-    self = [super init];
-    if (self) {
-        firstName = @"";
-		middleName = @"";
-		lastName = @"";
-		avatarUrl = @"";
-		namePhonetic = @"";
-        self.cellPhoneNums = [NSMutableSet set];
-        
-        self.contactId = dbcontact.contactId;
-        self.avatarUrl = dbcontact.avatarUrl;
-        self.firstName = dbcontact.firstName;
-        self.lastName = dbcontact.lastName;
-        self.namePhonetic = dbcontact.namePhonetic;
-        self.middleName = dbcontact.middleName;
-        self.organization = dbcontact.organization;
-        
-        self.department = dbcontact.department;
-        self.note = dbcontact.note;
-        self.jobTitle = dbcontact.jobTitle;
-        self.nickName = dbcontact.nickName;
-        self.birthday = dbcontact.birthday;
-        self.modifyDate = dbcontact.modifyDate;
-        
-    }
-    return self;
-}
-
-- (void)dealloc {
-    self.avatarUrl = nil;
-	self.firstName = nil;
-	self.middleName = nil;
-	self.lastName = nil;
-	self.namePhonetic = nil;
-    self.cellPhoneNums = nil;
-    
-	self.organization = nil;
-	self.department = nil;
-	self.note = nil;
-	self.jobTitle = nil;
-	self.nickName = nil;
-	self.birthday = nil;
-    
-	[super dealloc];
-}
 
 @end
 
@@ -160,14 +147,6 @@
 	[super dealloc];
 }
 
--(DbData*)mainTelephone {
-    for (DbData *data in properties) {
-        if ([data isMainTelephone]) {
-            return data;
-        }
-    }
-    return nil;
-}
 
 - (id)copyWithZone:(NSZone *)zone {
 	

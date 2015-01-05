@@ -308,7 +308,6 @@
             NSNumber *phoneid = [phoneContactIds objectAtIndex:index + i];
             MMMomoContact* dbContact = [[[MMMomoContact alloc] init] autorelease];
             ABRecordRef person = ABAddressBookGetPersonWithRecordID(addressBook, [phoneid intValue]);
-            dbContact.avatarUrl = @"";
             NSMutableArray* dbDataList = [[[NSMutableArray alloc] init] autorelease];
             dbContact.phoneCid = [phoneid intValue];
             [MMAddressBook ABRecord2DbStruct:dbContact withDataList:dbDataList  withPerson:person];
@@ -344,7 +343,6 @@
                 info.phoneContactId = [[phoneContactIds objectAtIndex:index] intValue];//contact.phoneCid;
                 NSDate *phoneModifyDate = [MMAddressBook getContactModifyDate:[[phoneContactIds objectAtIndex:index] intValue]];
                 info.phoneModifyDate = [phoneModifyDate timeIntervalSince1970];
-                info.avatarUrl = contact.avatarBigUrl;
                 [self addContactSyncInfo:info];
                 MLOG(@"upload phone contact:%ld success, contact id:%ld", (long)contact.phoneCid, (long)info.contactId);
             } else if (303 == status) {
@@ -360,7 +358,6 @@
                     info.phoneContactId = contact.phoneCid;
                     NSDate *phoneModifyDate = [MMAddressBook getContactModifyDate:[[phoneContactIds objectAtIndex:index] intValue]];
                     info.phoneModifyDate = [phoneModifyDate timeIntervalSince1970] ;
-                    info.avatarUrl = contact.avatarBigUrl;
                     [self addContactSyncInfo:info];
                     MLOG(@"upload phone contact:%ld, contact id:%ld exists", (long)info.phoneContactId, (long)info.contactId);
                 } else {
@@ -410,33 +407,6 @@
     return YES;
 }
 
-
--(BOOL)isAvatarChanged:(NSData*)avatar syncInfo:(MMContactSyncInfo*)info {
-    NSData *part = [self getAvatarPart:avatar];
-    if (0 == [part length] && 0 == [info.avatarPart length]) {
-        return NO;
-    }
-    if([info.avatarPart isEqualToData:part]) {
-        //todo check md5
-        return NO;
-    }
-    return YES;
-}
-
--(BOOL)isAvatarDownFail:(MMContactSyncInfo*)info {
-    if ([info.avatarUrl length] >= 2) {
-        if([info.avatarUrl hasPrefix:@"#"] && [info.avatarUrl hasSuffix:@"#"]) {
-            return YES;
-        }
-    }
-    return NO;
-}
-
-- (BOOL)isBigAvatarUrl:(NSString*)avatarURL {
-    NSString* str = [NSString stringWithFormat:@"_%d.", BIG_AVATAR_SIZE];
-    return [avatarURL rangeOfString:str].location != NSNotFound;
-}
-
 -(BOOL)updateContactUp:(MMContactSyncInfo*)info  person:(ABRecordRef)person{
     MMMomoContact* dbContact = [[[MMMomoContact alloc] init] autorelease];
     NSMutableArray* dbDataList = [[NSMutableArray alloc] init];
@@ -446,13 +416,7 @@
     dbContact.properties = dbDataList;
     [dbDataList release];
     dbContact.modifyDate = info.modifyDate;
-    
-    dbContact.avatarUrl = info.avatarUrl;
-    if ([self isAvatarDownFail:info]) {
-        NSRange range = NSMakeRange(1, [info.avatarUrl length] - 2);
-        dbContact.avatarUrl = [info.avatarUrl substringWithRange:range];
-    }
-    
+
     NSDictionary *response = nil;
     NSInteger statusCode = [MMServerContactManager updateContact:dbContact response:&response];
     if (statusCode == 200 || statusCode == 303) {
@@ -609,7 +573,6 @@
     info.phoneContactId = cellId;
     info.modifyDate = contact.modifyDate;
     info.phoneModifyDate = [[MMAddressBook getContactModifyDate:cellId] timeIntervalSince1970];
-    info.avatarUrl = contact.avatarBigUrl;
     [self addContactSyncInfo:info];
     return YES;
 }
@@ -624,7 +587,6 @@
     info.modifyDate = contact.modifyDate;
     int64_t phoneModifyDate = [[MMAddressBook getContactModifyDate:info.phoneContactId] timeIntervalSince1970];
     info.phoneModifyDate = phoneModifyDate;
-    info.avatarUrl = contact.avatarBigUrl;
     [self updateContactSyncInfo:info];
     return YES;
 }
@@ -693,7 +655,6 @@
             info.phoneContactId = cellId;
             info.modifyDate = contact.modifyDate;
             info.phoneModifyDate = [[MMAddressBook getContactModifyDate:cellId] timeIntervalSince1970];
-            info.avatarUrl = contact.avatarBigUrl; //下载大头像
             [addContactSyncArray addObject:info];
             
             MLOG(@"add contact:%lld, phone contact id:%d to phone", (int64_t)info.contactId, info.phoneContactId);
