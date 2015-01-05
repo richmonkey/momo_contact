@@ -71,9 +71,11 @@ static void ABChangeCallback(ABAddressBookRef addressBook, CFDictionaryRef info,
         ABAddressBookRequestAccessWithCompletion(self.addressBook, ^(bool granted, CFErrorRef error) {
             NSLog(@"grant:%d", granted);
             if (granted) {
-                ABAddressBookRegisterExternalChangeCallback(self.addressBook, ABChangeCallback, (__bridge void *)(self));
-                int count = [MMAddressBook getContactCount];
-                self.localNumLabel.text = [NSString stringWithFormat:@"%d", count];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    ABAddressBookRegisterExternalChangeCallback(self.addressBook, ABChangeCallback, (__bridge void *)(self));
+                    int count = [MMAddressBook getContactCount];
+                    self.localNumLabel.text = [NSString stringWithFormat:@"%d", count];
+                });
             }
         });
     } else if (status == kABAuthorizationStatusAuthorized){
