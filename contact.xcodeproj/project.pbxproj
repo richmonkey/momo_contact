@@ -990,7 +990,11 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Fuzhou Yewen Advertising Co., Ltd.";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "contact/contact-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = PL_DB_PRIVATE;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					PL_DB_PRIVATE,
+					NS_BLOCK_ASSERTIONS,
+					NDEBUG,
+				);
 				INFOPLIST_FILE = "contact/contact-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_LDFLAGS = "-licucore";
