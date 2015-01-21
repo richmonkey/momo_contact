@@ -962,8 +962,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = NO;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: shengzhi lin (PN5BTFF84Y)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: shengzhi lin (PN5BTFF84Y)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "contact/contact-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -975,7 +975,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				OTHER_LDFLAGS = "-licucore";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "99137e09-5fce-41b7-9a43-caf110e71fe2";
+				PROVISIONING_PROFILE = "752d5771-fc1b-4d37-8493-c56e428fac74";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
