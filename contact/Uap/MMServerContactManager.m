@@ -181,7 +181,9 @@
 	[dic setObject:PARSE_NULL_STR(contact.note) forKey:@"note"];
     
 	[dic setObject:[NSNumber numberWithLongLong:contact.modifyDate] forKey:@"modified_at"];
-    [dic setObject:PARSE_NULL_STR(contact.avatarB64) forKey:@"avatar_b64"];
+    if (contact.avatarB64.length < (128*1024*4/3)) {
+        [dic setObject:PARSE_NULL_STR(contact.avatarB64) forKey:@"avatar_b64"];
+    }
     
 	NSMutableArray *addressArray = [NSMutableArray array];
 	NSMutableArray *imArray = [NSMutableArray array];
