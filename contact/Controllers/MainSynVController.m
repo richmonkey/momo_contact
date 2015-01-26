@@ -15,6 +15,7 @@
 #import "UIView+NGAdditions.h"
 #import "UIImage+NGAdditions.h"
 #import "MMCommonAPI.h"
+#import "MMGlobalData.h"
 
 #if ! __has_feature(objc_arc)
 #error This file must be compiled with ARC. Either turn on ARC for the project or use -fobjc-arc flag
@@ -87,16 +88,42 @@ static void ABChangeCallback(ABAddressBookRef addressBook, CFDictionaryRef info,
         NSLog(@"no addressbook authorization");
     }
 
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        int count;
-        BOOL r = [MMServerContactManager getContactCount:&count];
-        if (r) {
-            NSLog(@"server count:%d", count);
-            dispatch_async(dispatch_get_main_queue(), ^{
-                self.serviceNumLabel.text = [NSString stringWithFormat:@"%d", count];
-            });
-        }
-    });
+    id value = [MMGlobalData getPreferenceforKey:@"server_contact_count"];
+    if (value != nil) {
+        int count = [value intValue];
+        self.serviceNumLabel.text = [NSString stringWithFormat:@"%d", count];
+    }
+
+    Token *token = [Token instance];
+    int now = (int)time(NULL);
+    if (now >= token.expireTimestamp - 1) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(20 * NSEC_PER_SEC)),
+                       dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            int count;
+            BOOL r = [MMServerContactManager getContactCount:&count];
+            if (r) {
+                NSLog(@"server count:%d", count);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [MMGlobalData setPreference:[NSNumber numberWithInt:count] forKey:@"server_contact_count"];
+                    [MMGlobalData savePreference];
+                    self.serviceNumLabel.text = [NSString stringWithFormat:@"%d", count];
+                });
+            }
+        });
+    } else {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            int count;
+            BOOL r = [MMServerContactManager getContactCount:&count];
+            if (r) {
+                NSLog(@"server count:%d", count);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [MMGlobalData setPreference:[NSNumber numberWithInt:count] forKey:@"server_contact_count"];
+                    [MMGlobalData savePreference];
+                    self.serviceNumLabel.text = [NSString stringWithFormat:@"%d", count];
+                });
+            }
+        });
+    }
 
     NSNotificationCenter * center = [NSNotificationCenter defaultCenter];
     [center addObserver:self selector:@selector(onBeginSync:) name:kMMBeginSync object:nil];
