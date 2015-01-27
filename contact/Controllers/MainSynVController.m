@@ -193,6 +193,7 @@ static void ABChangeCallback(ABAddressBookRef addressBook, CFDictionaryRef info,
     BOOL r = [[notification.object objectForKey:@"result"] boolValue];
     if (!r) {
         [MMCommonAPI alert:@"同步失败"];
+        [self stopSpin];
         return;
     }
     
@@ -209,10 +210,8 @@ static void ABChangeCallback(ABAddressBookRef addressBook, CFDictionaryRef info,
             if (sucuess) {
                 self.serviceNumLabel.text = [NSString stringWithFormat:@"%d", count];
                 NSLog(@"server count:%d", count);
-                [self stopSpin];
                 [MMCommonAPI alert:@"同步完成"];
             } else {
-                [self stopSpin];
                 [MMCommonAPI alert:@"同步失败"];
             }
         });
