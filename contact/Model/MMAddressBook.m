@@ -50,7 +50,7 @@
 
 + (DbContact*)getContact:(int32_t)cellId withError:(MMABErrorType*)error;
 
-+(MMFullContact*)getContact:(int32_t)phoneContactId;
+
 
 + (BOOL)dbContactFromABRecord:(DbContact*)dbContact abRecord:(ABRecordRef)person;
 
@@ -824,12 +824,18 @@ NSString* formatTelNumber(NSString* strTel){
 			CFRelease(typeRef);
 		}
     }
+    
 
-    CFDataRef data = ABPersonCopyImageDataWithFormat(person, kABPersonImageFormatThumbnail);
-    NSData *imageData = (NSData*)data;
-    if (imageData != nil) {
-         dbContact.avatarB64 = [GTMBase64 stringByEncodingData:imageData];
-     }
+    CFDataRef data = ABPersonCopyImageDataWithFormat(person, kABPersonImageFormatOriginalSize);
+    if (data != nil && CFDataGetLength(data) >= 128*1024) {
+        CFRelease(data);
+        data = ABPersonCopyImageDataWithFormat(person, kABPersonImageFormatThumbnail);
+    }
+    if (data != nil) {
+        NSData *imageData = (NSData*)data;
+        dbContact.avatarB64 = [GTMBase64 stringByEncodingData:imageData];
+        CFRelease(data);
+    }
     return YES;
 }
 

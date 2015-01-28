@@ -41,6 +41,8 @@ typedef int MMABErrorType;
 
 +(NSArray*)insertContacts:(NSArray*)fullContacts;
 
++(MMFullContact*)getContact:(int32_t)phoneContactId;
+
 /*
  * 向Iphone的AddressBook插入联系人数据
  */
