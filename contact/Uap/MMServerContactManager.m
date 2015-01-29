@@ -138,23 +138,23 @@
 	return nil;
 }
 +(int)getImProperty:(NSString*)protocol {
-	if ([protocol isEqualToString:@"91u"]) {
+	if ([protocol caseInsensitiveCompare:@"91u"] == NSOrderedSame) {
 		return kMoIm91U;
-	} else if ([protocol isEqualToString:@"qq"] ) {
+	} else if ([protocol caseInsensitiveCompare:@"qq"] == NSOrderedSame ) {
 		return kMoImQQ;
-	} else if ([protocol isEqualToString:@"msn"]) {
+	} else if ([protocol caseInsensitiveCompare:@"msn"] == NSOrderedSame) {
 		return kMoImMSN;
-	} else if ([protocol isEqualToString:@"icq"]) {
+	} else if ([protocol caseInsensitiveCompare:@"icq"] == NSOrderedSame) {
 		return kMoImICQ;
-	} else if ([protocol isEqualToString:@"gtalk"]) {
+	} else if ([protocol caseInsensitiveCompare:@"gtalk"] == NSOrderedSame) {
 		return kMoImGtalk;
-	} else if ([protocol isEqualToString:@"yahoo"]) {
+	} else if ([protocol caseInsensitiveCompare:@"yahoo"] == NSOrderedSame) {
 		return kMoImYahoo;
-	} else if ([protocol isEqualToString:@"skype"]) {
+	} else if ([protocol caseInsensitiveCompare:@"skype"] == NSOrderedSame) {
 		return kMoImSkype;
-	} else if ([protocol isEqualToString:@"aim"]) {
+	} else if ([protocol caseInsensitiveCompare:@"aim"] == NSOrderedSame) {
 		return kMoImAIM;
-	} else if ([protocol isEqualToString:@"jabber"]) {
+	} else if ([protocol caseInsensitiveCompare:@"jabber"] == NSOrderedSame) {
 		return kMoImJabber;
 	} else {
 		assert(0);
